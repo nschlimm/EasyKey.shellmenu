@@ -279,27 +279,27 @@ function fetachAll () {
 # submenus
 
 function workingDiffs() {
-  source $supergithome/diff.sh
+  source $supergithome/EasyKey.git/diff.sh
   nowaitonexit
 }
 
 function atlassiansView() {
-  source $supergithome/atlassian.sh
+  source $supergithome/EasyKey.git/atlassian.sh
   nowaitonexit
 }
 
 function changeProject () {
-  source $supergithome/fl.sh
+  source $supergithome/EasyKey.git/fl.sh
   nowaitonexit
 }
 
 function gitExtras () {
-  source $supergithome/gitExtras.sh
+  source $supergithome/EasyKey.git/gitExtras.sh
   nowaitonexit
 }
 
 function gitPasswort () {
-  source $supergithome/userpas.sh
+  source $supergithome/EasyKey.git/userpas.sh
   nowaitonexit
 }
 
