@@ -15,7 +15,6 @@
 # selectItem <list command> <awk select from line selected> <optional: width if coloring is enabled>  <optional: line id of header> <optional: preselection>
 
 source ./shellmenu.sh
-trackchoices=$1
 
 continuemenu=true
 while ${continuemenu:=true}; do
@@ -48,7 +47,6 @@ echo
 submenuHead "Other stuff:"
 menuItemClm I "List images in contexts" listImagesInUse J "Ingress configuration" "kubectl get ing -o json | jq -r '.items[].spec.rules[].http.paths[]'"
 menuItemClm K "Describe ingress" "kubectl describe ing" "L" "Edit config map" editConfigMap
-
 choice
 done
 echo "bye, bye, homie!"
