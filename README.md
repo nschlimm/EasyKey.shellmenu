@@ -88,7 +88,7 @@ Notice that `selectItem` has following syntax:
 ```
 selectItem <list command> <awk select from line selected>
 ```
-
+<img width="535" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/617b8d5f-0046-4233-8866-e39a1bfedc1e">
 
 
 
