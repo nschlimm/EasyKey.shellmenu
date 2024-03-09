@@ -1,8 +1,14 @@
 # shellmenu
-Very simple script to generate menu and selections.
+Very simple script to generate menu and selections in out favorite shell environment.
 
+- Use single or double column menu
+- Call shell functions or immediately execut shell command
+- Return to menu once command or function completed
+- Log executed commands
+  
 # exmaple.sh
 
+```
 Super KUBECTL Home
 
 Kubectl Config:
@@ -36,9 +42,12 @@ K. Describe ingress                             L. Edit config map
 Press 'q' to quit
 
 Make your choice:
+```
 
 # Syntax
+```
 menuInit <menu title>
 submenuHead <sub menu title>
 menuItem <key> <action name> <shell function|shell comand>
 menuItemClm <key> <action name> <shell function|shell command> <key> <action name> <shell function|shell command>
+```
