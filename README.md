@@ -22,9 +22,7 @@ menuItemClm <key> <action name> <shell function|shell command> <key> <action nam
 
 # exmaple.sh
 
-```
 <img width="600" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/ae8a0a16-434a-4c31-8001-01d29996b72c">
-```
 
 # some example functions
 
