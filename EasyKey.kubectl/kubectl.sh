@@ -1,5 +1,5 @@
 #!/bin/sh
-source ../shellmenu.sh
+source /Users/d6t6/workspace/EasyKey.shellmenu/shellmenu.sh
 trackchoices=$1
 
 function listImagesInUse() {
