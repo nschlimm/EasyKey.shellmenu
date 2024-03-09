@@ -57,3 +57,38 @@ Press 'q' to quit
 
 Make your choice:
 ```
+
+# some example functions
+
+The following examples are also taken from my kubectl.sh utility.
+
+A function that collects input and executes a command based on that input.
+
+```
+function addUsers() {
+   echo "User name (e.g. admin)?"
+   read userName
+   echo "Token (e.g. bHVNUkxJZU82d0JudWtpdktBbzhDZFVuSDVEYWtiVmJua3RVT3orUkNzDFGH)?"
+   read userToken
+   executeCommand "kubectl config set-credentials $userName --token $userToken"
+}
+```
+
+A function where you can select items from a list.
+
+```
+function showPodManifest() {
+    selectItem "kubectl get pods" "awk '{print \$1}'"
+    if [[ $fname == "" ]]; then return 0; fi
+    executeCommand "kubectl get pods $fname -o yaml"
+}
+```
+
+Notice that `selectItem` has following syntax:
+```
+selectItem <list command> <awk select from line selected>
+```
+
+
+
+
