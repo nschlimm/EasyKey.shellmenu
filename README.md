@@ -5,7 +5,15 @@ Very simple script to generate menu and selections in out favorite shell environ
 - Call shell functions or immediately execut shell command
 - Return to menu once command or function completed
 - Log executed commands
-  
+
+# Syntax
+```
+menuInit <menu title>
+submenuHead <sub menu title>
+menuItem <key> <action name> <shell function|shell comand>
+menuItemClm <key> <action name> <shell function|shell command> <key> <action name> <shell function|shell command>
+```
+
 # exmaple.sh
 
 ```
@@ -42,12 +50,4 @@ K. Describe ingress                             L. Edit config map
 Press 'q' to quit
 
 Make your choice:
-```
-
-# Syntax
-```
-menuInit <menu title>
-submenuHead <sub menu title>
-menuItem <key> <action name> <shell function|shell comand>
-menuItemClm <key> <action name> <shell function|shell command> <key> <action name> <shell function|shell command>
 ```
