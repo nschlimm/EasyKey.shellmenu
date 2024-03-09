@@ -78,7 +78,7 @@ A function where you can select items from a list.
 
 ```
 function showPodManifest() {
-    selectItem "kubectl get pods" "awk '{print \$1}'"
+    selectItem "kubectl get pods" "awk '{print \$1}'" 100 1 "2"
     if [[ $fname == "" ]]; then return 0; fi
     executeCommand "kubectl get pods $fname -o yaml"
 }
@@ -86,9 +86,9 @@ function showPodManifest() {
 
 Notice that `selectItem` has following syntax:
 ```
-selectItem <list command> <awk select from line selected>
+selectItem <list command> <awk select from line selected> <optional: width if coloring is enabled>  <optional: line id of header> <optional: preselection>
 ```
-<img width="535" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/617b8d5f-0046-4233-8866-e39a1bfedc1e">
+<img width="736" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/98270286-26cb-4e68-a052-9b403aa41c6f">
 
-
+The `showPodManifest` example function creates the list above and the `"awk {print \$1}` will select the "NAME" column of the line number entered.
 
