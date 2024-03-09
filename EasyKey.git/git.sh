@@ -1,6 +1,11 @@
 #!/bin/sh
-supergithome=/Users/d6t6/workspace/EasyKey.shellmenu
-source $supergithome/shellmenu.sh
+# Get the directory of the current script
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Source the file relative to the script's directory
+source "$script_dir/../shellmenu.sh"
+
+#supergithome=/Users/d6t6/workspace/EasyKey.shellmenu
+#source $supergithome/shellmenu.sh
 trackchoices=$1
 
 function analyzeWorkingDir (){
