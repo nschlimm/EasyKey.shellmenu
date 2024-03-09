@@ -1,12 +1,5 @@
 #!/bin/sh
 
-rawdatafilename=rawdata.txt
-summaryfilename=summary.txt
-menuitemsfilename=menugroups.txt
-rawdatahome=$supergithome/
-configfilename=.sgitconfig
-actualmenu=
-
 function coloredLog () { # logentry ; color code
   export GREP_COLOR="$2"
   echo "$1" | grep --color ".*"
@@ -29,7 +22,6 @@ function redLog() {
 }
 
 function menuInit () {
-  touch $rawdatahome$rawdatafilename
   actualmenu="$1"
   menudatamap=()
   export GREP_COLOR='1;37;44'
@@ -118,15 +110,15 @@ function alternateRows() {
    while read line
     do
       if [[ $i == 1 ]] && [[ $header != "" ]]; then
-        echo -e "\e[48;5;93m$line\e[0m"
+        echo -e "\033[48;5;93m$line\033[0m"
       else 
-        echo -e "\e[48;5;238m$line\e[0m"
+        echo -e "\033[48;5;238m$line\033[0m"
       fi
       read line
-      echo -e "\e[48;5;232m$line\e[0m"
+      echo -e "\033[48;5;232m$line\033[0m"
       i=$((i+1))
     done
-    echo -en "\e[0m"
+    echo -en "\033[0m"
 }
 
 function nowaitonexit () {
@@ -147,26 +139,20 @@ function logCommand () {
             submenuname=$(echo "$i" | cut -f4 -d#)
             method=$(echo "$i" | cut -f3 -d#)
             today=$(date)
-            echo "$today,$actualmenu,$submenuname,$gkommando,$method" >> $rawdatahome$rawdatafilename
          fi
    done
 }
 
 function compileMenu () {
-   touch $rawdatahome$summaryfilename
-   touch $rawdatahome$menuitemsfilename
-   INPUT=$rawdatahome$rawdatafilename
    OLDIFS=$IFS
    IFS=,
    [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
    while read logdate menu submenu kommando methode
    do
-      counta=$(grep -c "$kommando" $rawdatahome$rawdatafilename)
       kommando=$(echo $kommando | sed 's#/#-#g')
       sed -i.bak "/$kommando/d" $rawdatahome$summaryfilename
       echo "$counta,$menu,$submenu,$kommando,$methode" >> $rawdatahome$summaryfilename
       sort -k1 -nr $rawdatahome$summaryfilename -o $rawdatahome$summaryfilename
-      counta=$(grep -c "$submenu" $rawdatahome$rawdatafilename)
       kommando=$(echo $submenu | sed 's#/#-#g')
       sed -i.bak "/$submenu/d" $rawdatahome$menuitemsfilename
       echo "$counta,$menu,$submenu" >> $rawdatahome$menuitemsfilename      
@@ -179,12 +165,6 @@ function compileMenu () {
    importantLog "Your sorted summary of menu favorites"
    cat $rawdatahome$menuitemsfilename 
    echo
-}
-
-function purgeCash () {
-  rm $rawdatahome$summaryfilename
-  rm $rawdatahome$menuitemsfilename
-  rm $rawdatahome$rawdatafilename
 }
 
 function importantLog() {
