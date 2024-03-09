@@ -90,5 +90,5 @@ selectItem <list command> <awk select from line selected> <optional: width if co
 ```
 <img width="736" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/98270286-26cb-4e68-a052-9b403aa41c6f">
 
-The `showPodManifest` example function creates the list above and the `"awk {print \$1}` will select the "NAME" column of the line number entered.
+The `showPodManifest` example function creates the list above and the `"awk {print \$1}` will select the "NAME" column of the line number entered. If you only hit enter, the preselected line 2 will be chosen which will select `postresql-0` into `$fname` variable.
 
