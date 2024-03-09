@@ -6,6 +6,12 @@ Very simple script to generate menu and selections in out favorite shell environ
 - Return to menu once command or function completed
 - Log executed commands
 
+# Get started
+
+Easy !
+Just look into `example.sh` and update that to write your own menu.
+Start with `bash example.sh`.
+
 # Syntax
 ```
 menuInit <menu title>
