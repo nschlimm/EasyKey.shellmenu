@@ -309,41 +309,15 @@ selectItem () {
   echo "... selected ${fname:-nothing}"
 }
 
-diffDrillDownAdvanced () { 
-
-  listkommando="$1"
-  regexp="$2"
-
-  if $listkommando | grep -q ".*"; then
-   while true; do
-        
-        importantLog "Drill down into file logcommanddiff: $listkommando"
-
-        selectItem "$listkommando" "$regexp"
-
-        if [[ $fname = "" ]]; then
-          break
-        fi
-        if [ $# -eq 3 ]
-          then
-             kommando="git difftool $3 -- $fname"
-             executeCommand "$kommando"
-        fi
-        if [ $# -eq 4 ]
-          then
-             kommando="git difftool $3 $4 -- $fname"
-             executeCommand "$kommando"
-        fi
-
-   done
-
-  fi
-
-}
-
 noterminate () { continuemenu=true; }
 terminate () { continuemenu=false; }
 
+#################################################
+# Initiates user input 
+# Outputs:
+#      Creates the interactive user input and
+#      and initiates execution of command selected
+#################################################
 choice () {
   echo
   echo "Press 'q' to quit"
@@ -377,58 +351,6 @@ exitGently () {
    echo "bye bye, homie!"
    nowaitonexit
    exit 1
-}
-
-initConfig () {
-   # read config to global arrays
-   INPUT="$supergithome"/"$configfilename"
-   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
-   i=0
-   configlines=$(cat "$INPUT")
-   while read -r configline; do
-      if echo "$configline" | grep -q "\[.*\]"; then
-        configsection=$(echo "$configline" | grep -o "\[.*\]")
-        configsectioname=${configsection:1:${#configsection}-2}
-        i=0
-        continue
-      fi
-      if [ -n "$configline" ]; then
-         eval "${configsectioname[i]}='$configline'"
-      fi
-      ((i++))
-   done <<< "$(echo -e "$configlines")"
-}
-
-selectFromSubdirectories() { #out: selected_subdir(name, not full path)
-   dir="$1" #full dir name
-   heading="$2"
-   xdarkprocessing="$3"
-   xpreselection="$4"
-
-   coloredLog "${dir}" '1;37;44'
-   ! [ "${heading}" = "" ] && coloredLog "${heading}"
-   selectItem "ls -F ${dir} | cut -d '/' -f1" ".*" 100 "$heading" "$xpreselection" "$xdarkprocessing"
-   selected_subdir=$fname
-}
-
-selectFromCSVList()
-{
-   list="$1" #csv list
-   heading="$2"
-   width="$3"
-
-   coloredLog "${dir}" '1;37;44'
-   ! [ "${heading}" = "" ] && coloredLog "${heading}"
-   [ -f .csvlist ] && rm .csvlist
-   touch .csvlist
-   variable=$list
-   for i in ${variable//,/ }
-   do
-       echo "$i" >> .csvlist
-   done
-   selectItem "cat .csvlist" ".*" "${width}"
-   selected_item=$fname
-   rm .csvlist
 }
 
 selectFromCsv() { #out: $linenumber(selected of csv file), $headers(of csv file), $fname(selected row values)

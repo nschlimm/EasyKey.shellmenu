@@ -354,6 +354,30 @@ function showStatus () {
   git remote -v
 }
 
+diffDrillDownAdvanced () { 
+  listkommando="$1"
+  regexp="$2"
+  if $listkommando | grep -q ".*"; then
+   while true; do
+        importantLog "Drill down into file logcommanddiff: $listkommando"
+        selectItem "$listkommando" "$regexp"
+        if [[ $fname = "" ]]; then
+          break
+        fi
+        if [ $# -eq 3 ]
+          then
+             kommando="git difftool $3 -- $fname"
+             executeCommand "$kommando"
+        fi
+        if [ $# -eq 4 ]
+          then
+             kommando="git difftool $3 $4 -- $fname"
+             executeCommand "$kommando"
+        fi
+   done
+  fi
+}
+
 globalClmWidth=35
 
 git fetch --all --tags 2> /dev/null
