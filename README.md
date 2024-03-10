@@ -27,8 +27,8 @@ Use `menuItemClm` for multi column menus (allows more actions in the menu).
 ```
 menuInit <menu title>
 submenuHead <sub menu title>
-menuItem <key> <name> <shell comand>
-menuItemClm <key> <action> <shell command> <key> <action> <shell command>
+menuItem <key> <description> <shell command>
+menuItemClm <key> <description> <shell command> <key> <description> <shell command>
 ```
 
 # exmaple.sh
