@@ -14,6 +14,12 @@ Start with `bash example.sh`.
 Or look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) `git.sh` oder [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) `kubectl.sh`. Two utilities based on EasyKey.shellmenu that I use in my daily work.
 
 # Syntax
+
+Use `menuInit` to initialize a new menu. 
+Use `submenuHead` to structure your menu into sub sections.
+Use `menuItem` for single column menus.
+Use `menuItemClm` for multi column menus.
+
 ```
 menuInit <menu title>
 submenuHead <sub menu title>
