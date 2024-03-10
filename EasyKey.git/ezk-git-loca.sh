@@ -1,5 +1,7 @@
 #!/bin/bash
-		
+
+configfilename=.ezk-git-loca-conf
+
 function toDir () {
 	vars="$*" # all splitted words back to one var
 	eval cd "${vars// /\\ }" # escape spaces
@@ -8,13 +10,33 @@ function toDir () {
 
 function toDirAndTerminate () {
   vars="$*" # all splitted words back to one var
-  eval cd "${vars// /\\ }" # escape spaces
+  eval "cd ${vars// /\\ }" # escape spaces
   nowaitonexit
   terminate
 }
 
 function purgDirCache () {
 	unset gitlocations
+}
+
+initConfig () {
+   # read config to global arrays
+   INPUT="$script_dir"/"$configfilename"
+   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
+   i=0
+   configlines=$(cat "$INPUT")
+   while read -r configline; do
+      if echo "$configline" | grep -q "\[.*\]"; then
+        configsection=$(echo "$configline" | grep -o "\[.*\]")
+        configsectioname=${configsection:1:${#configsection}-2}
+        i=0
+        continue
+      fi
+      if [ -n "$configline" ]; then
+         eval "${configsectioname[i]}='$configline'"
+      fi
+      ((i++))
+   done <<< "$(echo -e "$configlines")"
 }
 
 initConfig
