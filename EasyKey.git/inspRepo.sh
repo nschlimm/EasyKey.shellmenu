@@ -35,16 +35,16 @@ while ${continuemenu:=true}; do
 clear
 menuInit "Inspecting repositories"
 submenuHead "State of working tree and stage (git status)"
-menuPunkt a "List which files are staged, unstaged, and untracked" "git status -s"
+menuItem a "List which files are staged, unstaged, and untracked" "git status -s"
 echo
 submenuHead "Information regarding the committed project history (git log)"
-menuPunkt b "Display commit history in one line" "git log --oneline"
-menuPunkt c "Show which files were altered in commits" "git log --stat"
-menuPunkt d "Display patch representing each commit" "git log -p"
-menuPunkt e "Search for commits by a particular author" listAuthorCommits
-menuPunkt f "Only display commits that include the specified file" listFileCommits
-menuPunkt g "Display a full diff of all the changes someone has made to a file" authorDiffFile
-menuPunkt h "Display contents of one commit" oneCommit
+menuItem b "Display commit history in one line" "git log --oneline"
+menuItem c "Show which files were altered in commits" "git log --stat"
+menuItem d "Display patch representing each commit" "git log -p"
+menuItem e "Search for commits by a particular author" listAuthorCommits
+menuItem f "Only display commits that include the specified file" listFileCommits
+menuItem g "Display a full diff of all the changes someone has made to a file" authorDiffFile
+menuItem h "Display contents of one commit" oneCommit
 echo
 choice
 done

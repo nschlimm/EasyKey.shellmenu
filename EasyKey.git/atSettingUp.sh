@@ -75,19 +75,19 @@ while ${continuemenu:=true}; do
 clear
 menuInit "Repositories"
 submenuHead "Setting up repositories"
-menuPunkt a "Transform the current directory into a git repository" atLocalGit
-menuPunkt b "Setting up a git repository in a directory" atLocalGitWithDir
-menuPunkt c "Setting up a shared git repository in a directory" atLocalGitBare
-menuPunkt d "Clone a remote repository" cloneRemote
+menuItem a "Transform the current directory into a git repository" atLocalGit
+menuItem b "Setting up a git repository in a directory" atLocalGitWithDir
+menuItem c "Setting up a shared git repository in a directory" atLocalGitBare
+menuItem d "Clone a remote repository" cloneRemote
 echo
 submenuHead "Configure repositories:"
-menuPunkt e "Define the author name and email to be used for all commits" defineAuthor
-menuPunkt f "Administering aliases" adminAliases
-menuPunkt g "Define the text editor used by commands" textEditor
-menuPunkt h "Define merge tool" defineMergeTool
-menuPunkt i "Open global config" openGlobalConfig
-menuPunkt j "Open system config" openSystemConfig
-menuPunkt k "Open local config" openLocalConfig
+menuItem e "Define the author name and email to be used for all commits" defineAuthor
+menuItem f "Administering aliases" adminAliases
+menuItem g "Define the text editor used by commands" textEditor
+menuItem h "Define merge tool" defineMergeTool
+menuItem i "Open global config" openGlobalConfig
+menuItem j "Open system config" openSystemConfig
+menuItem k "Open local config" openLocalConfig
 
 choice
 done

@@ -135,41 +135,41 @@ while ${continuemenu:=true}; do
 clear
 menuInit "Saving changes"
 submenuHead "Adding changes to stage:"
-menuPunkt a "Git add all gently" addAllGently
-menuPunkt b "Git interactive staging session" interactiveStage
-menuPunkt c "Git interactive staging detail session" interStage
+menuItem a "Git add all gently" addAllGently
+menuItem b "Git interactive staging session" interactiveStage
+menuItem c "Git interactive staging detail session" interStage
 echo
 submenuHead "Commit changes:"
-menuPunkt d "Commit staged snapshot - vim (stage -> archive)" commitStagedSnapshot
-menuPunkt f "Commit all changes of tracked files - vim (tree -> stage -> archive)" commitChangesVim
-menuPunkt g "Commit all changes of tracked files - read (tree -> stage -> archive)" commitChanges
+menuItem d "Commit staged snapshot - vim (stage -> archive)" commitStagedSnapshot
+menuItem f "Commit all changes of tracked files - vim (tree -> stage -> archive)" commitChangesVim
+menuItem g "Commit all changes of tracked files - read (tree -> stage -> archive)" commitChanges
 echo
 submenuHead "Stash current changes:"
-menuPunkt h "Stash current changes" stash
-menuPunkt i "Reapply stash to current directory (pop - deletes stash)" stashPop
-menuPunkt j "Reapply stash to current directory (apply - leaves stash alive)" stashApply
-menuPunkt k "Stash current changes - include untracked" stashAllIncludeUntracked
-menuPunkt l "Stash current changes - include all untracked and ignored" stashAll
+menuItem h "Stash current changes" stash
+menuItem i "Reapply stash to current directory (pop - deletes stash)" stashPop
+menuItem j "Reapply stash to current directory (apply - leaves stash alive)" stashApply
+menuItem k "Stash current changes - include untracked" stashAllIncludeUntracked
+menuItem l "Stash current changes - include all untracked and ignored" stashAll
 echo
 submenuHead "Managing multiple stashes:"
-menuPunkt m "List stashes" stashList
-menuPunkt n "Stash with message" stashWithMessage
-menuPunkt o "Reapply stash to current directory from stash list (pop)" stashPopFromList
-menuPunkt p "Reapply stash to current directory from stash list (apply)" stashApplyFromList
+menuItem m "List stashes" stashList
+menuItem n "Stash with message" stashWithMessage
+menuItem o "Reapply stash to current directory from stash list (pop)" stashPopFromList
+menuItem p "Reapply stash to current directory from stash list (apply)" stashApplyFromList
 echo
 submenuHead "Clean up stashes:"
-menuPunkt r "Delete all stashes" stashDeleteAll
-menuPunkt s "Delete specific stash" stashDeleteSpecific
+menuItem r "Delete all stashes" stashDeleteAll
+menuItem s "Delete specific stash" stashDeleteSpecific
 echo
 submenuHead "Other stash stuff:"
-menuPunkt t "View summary of a stash (stash state vs. original parent commit)" stashSummary
-menuPunkt u "View diff of a stash (stash state vs. original parent commit)" stashDiff
-menuPunkt v "Stash single files" stashSingle
-menuPunkt w "Create branch from stash" stashBranch
-menuPunkt x "Inspect stashes" inspectStash
+menuItem t "View summary of a stash (stash state vs. original parent commit)" stashSummary
+menuItem u "View diff of a stash (stash state vs. original parent commit)" stashDiff
+menuItem v "Stash single files" stashSingle
+menuItem w "Create branch from stash" stashBranch
+menuItem x "Inspect stashes" inspectStash
 echo
 submenuHead "Ignoring files:"
-menuPunkt y "Ignore menu" ignoreMenu
+menuItem y "Ignore menu" ignoreMenu
 echo
 showStatus
 choice

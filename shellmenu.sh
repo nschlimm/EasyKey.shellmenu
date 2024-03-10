@@ -78,9 +78,10 @@ function menuItem () {
 
 function menuItemClm () {
 
+   clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
-   echo -e "${1}.,${2},${4}.,${5}" | awk -F , -v OFS=, '{printf "%-3s",$1; printf "%-45s",$2; printf "%-3s",$3; printf "%-45s",$4; printf("\n"); }'
+   echo -e "${1}.,${2},${4}.,${5}" | awk -F , -v OFS=, '{printf "%-3s",$1; printf "%-'${clmLocalWidth}'s",$2; printf "%-3s",$3; printf "%-'${clmLocalWidth}'s",$4; printf("\n"); }'
 
 }
 
@@ -171,16 +172,6 @@ function importantLog() {
    echo -e -n "\033[1;36m$prompt"
    echo $1
    echo -e -n '\033[0m'
-}
-
-function showStatus () {
-  importantLog $(pwd | grep -o "[^/]*$")
-  actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  importantLog $actual 
-  git log --decorate --oneline -n 1
-  git status | grep "Your branch"
-  analyzeWorkingDir
-  git remote -v
 }
 
 function gentlyCommandNY () {

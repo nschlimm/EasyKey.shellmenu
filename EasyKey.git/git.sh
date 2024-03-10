@@ -1,11 +1,12 @@
 #!/bin/sh
-# Get the directory of the current script
+
+###################################
+# EasyKey.git utility main script #
+###################################
+
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# Source the file relative to the script's directory
 source "$script_dir/../shellmenu.sh"
 
-#supergithome=/Users/d6t6/workspace/EasyKey.shellmenu
-#source $supergithome/shellmenu.sh
 trackchoices=$1
 
 function analyzeWorkingDir (){
@@ -20,7 +21,7 @@ function analyzeWorkingDir (){
       filescount=$(git ls-files --others --exclude-standard | wc -l)
       wstat="$wstat (WARN: $filescount untracked file(s) present)"
    fi
-   echo "Working directory vs. HEAD: $wstat"
+   echo "> $wstat"
    echo
 }
 
@@ -284,27 +285,27 @@ function fetachAll () {
 # submenus
 
 function workingDiffs() {
-  source $supergithome/EasyKey.git/diff.sh
+  source $script_dir/../EasyKey.git/diff.sh
   nowaitonexit
 }
 
 function atlassiansView() {
-  source $supergithome/EasyKey.git/atlassian.sh
+  source $script_dir/../EasyKey.git/atlassian.sh
   nowaitonexit
 }
 
 function changeProject () {
-  source $supergithome/EasyKey.git/fl.sh
+  source $script_dir/../EasyKey.git/fl.sh
   nowaitonexit
 }
 
 function gitExtras () {
-  source $supergithome/EasyKey.git/gitExtras.sh
+  source $script_dir/../EasyKey.git/gitExtras.sh
   nowaitonexit
 }
 
 function gitPasswort () {
-  source $supergithome/EasyKey.git/userpas.sh
+  source $script_dir/../EasyKey.git/userpas.sh
   nowaitonexit
 }
 
@@ -339,6 +340,25 @@ function coRemoteBranch () {
        git checkout --track $bname 
 }
 
+function setRemoteOrigin() {
+   echo "Enter remot origin address:"
+   read originaddress
+   executeCommand "git remote set-url origin $originaddress"
+}
+
+function showStatus () {
+  importantLog $(pwd | grep -o "[^/]*$")
+  actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+  importantLog $actual 
+  git log --decorate --oneline -n 1
+  git status | grep "Your branch"
+  analyzeWorkingDir
+  git remote -v
+}
+
+# Menu section
+globalClmWidth=35
+
 git fetch --all --tags 2> /dev/null
 continuemenu=true
 
@@ -346,37 +366,27 @@ while ${continuemenu:=true}; do
 clear
 menuInit "Super GIT Home"
 submenuHead "Working with remotes:"
-menuItem a "Gently push current" pushActual
-menuItem e "Set upstream to current" setUpstream
-menuItem f "Administer remotes" adminRemotes
+menuItemClm a "Gently push current" pushActual b "Set remote origin repo" setRemoteOrigin
+menuItemClm e "Set upstream to current" setUpstream f "Administer remotes" adminRemotes
 menuItem g "Show repository history" showRepoHisto
 echo
 submenuHead "Working on local branches:"
-menuItem k "New local/remote branch, checkout" newLocalBranch
-menuItem L "Push local branch to remote" pushLocalBranch
-menuItem v "Checkout remote branch" coRemoteBranch
-menuItem n "Delete local/remote branch" deleteBranch
-menuItem o "Merge from source branch to target branch" mergeSourceToTarget
-menuItem p "Show all branches (incl. remote)" showAllBranches
+menuItemClm k "New local/remote branch checkout" newLocalBranch L "Push local branch to remote" pushLocalBranch
+menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
+menuItemClm o "Merge source to target branch" mergeSourceToTarget p "Show all branches (incl. remote)" showAllBranches
 menuItem r "Show branch history" showBranchHisto
 echo
 submenuHead "Other usefull actions:"
-menuItem s "Working with diffs" workingDiffs
-menuItem w "Atlassian's view" atlassiansView
+menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView
 echo
 submenuHead "Git admin actions:"
-menuItem 1 "Show local git config" localGitConfig
-menuItem 2 "Show global git config" globalGitConfig
-menuItem 3 "Administering aliases" adminAliases
-menuItem 4 "Show .gitignore" gitIgnore
-menuItem 5 "Git extras" gitExtras
-menuItem 6 "Change Git Passwords" gitPasswort
+menuItemClm 1 "Show local git config" localGitConfig 2 "Show global git config" globalGitConfig
+menuItemClm 3 "Administering aliases" adminAliases 4 "Show .gitignore" gitIgnore
+menuItemClm 5 "Git extras" gitExtras 6 "Change Git Passwords" gitPasswort
 echo
 submenuHead "Shortcuts"
-menuItem P "Change project" changeProject
-menuItem B "Change branch" changeBranch
-menuItem F "Fetch all" fetachAll
-menuItem C "Compile favorites" compileMenu
+menuItemClm P "Change project" changeProject B "Change branch" changeBranch
+menuItemClm F "Fetch all" fetachAll C "Compile favorites" compileMenu
 menuItem X "Purge cache" purgeCash
 echo
 showStatus

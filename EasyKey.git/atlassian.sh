@@ -3,22 +3,22 @@
 # submenus
 
 function settingUp () {
-	source $supergithome/EasyKey.git/atSettingUp.sh
+	source $script_dir/../EasyKey.git/atSettingUp.sh
     nowaitonexit
 }
 
 function savingChanges () {
-	source $supergithome/EasyKey.git/atSaveChanges.sh
+	source $script_dir/../EasyKey.git/atSaveChanges.sh
     nowaitonexit
 }
 
 function inspectingRepos () {
-	source $supergithome/EasyKey.git/inspRepo.sh
+	source $script_dir/../EasyKey.git/inspRepo.sh
 	nowaitonexit
 }
 
 function undoingChanges () {
-	source $supergithome/EasyKey.git/atUndoingChanges.sh
+	source $script_dir/../EasyKey.git/atUndoingChanges.sh
 	nowaitonexit
 }
 

@@ -48,11 +48,11 @@ while ${continuemenu:=true}; do
 clear
 menuInit "Undoing changes"
 submenuHead "Undoing changes"
-menuPunkt a "Revert last commit - (keep commit history)" revertLastCommit
-menuPunkt b "Revert commit - (keep commit history)" revertToCommit
-menuPunkt c "(Soft) Reset commit - (delete some commits)" resetToCommit
-menuPunkt d "(Hard) Reset commit - (delete some commits)" resetToCommitHard
-menuPunkt e "Undo local changes (only effects untracked files)" clean
+menuItem a "Revert last commit - (keep commit history)" revertLastCommit
+menuItem b "Revert commit - (keep commit history)" revertToCommit
+menuItem c "(Soft) Reset commit - (delete some commits)" resetToCommit
+menuItem d "(Hard) Reset commit - (delete some commits)" resetToCommitHard
+menuItem e "Undo local changes (only effects untracked files)" clean
 
 echo
 echo "NOTE: if your work with remote repos and already 
