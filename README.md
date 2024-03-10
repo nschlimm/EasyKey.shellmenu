@@ -8,17 +8,17 @@ Very simple script to generate menu and selections in your favorite shell enviro
 
 # Get started
 
-Easy !
-Clone this repository. Then look into `example.sh` and update that to write your own menu.
-Start with `bash example.sh`.
-Or look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) `git.sh` oder [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) `kubectl.sh`. Two utilities based on EasyKey.shellmenu that I use in my daily work.
+Easy !  
+Clone this repository. Then look into `example.sh` and update that to write your own menu.  
+Start with `bash example.sh`.  
+Or look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) `git.sh` oder [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) `kubectl.sh`. Two utilities based on EasyKey.shellmenu that I use in my daily work.  
 
 # Syntax
 
-Use `menuInit` to initialize a new menu. 
-Use `submenuHead` to structure your menu into sub sections.
-Use `menuItem` for single column menus.
-Use `menuItemClm` for multi column menus.
+Use `menuInit` to initialize a new menu.  
+Use `submenuHead` to structure your menu into sub sections.  
+Use `menuItem` for single column menus.  
+Use `menuItemClm` for multi column menus.  
 
 ```
 menuInit <menu title>
