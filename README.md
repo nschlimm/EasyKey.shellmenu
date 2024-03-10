@@ -22,13 +22,13 @@ Or look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellmenu/tree/ma
 Use `menuInit` to initialize a new menu.  
 Use `submenuHead` to structure your menu into sub sections.  
 Use `menuItem` for single column menus.  
-Use `menuItemClm` for multi column menus.  
+Use `menuItemClm` for multi column menus (allows more actions in the menu).  
 
 ```
 menuInit <menu title>
 submenuHead <sub menu title>
-menuItem <key> <action name> <shell function|shell comand>
-menuItemClm <key> <action name> <shell function|shell command> <key> <action name> <shell function|shell command>
+menuItem <key> <name> <shell comand>
+menuItemClm <key> <action> <shell command> <key> <action> <shell command>
 ```
 
 # exmaple.sh
