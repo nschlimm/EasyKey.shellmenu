@@ -276,27 +276,22 @@ function fetachAll () {
 # submenus
 
 function workingDiffs() {
-  source $script_dir/../EasyKey.git/diff.sh
+  source $script_dir/../EasyKey.git/ezk-git-diff.sh
   nowaitonexit
 }
 
 function atlassiansView() {
-  source $script_dir/../EasyKey.git/atlassian.sh
+  source $script_dir/../EasyKey.git/ezk-git-extras.sh
   nowaitonexit
 }
 
 function changeProject () {
-  source $script_dir/../EasyKey.git/fl.sh
+  source $script_dir/../EasyKey.git/ezk-git-loca.sh
   nowaitonexit
 }
 
 function gitExtras () {
-  source $script_dir/../EasyKey.git/gitExtras.sh
-  nowaitonexit
-}
-
-function gitPasswort () {
-  source $script_dir/../EasyKey.git/userpas.sh
+  source $script_dir/../EasyKey.git/ezk-git-extras.sh
   nowaitonexit
 }
 

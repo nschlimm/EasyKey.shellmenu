@@ -1,6 +1,4 @@
 #!/bin/bash
-supergithome=/Users/d6t6/workspace/EasyKey.shellmenu
-source $supergithome/shellmenu.sh
 		
 function toDir () {
 	vars="$*" # all splitted words back to one var
