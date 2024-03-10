@@ -14,7 +14,8 @@
 # executeCommand <shell command>
 # selectItem <list command> <awk select from line selected> <optional: width if coloring is enabled>  <optional: line id of header> <optional: preselection>
 
-source ./shellmenu.sh
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/shellmenu.sh"
 
 while ${continuemenu:=true}; do
 clear
