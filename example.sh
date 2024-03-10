@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ##############################
 #  Example menu as template  #
