@@ -1,5 +1,5 @@
 # EasyKey.shellmenu
-Very simple script to generate menu and selections in out favorite shell environment.
+Very simple script to generate menu and selections in your favorite shell environment.
 
 - Use single or double column menu
 - Call shell functions or immediately execut shell command
