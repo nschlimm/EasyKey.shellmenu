@@ -1,27 +1,32 @@
 #!/bin/sh
 
-function coloredLog () { # logentry ; color code
+# generate colored log
+coloredLog () { # log entry ; color code
   export GREP_COLOR="$2"
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
 }
 
-function blueLog() {
+# generate blue log
+blueLog() { # log entry
   log="$1"
   coloredLog "${log}" '1;37;44'
 }
 
-function greenLog() {
+# generate green log
+greenLog() { # log entry
   log="$1"
   coloredLog "${log}" '1;97;42'
 }
 
-function redLog() {
+# generate red log
+redLog() { # log entry
   log="$1"
   coloredLog "${log}" '1;37;44'
 }
 
-function menuInit () {
+# initialize menu
+menuInit () { # menu name (e.g. "Super GIT Menu")
   actualmenu="$1"
   menudatamap=()
   export GREP_COLOR='1;37;44'
@@ -30,14 +35,15 @@ function menuInit () {
   echo
 }
 
-function submenuHead () {
-   actualsubmenuname="$1"
+# sub menu head to group commands in menu
+submenuHead () { # sub menu name (e.g. "Version control commands")
+  actualsubmenuname="$1"
   export GREP_COLOR='1;36'
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
 }
 
-function submenuHeadClm () {
+submenuHeadClm () {
   actualsubmenuname="$1"
   export GREP_COLOR='1;36'
   pad "$1" 90 - R | grep --color ".*"
@@ -45,18 +51,18 @@ function submenuHeadClm () {
 }
 
 pad () {
-   local text=${1?Usage: pad text [length] [character] [L|R|C]}
-   local length=${2:-80}
-   local char=${3:--}
-   local side=${4:-R}
+   local text="${1?Usage: pad text [length] [character] [L|R|C]}"
+   local length="${2:-80}"
+   local char="${3:--}"
+   local side="${4:-R}"
    local line l2
 
-   [ ${#text} -ge $length ] && { echo "$text"; return; }
+   [ ${#text} -ge "$length" ] && { echo "$text"; return; }
 
    char=${char:0:1}
    side=${side^^}
 
-   printf -v line "%*s" $(($length - ${#text})) ' '
+   printf -v line "%*s" $((length - text)) ' '
    line=${line// /$char}
 
    if [[ $side == "R" ]]; then
@@ -69,112 +75,83 @@ pad () {
    fi
 }
 
-function menuItem () {
-
+menuItem () {
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    echo "$1. $2"
-
 }
 
-function menuItemClm () {
+menuItemClm () {
 
    clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
-   echo -e "${1}.,${2},${4}.,${5}" | awk -F , -v OFS=, '{printf "%-3s",$1; printf "%-'${clmLocalWidth}'s",$2; printf "%-3s",$3; printf "%-'${clmLocalWidth}'s",$4; printf("\n"); }'
+   echo -e "${1}.,${2},${4}.,${5}" | awk -F , -v OFS=, '{printf "%-3s",$1; printf "%-'"${clmLocalWidth}"'s",$2; printf "%-3s",$3; printf "%-'"${clmLocalWidth}"'s",$4; printf("\n"); }'
 
 }
 
-function callKeyFunktion () { 
+callKeyFunktion () { 
    for i in "${menudatamap[@]}"
      do
-       keys2=$(echo $i | cut -d'#' -f1)
+       keys2=$(echo "$i" | cut -d'#' -f1)
          if [ "$1" = "$keys2" ]
            then
             method=$(echo "$i" | cut -f3 -d#)
-            if [[ $trackchoices == 1 ]]; then
-              logCommand "$1"
-            fi
             clear
             coloredLog "$method" '1;37;44'
-            eval $method
+            eval "$method"
             return 1
          fi
    done
    return 5
 }
 
-function alternateRows() {
+alternateRows() {
    #!/bin/bash
    header="$1"
    i=1
-   while read line
+   while read -r line
     do
       if [[ $i == 1 ]] && [[ $header != "" ]]; then
         echo -e "\033[48;5;93m$line\033[0m"
       else 
         echo -e "\033[48;5;238m$line\033[0m"
       fi
-      read line
+      read -r line
       echo -e "\033[48;5;232m$line\033[0m"
       i=$((i+1))
     done
     echo -en "\033[0m"
 }
 
-function nowaitonexit () {
+nowaitonexit () {
   waitstatus=false
 }
 
-function waitonexit () {
+waitonexit () {
   waitstatus=true
 }
 
-function logCommand () {
-   for i in "${menudatamap[@]}"
-     do
-       keys=${i:0:1}
-         if [ "$1" == "$keys" ]
-           then
-            gkommando=$(echo "$i" | cut -f2 -d#)
-            submenuname=$(echo "$i" | cut -f4 -d#)
-            method=$(echo "$i" | cut -f3 -d#)
-            today=$(date)
-         fi
-   done
-}
-
-function compileMenu () {
+compileMenu () {
    OLDIFS=$IFS
    IFS=,
-   [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
-   while read logdate menu submenu kommando methode
+   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
+   while read -r logdate menu submenu kommando methode
    do
-      kommando=$(echo $kommando | sed 's#/#-#g')
-      sed -i.bak "/$kommando/d" $rawdatahome$summaryfilename
-      echo "$counta,$menu,$submenu,$kommando,$methode" >> $rawdatahome$summaryfilename
-      sort -k1 -nr $rawdatahome$summaryfilename -o $rawdatahome$summaryfilename
-      kommando=$(echo $submenu | sed 's#/#-#g')
-      sed -i.bak "/$submenu/d" $rawdatahome$menuitemsfilename
-      echo "$counta,$menu,$submenu" >> $rawdatahome$menuitemsfilename      
-      sort -k1 -nr $rawdatahome$menuitemsfilename -o $rawdatahome$menuitemsfilename
+      kommando=$(echo "$kommando" | sed 's#/#-#g')
+      sed -i.bak "/$kommando/d" "$rawdatahome""$summaryfilename"
+      sort -k1 -nr "$rawdatahome""$summaryfilename" -o "$rawdatahome""$summaryfilename"
+      kommando=$(echo "$submenu" | sed 's#/#-#g')
    done < $INPUT
    IFS=$OLDIFS
-   importantLog "Your sorted summary of command favorites"
-   cat $rawdatahome$summaryfilename
-   echo
-   importantLog "Your sorted summary of menu favorites"
-   cat $rawdatahome$menuitemsfilename 
-   echo
 }
 
-function importantLog() {
+importantLog() {
    echo -e -n "\033[1;36m$prompt"
    echo $1
    echo -e -n '\033[0m'
 }
 
-function gentlyCommandNY () {
+gentlyCommandNY () {
   
   frage="$1"
   kommando="$2"
@@ -191,35 +168,35 @@ function gentlyCommandNY () {
 }
 
 
-function breakOnNo () {
+breakOnNo () {
  read -p "$1" -n 1 -r
  echo
  if [[ $REPLY =~ ^[^Yy]$ ]]; then
-   break
+   return
  fi
 }
 
-function executeCommand () {
+executeCommand () {
  importantLog "Executing: '$1'"
- eval $1
+ eval "$1"
  importantLog "Finished execution of '$1'"
 }
 
-function drillDown () {
+drillDown () {
    while true; do
      read -p "Drill down into file (y/n)? " -n 1 -r
      echo    # (optional) move to a new line                    if [[ $REPLY =~ ^[Yy]$ ]]
      if [[ $REPLY =~ ^[Yy]$ ]]
      then
         echo "Enter filename"
-        read fname
+        read -r fname
         if [ $# -eq 1 ]
           then
-            git difftool $1 $fname
+            git difftool "$1" "$fname"
         fi
         if [ $# -eq 2 ]
           then
-            git difftool $1:$fname $2:$fname
+            git difftool "$1":"$fname" "$2":"$fname"
         fi
      else
         break
@@ -227,8 +204,8 @@ function drillDown () {
    done
 }
 
-function selectItem () { 
-  # magic function letting user select from list. 
+selectItem () { 
+  # magic letting user select from list. 
   # out: 'linenumber' -> selected line number
   #      selected (the complete line selected)
   #      fname (selected line after regular expression applied -> what you want to have as return value from selection)
@@ -243,9 +220,9 @@ function selectItem () {
   blueLog "${listkommando}"
 
   if [[ $width = "" ]]; then
-    eval $listkommando | nl -n 'ln' -s " "
+    eval "$listkommando" | nl -n 'ln' -s " "
   else 
-    eval $listkommando | nl -n 'ln' -s " " | awk -v m=${width} '{printf("[%-'${width}'s]\n", $0)}' | alternateRows $header
+    eval "$listkommando" | nl -n 'ln' -s " " | awk -v m="${width}" '{printf("[%-'"${width}"'s]\n", $0)}' | alternateRows "$header"
   fi
   linenumber=""
   selected=""
@@ -253,7 +230,7 @@ function selectItem () {
   dfltln=${xpreselection}
   if [ "$xdarkprocessing" = "" ]; then
     echo "Select line or hit enter for preselection [${xpreselection}]:"
-    read linenumber
+    read -r linenumber
   fi
   linenumber=${linenumber:-$dfltln}
   message=$(echo "${linenumber}" | cut -d '.' -f2) # message = linenumer if no dot-message selected 
@@ -264,7 +241,7 @@ function selectItem () {
      message=${linenumber}
      fname=""
    else
-     selected=$(eval "$listkommando" | sed -n ${linenumber}p)
+     selected=$(eval "$listkommando" | sed -n "${linenumber}"p)
      echo "$selected"
      if echo "$regexp" | grep -q "awk"; then
        blueLog "awk detected $regexp"
@@ -276,7 +253,7 @@ function selectItem () {
   echo "... selected ${fname:-nothing}"
 }
 
-function diffDrillDownAdvanced () { # list kommando; regexp to select filename from list command; baseline object name; other object name
+diffDrillDownAdvanced () { # list kommando; regexp to select filename from list command; baseline object name; other object name
 
   listkommando="$1"
   regexp="$2"
@@ -313,7 +290,7 @@ function diffDrillDownAdvanced () { # list kommando; regexp to select filename f
 
 }
 
-function circulateOnSelectedItem() {
+circulateOnSelectedItem() {
      listkommando=$1
      regexp=$2
      comand=$3
@@ -334,10 +311,10 @@ function circulateOnSelectedItem() {
     done
 }
 
-function noterminate () { continuemenu=true; }
-function terminate () { continuemenu=false; }
+noterminate () { continuemenu=true; }
+terminate () { continuemenu=false; }
 
-function choice () {
+choice () {
   echo
   echo "Press 'q' to quit"
   echo
@@ -347,7 +324,7 @@ function choice () {
   if [[ $REPLY == "q" ]]; then
        terminate
   else
-    callKeyFunktion $REPLY
+    callKeyFunktion "$REPLY"
     if [[ $? -gt 1 ]]; then
       coloredLog "Huh ($request)?" "1;31"
     fi
@@ -360,25 +337,25 @@ function choice () {
 
 }
 
-function quit () {
-       echo "bye bye, homie!"
-       nowaitonexit
-       break #2> /dev/null
+quit () {
+   echo "bye bye, homie!"
+   nowaitonexit
+   return #2> /dev/null
 }
 
-function exitGently () {
-       echo "bye bye, homie!"
-       nowaitonexit
-       exit 1
+exitGently () {
+   echo "bye bye, homie!"
+   nowaitonexit
+   exit 1
 }
 
-function initConfig () {
+initConfig () {
    # read config to global arrays
-   INPUT=$supergithome/$configfilename
-   [ ! -f $INPUT ] && { echo "$INPUT file not found"; exit 99; }
+   INPUT="$supergithome"/"$configfilename"
+   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
    i=0
-   configlines=$(cat $INPUT)
-   while read configline; do
+   configlines=$(cat "$INPUT")
+   while read -r configline; do
       if echo "$configline" | grep -q "\[.*\]"; then
         configsection=$(echo "$configline" | grep -o "\[.*\]")
         configsectioname=${configsection:1:${#configsection}-2}
@@ -386,7 +363,7 @@ function initConfig () {
         continue
       fi
       if [ -n "$configline" ]; then
-         eval "$configsectioname[i]='$configline'"
+         eval "${configsectioname[i]}='$configline'"
       fi
       ((i++))
    done <<< "$(echo -e "$configlines")"
@@ -394,7 +371,7 @@ function initConfig () {
 
 waitonexit
 
-function selectFromSubdirectories() { #out: selected_subdir(name, not full path)
+selectFromSubdirectories() { #out: selected_subdir(name, not full path)
    dir="$1" #full dir name
    heading="$2"
    xdarkprocessing="$3"
@@ -406,7 +383,7 @@ function selectFromSubdirectories() { #out: selected_subdir(name, not full path)
    selected_subdir=$fname
 }
 
-function selectFromCSVList()
+selectFromCSVList()
 {
    list="$1" #csv list
    heading="$2"
@@ -421,12 +398,12 @@ function selectFromCSVList()
    do
        echo "$i" >> .csvlist
    done
-   selectItem "cat .csvlist" ".*" ${width} 
+   selectItem "cat .csvlist" ".*" "${width}"
    selected_item=$fname
    rm .csvlist
 }
-#comment
-function selectFromCsv() { #out: $linenumber(selected of csv file), $headers(of csv file), $fname(selected row values)
+
+selectFromCsv() { #out: $linenumber(selected of csv file), $headers(of csv file), $fname(selected row values)
    csvfile=$1 #source csv file full name
    linefrom=$2 #paging line from
    lineto=$3 #paging line to
@@ -435,11 +412,11 @@ function selectFromCsv() { #out: $linenumber(selected of csv file), $headers(of 
    linefrom=${linefrom:=2}
    lineto=${lineto:=80}
    coloredLog "${csvfile}" '1;37;44'
-   headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
-   selectItem '(echo "${headers}" && sed -n '${linefrom}','${lineto}'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
+   headers=$(head -1 "$csvfile" | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
+   selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
 }
 
-function coloredCsvTable() { #show csv file with header line in nice format
+coloredCsvTable() { #show csv file with header line in nice format
    csvfile="$1" #source csv file full name
    linefromXX="$2" #paging line from
    linetoXX="$3" #paging line to
@@ -448,7 +425,7 @@ function coloredCsvTable() { #show csv file with header line in nice format
    if [ "${linefromXX}" = "1" ]; then linefromXX="2"; fi
    headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
    coloredLog "${csvfile}" '1;37;44'
-   ! [ "${heading}" = "" ] && coloredLog ${heading}
+   ! [ "${heading}" = "" ] && coloredLog "${heading}"
    if [ "${width}" = "" ]; then
      (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | alternateRows 1
    else
