@@ -1,8 +1,8 @@
 #!/bin/sh
 
-##################################
-#  Example menu for as template  #
-##################################
+##############################
+#  Example menu as template  #
+##############################
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/shellmenu.sh"
