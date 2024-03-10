@@ -1,5 +1,6 @@
 [workspaces]
-shellmenu=~/workspace
+myworkspacelocation=~/workspace
+
 [locations]
 mavenrepohome=~/.m2
 userbin=/usr/local/bin
