@@ -23,7 +23,7 @@ menuItemClm <key> <action name> <shell function|shell command> <key> <action nam
 
 # exmaple.sh
 
-The following example are taken from my kubectl.sh utility for illustration.
+The following example are taken from example.sh utility for illustration.
 
 ```
 source ./shellmenu.sh
