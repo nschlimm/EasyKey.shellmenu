@@ -1,32 +1,83 @@
-#!/bin/sh
+#!/bin/bash
 
-# generate colored log
-coloredLog () { # log entry ; color code
+waitonexit=true;
+continuemenu=true
+globalClmWidth=45
+
+#######################################
+# Colored log to standard out.
+# Arguments:
+#   $1: log text
+#   $2: color code, e.g. "01;31"
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+coloredLog () {
   export GREP_COLOR="$2"
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
 }
 
-# generate blue log
-blueLog() { # log entry
+#######################################
+# Writes log text to standard out.
+# Background blue. Font color white.
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+blueLog() {
   log="$1"
   coloredLog "${log}" '1;37;44'
 }
 
-# generate green log
-greenLog() { # log entry
+#######################################
+# Writes log text to standard out.
+# Background green. Font color white.
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+greenLog() {
   log="$1"
   coloredLog "${log}" '1;97;42'
 }
 
-# generate red log
-redLog() { # log entry
+#######################################
+# Writes log text to standard out.
+# Background red. Font color white.
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+redLog() {
   log="$1"
   coloredLog "${log}" '1;37;44'
 }
 
-# initialize menu
-menuInit () { # menu name (e.g. "Super GIT Menu")
+#######################################
+# Writes 'important' log text to stdout
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes log to standard out
+#######################################
+importantLog() {
+   echo -e -n "\033[1;36m"
+   echo $1
+   echo -e -n '\033[0m'
+}
+
+#################################################
+# Writes the menu title and prepares menu array.
+# Arguments:
+#   $1: menu title, e.g. "Git Utility"
+# Outputs:
+#   Creates menudatamap global variable
+#################################################
+menuInit () {
   actualmenu="$1"
   menudatamap=()
   export GREP_COLOR='1;37;44'
@@ -35,55 +86,61 @@ menuInit () { # menu name (e.g. "Super GIT Menu")
   echo
 }
 
-# sub menu head to group commands in menu
-submenuHead () { # sub menu name (e.g. "Version control")
+#################################################
+# Creates a submenu title and the data structure
+# Arguments:
+#   $1: sub menu title, e.g. "Git Utility"
+# Outputs:
+#   Creates actualsubmenuname global variable
+#################################################
+submenuHead () { 
   actualsubmenuname="$1"
   export GREP_COLOR='1;36'
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
 }
 
-submenuHeadClm () {
-  actualsubmenuname="$1"
-  export GREP_COLOR='1;36'
-  pad "$1" 90 - R | grep --color ".*"
-  export GREP_COLOR='01;31'
-}
-
-pad () {
-   local text="${1?Usage: pad text [length] [character] [L|R|C]}"
-   local length="${2:-80}"
-   local char="${3:--}"
-   local side="${4:-R}"
-   local line l2
-
-   [ ${#text} -ge "$length" ] && { echo "$text"; return; }
-
-   char=${char:0:1}
-   side=${side^^}
-
-   printf -v line "%*s" $((length - text)) ' '
-   line=${line// /$char}
-
-   if [[ $side == "R" ]]; then
-       echo "${text}${line}"
-   elif [[ $side == "L" ]]; then
-       echo "${line}${text}"
-   elif [[ $side == "C" ]]; then
-       l2=$((${#line}/2))
-       echo "${line:0:$l2}${text}${line:$l2}"
-   fi
-}
-
+#################################################
+# Creates a single column menu item
+# Arguments:
+#   $1: key, e.g. "b"
+#   $2: menu item name, e.g. "Copy files"
+#   $3: name of shell function to call, or the 
+#       shell command itself.
+# Globals:
+#   menudatamap - the menu data
+#   actualsubmenuname - the actual submenu 
+#   actualmenu - the actual main menu
+# Outputs:
+#   Adds menu item data to menudatamap array.
+#   Prints the menu item to standard out.
+#################################################
 menuItem () {
-
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    echo "$1. $2"
-
 }
 
+#################################################
+# Creates a multi column menu item
+# Arguments:
+#   $1: key, e.g. "b"
+#   $2: menu item name, e.g. "Copy files"
+#   $3: name of shell function to call, or the 
+#       shell command itself.
+#   $4: key, e.g. "c"
+#   $5: menu item name, e.g. "Delete files"
+#   $6: name of shell function to call, or the 
+#       shell command itself.
+# Globals:
+#   menudatamap - the menu data
+#   actualsubmenuname - the actual submenu 
+#   actualmenu - the actual main menu
+#   globalClmWidth - the column width
+# Outputs:
+#   Adds menu item data to menudatamap array.
+#   Prints the menu item to standard out.
+#################################################
 menuItemClm () {
-
    clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
@@ -93,25 +150,40 @@ menuItemClm () {
                             printf "%-3s",$3; 
                             printf "%-'"${clmLocalWidth}"'s",$4; 
                             printf("\n"); }'
-
 }
 
+#################################################
+# Calls the function or shell command associated
+# to the key pressed by the user.
+# Globals:
+#   menudatamap - the menu data
+# Outputs:
+#   The executed user defined function or command
+#################################################
 callKeyFunktion () { 
    for i in "${menudatamap[@]}"
      do
        keys2=$(echo "$i" | cut -d'#' -f1)
          if [ "$1" = "$keys2" ]
            then
-            method=$(echo "$i" | cut -f3 -d#)
-            clear
-            coloredLog "$method" '1;37;44'
-            eval "$method"
-            return 1
+              method=$(echo "$i" | cut -f3 -d#)
+              clear && coloredLog "$method" '1;37;44'
+              eval "$method"
+              return 1
          fi
    done
    return 5
 }
 
+#################################################
+# Enables alternate coloring of lines in long 
+# lists for improved readability.
+# Arguments:
+#   Reads stdin -> the line of the list displayed
+#   $1: the header id of the table
+# Outputs:
+#   Writes a colored or non-colored line to stdout
+#################################################
 alternateRows() {
    #!/bin/bash
    header="$1"
@@ -130,99 +202,75 @@ alternateRows() {
     echo -en "\033[0m"
 }
 
+#################################################
+# Used to indicate ez.key that it may not wait
+# after command execution and immediately return
+# to main menu.
+# Globals:
+#   waitstatus - actual wait state
+# Outputs:
+#   Changes global wait state
+#################################################
 nowaitonexit () {
   waitstatus=false
 }
 
+#################################################
+# Used to indicate ez.key that it may wait for
+# user to press key after command execution.
+# After key press: to main menu.
+# Globals:
+#   waitstatus - actual wait state
+# Outputs:
+#   Changes global wait state
+#################################################
 waitonexit () {
   waitstatus=true
 }
 
-compileMenu () {
-   OLDIFS=$IFS
-   IFS=,
-   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
-   while read -r logdate menu submenu kommando methode
-   do
-      kommando=$(echo "$kommando" | sed 's#/#-#g')
-      sed -i.bak "/$kommando/d" "$rawdatahome""$summaryfilename"
-      sort -k1 -nr "$rawdatahome""$summaryfilename" -o "$rawdatahome""$summaryfilename"
-      kommando=$(echo "$submenu" | sed 's#/#-#g')
-   done < $INPUT
-   IFS=$OLDIFS
-}
-
-importantLog() {
-   echo -e -n "\033[1;36m$prompt"
-   echo $1
-   echo -e -n '\033[0m'
-}
-
-gentlyCommandNY () {
-  
-  frage="$1"
-  kommando="$2"
-  read -p "${frage}" -n 1 -r
-  if [[ $REPLY =~ ^[yY]$ ]]
-     then
-       echo
-       executeCommand "$kommando"
-     else
-      echo 
-      echo "Command '$kommando' not executed ..."
-  fi      
-
-}
-
-
-breakOnNo () {
- read -p "$1" -n 1 -r
- echo
- if [[ $REPLY =~ ^[^Yy]$ ]]; then
-   return
- fi
-}
-
+#################################################
+# Executes the given command.
+# Arguments:
+#   $1: the command to execute
+# Outputs:
+#   Executed command
+#################################################
 executeCommand () {
  importantLog "Executing: '$1'"
  eval "$1"
  importantLog "Finished execution of '$1'"
 }
 
-drillDown () {
-   while true; do
-     read -p "Drill down into file (y/n)? " -n 1 -r
-     echo
-     if [[ $REPLY =~ ^[Yy]$ ]]
-     then
-        echo "Enter filename"
-        read -r fname
-        if [ $# -eq 1 ]
-          then
-            git difftool "$1" "$fname"
-        fi
-        if [ $# -eq 2 ]
-          then
-            git difftool "$1":"$fname" "$2":"$fname"
-        fi
-     else
-        break
-     fi
-   done
-}
-
+#################################################
+# Executes a so called list command. That is a 
+# command like 'ls -l' that returns a list.
+# This function executes the list command and
+# gives every item in the list an ID. The header
+# will have the ID=1, the first row most often
+# ID=2. Users can select the list item and
+# execute user defined functions based on the
+# data of that list item.
+# Arguments:
+#   $1: the list command
+#   $2: the awk command or regex to grep a column
+#       value of the selected list item
+#   $3: the width of the displayed list, optional
+#   $4: ID of the header, usually "1", optional
+#   $5: Preselcted item in the list, optional
+# Outputs:
+#      'linenumber' - selected line number
+#      selected - the complete line selected)
+#      fname - selected line after regular expression 
+#              or awk cmd applied -> what you want to 
+#              have as return value from selection.
+#              often the main output of this function!
+#################################################
 selectItem () { 
-  # magic letting user select from list. 
-  # out: 'linenumber' -> selected line number
-  #      selected (the complete line selected)
-  #      fname (selected line after regular expression applied -> what you want to have as return value from selection)
-  #      message (dot-seperated part of number selection, e.g. 18.r -> r is the message)
-  listkommando="$1" # list to select from
-  regexp="$2" # optional: regexp to grep considered item from selected line item, e.g. 'M foo.bar -> grep foo.bar with "[^ ]*$"
-  width="$3" # optional if coloring is desired
-  header="$4" # special coloring for header
-  xpreselection="$5" # preselection
-  xdarkprocessing="$6"
+  listkommando="$1"
+  regexp="$2"
+  width="$3"
+  header="$4"
+  xpreselection="$5"
 
   blueLog "${listkommando}"
 
@@ -236,14 +284,12 @@ selectItem () {
   fi
   linenumber=""
   selected=""
-  message=""
   dfltln=${xpreselection}
   if [ "$xdarkprocessing" = "" ]; then
     echo "Select line or hit enter for preselection [${xpreselection}]:"
     read -r linenumber
   fi
   linenumber=${linenumber:-$dfltln}
-  message=$(echo "${linenumber}" | cut -d '.' -f2)
   linenumber=$(echo "${linenumber}" | cut -d '.' -f1)
   re='^[0-9]+$'
   if ! [[ $linenumber =~ $re ]]; then
@@ -263,7 +309,7 @@ selectItem () {
   echo "... selected ${fname:-nothing}"
 }
 
-diffDrillDownAdvanced () { # list kommando; regexp to select filename from list command; baseline object name; other object name
+diffDrillDownAdvanced () { 
 
   listkommando="$1"
   regexp="$2"

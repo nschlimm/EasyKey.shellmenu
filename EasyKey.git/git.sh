@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ###################################
 # EasyKey.git utility main script #
@@ -6,8 +6,6 @@
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/../shellmenu.sh"
-
-trackchoices=$1
 
 function analyzeWorkingDir (){
    wstat=$(git diff HEAD --shortstat) # analyze local dir working status vs. actual checkout
@@ -356,11 +354,9 @@ function showStatus () {
   git remote -v
 }
 
-# Menu section
 globalClmWidth=35
 
 git fetch --all --tags 2> /dev/null
-continuemenu=true
 
 while ${continuemenu:=true}; do
 clear

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function revertLastCommit () {
    echo "Enter YES if you want to revert to last commit:"

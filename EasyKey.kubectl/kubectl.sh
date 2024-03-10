@@ -1,6 +1,11 @@
-#!/bin/sh
-source /Users/d6t6/workspace/EasyKey.shellmenu/shellmenu.sh
-trackchoices=$1
+#!/bin/bash
+
+#######################################
+# EasyKey.kubectl utility main script #
+#######################################
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
 
 function listImagesInUse() {
 
@@ -214,16 +219,10 @@ deplomentActualStatus() {
       fi
     done <<< "${pod_list}"
 
-    # Set colors using tput
-    green=$(tput setaf 2)
-    red=$(tput setaf 1)
-    reset=$(tput sgr0)
-
-    # Print the result with colors
     if ${all_pods_running}; then
-      echo "${green}All pods running${reset}"  # Green color for "Engines UP"
+      greenLog "All pods ready"
     else
-      echo "${red}System not complete${reset}"  # Red color for "Engines DOWN"
+      redLog "Not all pods ready"
     fi
 
 }
@@ -238,7 +237,7 @@ echo "Namespace: $(kubectl config view --minify -o jsonpath='{..namespace}')"
 echo
 deplomentActualStatus
 echo
-submenuHead "Kubectl Config:"
+submenuHead "Kubectl Config:" "Test:"
 menuItemClm a "Show config" "kubectl config view" b "Switch context" switchContext
 menuItemClm c "Switch namespace" switchNamespace d "Add cluster" addCluster 
 menuItemClm e "Add users (token)" addUsers f "Add context" addContext 
