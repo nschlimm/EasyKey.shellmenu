@@ -36,7 +36,7 @@ menuInit () { # menu name (e.g. "Super GIT Menu")
 }
 
 # sub menu head to group commands in menu
-submenuHead () { # sub menu name (e.g. "Version control commands")
+submenuHead () { # sub menu name (e.g. "Version control")
   actualsubmenuname="$1"
   export GREP_COLOR='1;36'
   echo "$1" | grep --color ".*"
@@ -76,8 +76,10 @@ pad () {
 }
 
 menuItem () {
+
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    echo "$1. $2"
+
 }
 
 menuItemClm () {
@@ -85,7 +87,12 @@ menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
    menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
-   echo -e "${1}.,${2},${4}.,${5}" | awk -F , -v OFS=, '{printf "%-3s",$1; printf "%-'"${clmLocalWidth}"'s",$2; printf "%-3s",$3; printf "%-'"${clmLocalWidth}"'s",$4; printf("\n"); }'
+   echo -e "${1}.,${2},${4}.,${5}" \
+      | awk -F , -v OFS=, '{printf "%-3s",$1; 
+                            printf "%-'"${clmLocalWidth}"'s",$2; 
+                            printf "%-3s",$3; 
+                            printf "%-'"${clmLocalWidth}"'s",$4; 
+                            printf("\n"); }'
 
 }
 
@@ -185,7 +192,7 @@ executeCommand () {
 drillDown () {
    while true; do
      read -p "Drill down into file (y/n)? " -n 1 -r
-     echo    # (optional) move to a new line                    if [[ $REPLY =~ ^[Yy]$ ]]
+     echo
      if [[ $REPLY =~ ^[Yy]$ ]]
      then
         echo "Enter filename"
@@ -222,7 +229,10 @@ selectItem () {
   if [[ $width = "" ]]; then
     eval "$listkommando" | nl -n 'ln' -s " "
   else 
-    eval "$listkommando" | nl -n 'ln' -s " " | awk -v m="${width}" '{printf("[%-'"${width}"'s]\n", $0)}' | alternateRows "$header"
+    eval "$listkommando" \
+       | nl -n 'ln' -s " " \
+       | awk -v m="${width}" '{printf("[%-'"${width}"'s]\n", $0)}' \
+       | alternateRows "$header"
   fi
   linenumber=""
   selected=""
@@ -233,7 +243,7 @@ selectItem () {
     read -r linenumber
   fi
   linenumber=${linenumber:-$dfltln}
-  message=$(echo "${linenumber}" | cut -d '.' -f2) # message = linenumer if no dot-message selected 
+  message=$(echo "${linenumber}" | cut -d '.' -f2)
   linenumber=$(echo "${linenumber}" | cut -d '.' -f1)
   re='^[0-9]+$'
   if ! [[ $linenumber =~ $re ]]; then
@@ -279,36 +289,10 @@ diffDrillDownAdvanced () { # list kommando; regexp to select filename from list 
              executeCommand "$kommando"
         fi
 
-#        read -p $'\n<Press any key to return>' -n 1 -r
-#        if [ "$REPLY" = "c" ]; then
-#           clear
-#        fi        
-
    done
 
   fi
 
-}
-
-circulateOnSelectedItem() {
-     listkommando=$1
-     regexp=$2
-     comand=$3
-     width=$4
-     header=$5
-     while true; do
-        
-        importantLog "Make a selection: $listkommando"
-
-        selectItem "$listkommando" "$regexp" "$4" "$5"
-
-        if [[ $fname = "" ]]; then
-          break
-        fi
-
-        eval "$comand"
-
-    done
 }
 
 noterminate () { continuemenu=true; }
@@ -340,7 +324,7 @@ choice () {
 quit () {
    echo "bye bye, homie!"
    nowaitonexit
-   return #2> /dev/null
+   return
 }
 
 exitGently () {
@@ -368,8 +352,6 @@ initConfig () {
       ((i++))
    done <<< "$(echo -e "$configlines")"
 }
-
-waitonexit
 
 selectFromSubdirectories() { #out: selected_subdir(name, not full path)
    dir="$1" #full dir name
