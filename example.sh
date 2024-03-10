@@ -1,18 +1,8 @@
 #!/bin/sh
 
 ##################################
-# Example menu for super kubectl #
+#  Example menu for as template  #
 ##################################
-
-# API Syntax FOR CREATING MENUS: 
-# menuInit <menu title>
-# submenuHead <sub menu title>
-# menuItem <key> <action name> <shell function|shell comand>
-# menuItemClm <key> <action name> <shell function|shell command> <key> <action name> <shell function|shell command>
-
-# API Syntax FOR WRITING FUNCTIONS Ccalled by menu item: 
-# executeCommand <shell command>
-# selectItem <list command> <awk select from line selected> <optional: width if coloring is enabled>  <optional: line id of header> <optional: preselection>
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/shellmenu.sh"
