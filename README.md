@@ -9,7 +9,7 @@ Very simple script to generate menu and selections in out favorite shell environ
 # Get started
 
 Easy !
-Just look into `example.sh` and update that to write your own menu.
+Clone this repository. Then look into `example.sh` and update that to write your own menu.
 Start with `bash example.sh`.
 Or look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) `git.sh` oder [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) `kubectl.sh`. Two utilities based on EasyKey.shellmenu that in my daily work.
 
