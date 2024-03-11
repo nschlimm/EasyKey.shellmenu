@@ -20,7 +20,7 @@ showGlobalSettingFile() {
 
 while ${continuemenu:=true}; do
 clear
-menuInit "Super KUBECTL Home"
+menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
      menuItem c "Clean all" "mvn clean:clean"
      menuItem x "Compile" "mvn clean compile" 
@@ -33,7 +33,6 @@ menuInit "Super KUBECTL Home"
     menuItem e "Show effective settings" "mvn help:effective-settings"
     menuItem r "Show local repo location" "mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'" 
     menuItem l "Show global settings file location" showGlobalSettingFile
-    echo && importantLog $(pwd)
   choice
 done
 echo "bye, bye, homie!"
