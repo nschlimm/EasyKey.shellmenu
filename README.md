@@ -1,8 +1,8 @@
 <p align="center">
-    <img src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/1131a5eb-f121-4999-aff3-a3978237db62" width="400px">
+    <img src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/2fb79ee4-60ad-4a9d-a224-d3e544662477" width="400px">
 </p>
 
-<h1 align="center">EasyKey.shellmenu</h1>
+<h1 align="center">Foster your productivity ✨</h1>
 
 The time when you forget your favorite commands is over! 💪
 
