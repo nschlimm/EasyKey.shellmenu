@@ -258,7 +258,7 @@ executeCommand () {
 #   $4: ID of the header, usually "1", optional
 #   $5: Preselcted item in the list, optional
 # Outputs:
-#      'linenumber' - selected line number
+#      linenumber - selected line number
 #      selected - the complete line selected)
 #      fname - selected line after regular expression 
 #              or awk cmd applied -> what you want to 
