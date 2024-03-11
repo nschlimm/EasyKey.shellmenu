@@ -1,74 +1,19 @@
 #!/bin/bash
 
+#################################
+# EasyKey.shellmenu main script #
+#################################
+
+# Globals
 waitonexit=true;
 continuemenu=true
 globalClmWidth=45
 
-#######################################
-# Colored log to standard out.
-# Arguments:
-#   $1: log text
-#   $2: color code, e.g. "01;31"
-# Outputs:
-#   Writes colored log to standard out
-#######################################
-coloredLog () {
-  export GREP_COLOR="$2"
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
-}
-
-#######################################
-# Writes log text to standard out.
-# Background blue. Font color white.
-# Arguments:
-#   $1: log text
-# Outputs:
-#   Writes colored log to standard out
-#######################################
-blueLog() {
-  log="$1"
-  coloredLog "${log}" '1;37;44'
-}
-
-#######################################
-# Writes log text to standard out.
-# Background green. Font color white.
-# Arguments:
-#   $1: log text
-# Outputs:
-#   Writes colored log to standard out
-#######################################
-greenLog() {
-  log="$1"
-  coloredLog "${log}" '1;97;42'
-}
-
-#######################################
-# Writes log text to standard out.
-# Background red. Font color white.
-# Arguments:
-#   $1: log text
-# Outputs:
-#   Writes colored log to standard out
-#######################################
-redLog() {
-  log="$1"
-  coloredLog "${log}" '1;37;44'
-}
-
-#######################################
-# Writes 'important' log text to stdout
-# Arguments:
-#   $1: log text
-# Outputs:
-#   Writes log to standard out
-#######################################
-importantLog() {
-   echo -e -n "\033[1;36m"
-   echo $1
-   echo -e -n '\033[0m'
-}
+############################
+############################
+# API to create shell menu #
+############################
+############################
 
 #################################################
 # Writes the menu title and prepares menu array.
@@ -152,93 +97,77 @@ menuItemClm () {
                             printf("\n"); }'
 }
 
-#################################################
-# Calls the function or shell command associated
-# to the key pressed by the user.
-# Globals:
-#   menudatamap - the menu data
-# Outputs:
-#   The executed user defined function or command
-#################################################
-callKeyFunktion () { 
-   for i in "${menudatamap[@]}"
-     do
-       keys2=$(echo "$i" | cut -d'#' -f1)
-         if [ "$1" = "$keys2" ]
-           then
-              method=$(echo "$i" | cut -f3 -d#)
-              clear && coloredLog "$method" '1;37;44'
-              eval "$method"
-              return 1
-         fi
-   done
-   return 5
-}
+#####################################
+#####################################
+# API to help write shell functions #
+# called by shellmenu               #
+#####################################
+#####################################
 
-#################################################
-# Enables alternate coloring of lines in long 
-# lists for improved readability.
+#######################################
+# Colored log to standard out.
 # Arguments:
-#   Reads stdin -> the line of the list displayed
-#   $1: the header id of the table
+#   $1: log text
+#   $2: color code, e.g. "01;31"
 # Outputs:
-#   Writes a colored or non-colored line to stdout
-#################################################
-alternateRows() {
-   #!/bin/bash
-   header="$1"
-   i=1
-   while read -r line
-    do
-      if [[ $i == 1 ]] && [[ $header != "" ]]; then
-        echo -e "\033[48;5;93m$line\033[0m"
-      else 
-        echo -e "\033[48;5;238m$line\033[0m"
-      fi
-      read -r line
-      echo -e "\033[48;5;232m$line\033[0m"
-      i=$((i+1))
-    done
-    echo -en "\033[0m"
+#   Writes colored log to standard out
+#######################################
+coloredLog () {
+  export GREP_COLOR="$2"
+  echo "$1" | grep --color ".*"
+  export GREP_COLOR='01;31'
 }
 
-#################################################
-# Used to indicate ez.key that it may not wait
-# after command execution and immediately return
-# to main menu.
-# Globals:
-#   waitstatus - actual wait state
-# Outputs:
-#   Changes global wait state
-#################################################
-nowaitonexit () {
-  waitstatus=false
-}
-
-#################################################
-# Used to indicate ez.key that it may wait for
-# user to press key after command execution.
-# After key press: to main menu.
-# Globals:
-#   waitstatus - actual wait state
-# Outputs:
-#   Changes global wait state
-#################################################
-waitonexit () {
-  waitstatus=true
-}
-
-#################################################
-# Executes the given command.
+#######################################
+# Writes log text to standard out.
+# Background blue. Font color white.
 # Arguments:
-#   $1: the command to execute
+#   $1: log text
 # Outputs:
-#   Executed command
-#################################################
-executeCommand () {
- importantLog "Executing: '$1'"
- eval "$1"
- importantLog "Finished execution of '$1'"
+#   Writes colored log to standard out
+#######################################
+blueLog() {
+  log="$1"
+  coloredLog "${log}" '1;37;44'
+}
+
+#######################################
+# Writes log text to standard out.
+# Background green. Font color white.
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+greenLog() {
+  log="$1"
+  coloredLog "${log}" '1;97;42'
+}
+
+#######################################
+# Writes log text to standard out.
+# Background red. Font color white.
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes colored log to standard out
+#######################################
+redLog() {
+  log="$1"
+  coloredLog "${log}" '1;37;44'
+}
+
+#######################################
+# Writes 'important' log text to stdout
+# Arguments:
+#   $1: log text
+# Outputs:
+#   Writes log to standard out
+#######################################
+importantLog() {
+   echo -e -n "\033[1;36m"
+   echo $1
+   echo -e -n '\033[0m'
 }
 
 #################################################
@@ -309,6 +238,142 @@ selectItem () {
   echo "... selected ${fname:-nothing}"
 }
 
+#################################################
+# Enables alternate coloring of lines in long 
+# lists for improved readability.
+# Arguments:
+#   Reads stdin -> the line of the list displayed
+#   $1: the header id of the table
+# Outputs:
+#   Writes a colored or non-colored line to stdout
+#################################################
+alternateRows() {
+   #!/bin/bash
+   header="$1"
+   i=1
+   while read -r line
+    do
+      if [[ $i == 1 ]] && [[ $header != "" ]]; then
+        echo -e "\033[48;5;93m$line\033[0m"
+      else 
+        echo -e "\033[48;5;238m$line\033[0m"
+      fi
+      read -r line
+      echo -e "\033[48;5;232m$line\033[0m"
+      i=$((i+1))
+    done
+    echo -en "\033[0m"
+}
+
+#################################################
+# Selelect rows or columns from CSV file. 
+# Uses selectItem(). Supports paging.
+# Arguments:
+#   $1: source csv file full name
+#   $2: paging line from
+#   $3: paging line to
+#   $4: pre selected line
+# Outputs:
+#   see selectItem() outputs
+#################################################
+selectFromCsv() { 
+   csvfile=$1 #source csv file full name
+   linefrom=$2 #paging line from
+   lineto=$3 #paging line to
+   preselection=$4
+   xdarkprocessing="$5"
+   linefrom=${linefrom:=2}
+   lineto=${lineto:=80}
+   coloredLog "${csvfile}" '1;37;44'
+   headers=$(head -1 "$csvfile" | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
+   selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
+}
+
+coloredCsvTable() { #show csv file with header line in nice format
+   csvfile="$1" #source csv file full name
+   linefromXX="$2" #paging line from
+   linetoXX="$3" #paging line to
+   width="$4" # optional if coloring is desired
+   heading="$5" # count of heading lines
+   if [ "${linefromXX}" = "1" ]; then linefromXX="2"; fi
+   headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
+   coloredLog "${csvfile}" '1;37;44'
+   ! [ "${heading}" = "" ] && coloredLog "${heading}"
+   if [ "${width}" = "" ]; then
+     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | alternateRows 1
+   else
+     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | awk -v m=${width} '{printf("[%-'${width}'s]\n", $0)}' | alternateRows 1
+   fi
+}
+
+#################################################
+# Used to indicate ez.key that it may not wait
+# after command execution and immediately return
+# to main menu.
+# Globals:
+#   waitstatus - actual wait state
+# Outputs:
+#   Changes global wait state
+#################################################
+nowaitonexit () {
+  waitstatus=false
+}
+
+#################################################
+# Used to indicate ez.key that it may wait for
+# user to press key after command execution.
+# After key press: to main menu.
+# Globals:
+#   waitstatus - actual wait state
+# Outputs:
+#   Changes global wait state
+#################################################
+waitonexit () {
+  waitstatus=true
+}
+
+######################################
+######################################
+# INTERNAL API for EasyKey.shellmenu #
+######################################
+######################################
+
+#################################################
+# Calls the function or shell command associated
+# to the key pressed by the user.
+# Globals:
+#   menudatamap - the menu data
+# Outputs:
+#   The executed user defined function or command
+#################################################
+callKeyFunktion () { 
+   for i in "${menudatamap[@]}"
+     do
+       keys2=$(echo "$i" | cut -d'#' -f1)
+         if [ "$1" = "$keys2" ]
+           then
+              method=$(echo "$i" | cut -f3 -d#)
+              clear && coloredLog "$method" '1;37;44'
+              eval "$method"
+              return 1
+         fi
+   done
+   return 5
+}
+
+#################################################
+# Executes the given command.
+# Arguments:
+#   $1: the command to execute
+# Outputs:
+#   Executed command
+#################################################
+executeCommand () {
+ importantLog "Executing: '$1'"
+ eval "$1"
+ importantLog "Finished execution of '$1'"
+}
+
 noterminate () { continuemenu=true; }
 terminate () { continuemenu=false; }
 
@@ -351,35 +416,5 @@ exitGently () {
    echo "bye bye, homie!"
    nowaitonexit
    exit 1
-}
-
-selectFromCsv() { #out: $linenumber(selected of csv file), $headers(of csv file), $fname(selected row values)
-   csvfile=$1 #source csv file full name
-   linefrom=$2 #paging line from
-   lineto=$3 #paging line to
-   preselection=$4
-   xdarkprocessing="$5"
-   linefrom=${linefrom:=2}
-   lineto=${lineto:=80}
-   coloredLog "${csvfile}" '1;37;44'
-   headers=$(head -1 "$csvfile" | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
-   selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
-}
-
-coloredCsvTable() { #show csv file with header line in nice format
-   csvfile="$1" #source csv file full name
-   linefromXX="$2" #paging line from
-   linetoXX="$3" #paging line to
-   width="$4" # optional if coloring is desired
-   heading="$5" # count of heading lines
-   if [ "${linefromXX}" = "1" ]; then linefromXX="2"; fi
-   headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
-   coloredLog "${csvfile}" '1;37;44'
-   ! [ "${heading}" = "" ] && coloredLog "${heading}"
-   if [ "${width}" = "" ]; then
-     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | alternateRows 1
-   else
-     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | awk -v m=${width} '{printf("[%-'${width}'s]\n", $0)}' | alternateRows 1
-   fi
 }
 
