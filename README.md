@@ -93,5 +93,5 @@ Option 3: Set a Variable for Script Directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Source shellmenu.sh using the variable
-source "relative/path/to/shellmenu.sh"
+source "$SCRIPT_DIR/relative/path/to/shellmenu.sh"
 ```
