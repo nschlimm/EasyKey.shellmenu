@@ -72,21 +72,21 @@ Result is the following menu:
 Every menu script you will write needs to source `shellmenu.sh`.   
 Here are several options for sourcing `shellmenu.sh` from your menu script:
 
-Option 1: Use Absolute Paths
+Option 1: Use absolute paths
 
 ```
 # Source shellmenu.sh using absolute paths
 source "/path/to/shellmenu.sh"
 ```
 
-Option 2: Relative Paths
+Option 2: Relative paths
 
 ```
 # Source shellmenu.sh using relative paths
 source "relative/path/to/shellmenu.sh"
 ```
 
-Option 3: Set a Variable for Script Directory
+Option 3: Set a variable for script directory
 
 ```
 # Set the variable for the main script directory
