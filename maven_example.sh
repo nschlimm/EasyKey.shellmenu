@@ -4,7 +4,11 @@
 #  Maven example menu  #
 ########################
 
-source ./shellmenu.sh"
+# This enables you to call maven_example.sh from anywhere on your machine.
+# If your user defined menu is stored in other location then shellmenu.sh
+# make sure to enter the relative path from your script_dir to shelmenu.sh directory.
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/shellmenu.sh"
 
 showGlobalSettingFile() {
   OUTPUT="$(mvn -X | grep -F '[DEBUG] Reading global settings from')"
