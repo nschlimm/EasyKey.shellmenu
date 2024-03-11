@@ -19,7 +19,7 @@ EasyKey.shellmenu is a simple script to generate menus for command execution in 
 
 # Get started
 
-Easy ! 😎 (but it is beneficial to read this manual) 
+Easy ! 😎 
 1. Clone this repository. 
 2. Then look into `maven_example.sh`
 3. Update that to write your own menu.
