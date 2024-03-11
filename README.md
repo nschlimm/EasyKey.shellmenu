@@ -5,7 +5,7 @@
 <h1 align="center">Just a simple shell menu :hatched_chick:
 <br> (that simplified my work) </h1>
 
-The time when you forget your favorite commands is over! 💪
+The time when you forget your favorite commands is over! :sweat_smile:
 
 EasyKey.shellmenu is a simple script to generate menus for command execution in your favorite shell environment. ✨  
 
