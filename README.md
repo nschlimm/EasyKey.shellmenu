@@ -2,7 +2,7 @@
 Very simple script to generate menu and selections in your favorite shell environment. ✨  
 
 - Use single or double column menu
-- Call shell functions or immediately execut shell command
+- Call shell functions or immediately execute shell command
 - Return to menu once command or function completed
 - Log executed commands
 
