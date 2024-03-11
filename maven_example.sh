@@ -4,8 +4,7 @@
 #  Maven example menu  #
 ########################
 
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$script_dir/shellmenu.sh"
+source ./shellmenu.sh"
 
 showGlobalSettingFile() {
   OUTPUT="$(mvn -X | grep -F '[DEBUG] Reading global settings from')"
