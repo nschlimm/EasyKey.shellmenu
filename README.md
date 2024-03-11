@@ -1,10 +1,16 @@
 # EasyKey.shellmenu
-Very simple script to generate menu and selections in your favorite shell environment. ✨  
 
+The time when you forget your favorite commands is over! 💪
+
+EasyKey.shellmenu is a simple script to generate menus for command execution in your favorite shell environment. ✨  
+
+- Execute your favorite commands with a keystroke
 - Use single or double column menu
-- Call shell functions or immediately execute shell command
+- Call user-defined shell functions or immediately execute shell command
 - Return to menu once command or function completed
 - Log executed commands
+
+👌 Increase your productivity and relax !
 
 # Get started
 
@@ -37,21 +43,9 @@ The following example are taken from `maven_example.sh` for illustration.
 
 ```
 source ./shellmenu.sh
-
-showGlobalSettingFile() {
-  OUTPUT="$(mvn -X | grep -F '[DEBUG] Reading global settings from')"
-  echo ${OUTPUT:37}
-  read -p "Open global settings? " -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ $REPLY =~ ^[Yy]$ ]]
-      then
-      vim ${OUTPUT:37}
-  fi
-}
-
 while ${continuemenu:=true}; do
 clear
-menuInit "Super KUBECTL Home"
+menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
      menuItem c "Clean all" "mvn clean:clean"
      menuItem x "Compile" "mvn clean compile" 
@@ -71,7 +65,7 @@ echo "bye, bye, homie!"
 ```
 Result is the following menu:
 
-<img width="600" alt="image" src="https://github.com/nschlimm/shellmenu/assets/876604/ae8a0a16-434a-4c31-8001-01d29996b72c">
+
 
 
 
