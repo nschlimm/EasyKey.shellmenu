@@ -289,6 +289,18 @@ selectFromCsv() {
    selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
 }
 
+#################################################
+# Display CSV file in colorized format.
+# Supports paging.
+# Arguments:
+#   $1: source csv file full name
+#   $2: paging line from
+#   $3: paging line to
+#   $4: width of the table
+#   $5: count of heading lines
+# Outputs:
+#   Writes the CSV table nicely to stdout
+#################################################
 coloredCsvTable() { #show csv file with header line in nice format
    csvfile="$1" #source csv file full name
    linefromXX="$2" #paging line from
