@@ -281,7 +281,7 @@ function workingDiffs() {
 }
 
 function atlassiansView() {
-  source $script_dir/../EasyKey.git/ezk-git-extras.sh
+  source $script_dir/../EasyKey.git/ezk-git-atln.sh
   nowaitonexit
 }
 
