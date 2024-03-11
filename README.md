@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/2fb79ee4-60ad-4a9d-a224-d3e544662477" width="400px">
+    <img src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/2fb79ee4-60ad-4a9d-a224-d3e544662477" width="200px">
 </p>
 
 <h1 align="center">Foster your productivity ✨</h1>
