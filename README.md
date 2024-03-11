@@ -65,6 +65,7 @@ echo "bye, bye, homie!"
 ```
 Result is the following menu:
 
+<img width="291" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/afc092cf-2483-4438-bcd2-815bbfc8b239">
 
 
 
