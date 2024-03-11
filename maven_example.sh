@@ -10,6 +10,7 @@
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/shellmenu.sh"
 
+# Just an arbitrary samle method called by shell menu
 showGlobalSettingFile() {
   OUTPUT="$(mvn -X | grep -F '[DEBUG] Reading global settings from')"
   echo ${OUTPUT:37}
