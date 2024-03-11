@@ -67,8 +67,9 @@ Result is the following menu:
 
 <img width="273" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5cbf1c4c-1027-4e47-b858-9a7fa131e7db">
 
-# Tipp: Starting your script 
+# Tipp: sourcing shellmenu.sh 
 
+Every menu script you will write needs to source `shellmenu.sh`.   
 Here are several options for sourcing `shellmenu.sh` from your menu script:
 
 Option 1: Use Absolute Paths
