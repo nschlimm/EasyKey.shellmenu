@@ -1,4 +1,8 @@
-# EasyKey.shellmenu
+<p align="center">
+    <img src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/1131a5eb-f121-4999-aff3-a3978237db62">
+</p>
+
+<h1 align="center">EasyKey.shellmenu</h1>
 
 The time when you forget your favorite commands is over! 💪
 
