@@ -5,9 +5,10 @@
 #################################
 
 # Globals
-waitonexit=true;
+waitonexit=true
 continuemenu=true
 globalClmWidth=45
+immediateMode=true
 
 ############################
 ############################
@@ -25,10 +26,14 @@ globalClmWidth=45
 menuInit () {
   actualmenu="$1"
   menudatamap=()
+  ${immediateMode} && printMenuHeading "$1"
+  echo
+}
+
+printMenuHeading(){
   export GREP_COLOR='1;37;44'
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
-  echo
 }
 
 #################################################
@@ -40,6 +45,10 @@ menuInit () {
 #################################################
 submenuHead () { 
   actualsubmenuname="$1"
+  ${immediateMode} && printSubmenuHeading "$1"
+}
+
+printSubmenuHeading(){
   export GREP_COLOR='1;36'
   echo "$1" | grep --color ".*"
   export GREP_COLOR='01;31'
@@ -61,7 +70,11 @@ submenuHead () {
 #   Prints the menu item to standard out.
 #################################################
 menuItem () {
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
+   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
+   ${immediateMode} && printMenuItem "$1" "$2"
+}
+
+printMenuItem() {
    echo "$1. $2"
 }
 
@@ -87,14 +100,18 @@ menuItem () {
 #################################################
 menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
-   menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
-   echo -e "${1}.,${2},${4}.,${5}" \
-      | awk -F , -v OFS=, '{printf "%-3s",$1; 
-                            printf "%-'"${clmLocalWidth}"'s",$2; 
-                            printf "%-3s",$3; 
-                            printf "%-'"${clmLocalWidth}"'s",$4; 
-                            printf("\n"); }'
+   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
+   menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu#2")
+   ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
+}
+
+printMenuItemClm() {
+  echo -e "${1}.,${2},${3}.,${4}" \
+          | awk -F , -v OFS=, '{printf "%-3s",$1; 
+                                printf "%-'"${clmLocalWidth}"'s",$2; 
+                                printf "%-3s",$3; 
+                                printf "%-'"${clmLocalWidth}"'s",$4; 
+                                printf("\n"); }'
 }
 
 #####################################
@@ -353,6 +370,8 @@ waitonexit () {
 #################################################
 # Calls the function or shell command associated
 # to the key pressed by the user.
+# Arguments:
+#   $1: pressed key
 # Globals:
 #   menudatamap - the menu data
 # Outputs:
@@ -371,6 +390,16 @@ callKeyFunktion () {
          fi
    done
    return 5
+}
+
+generateMenu () { 
+  # Loop through the list
+  OLD_IFS=$IFS
+  for ((index=0; index<${#menudatamap[@]}; index++)); do
+    IFS="#" read -r key description action submenu menu column <<< "$menudata"
+
+  done
+  IFS="$OLD_IFS"
 }
 
 #################################################
