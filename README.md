@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Just a simple shell menu :hatched_chick:
-<br> (that simplifies my work) </h1>
+<br> (that simplified my work) </h1>
 
 The time when you forget your favorite commands is over! 💪
 
