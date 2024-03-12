@@ -4,9 +4,7 @@
 #  Maven example menu  #
 ########################
 
-# This enables you to call maven_example.sh from anywhere on your machine.
-# If your user defined menu is stored in other location then shellmenu.sh
-# make sure to enter the relative path from your script_dir to shelmenu.sh directory.
+# source shellmenu.sh
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/shellmenu.sh"
 
