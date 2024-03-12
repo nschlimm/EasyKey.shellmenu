@@ -9,6 +9,7 @@ waitonexit=true
 continuemenu=true
 globalClmWidth=45
 immediateMode=false
+actualmenu="EasyKey.shellmenu"
 
 ############################
 ############################
@@ -291,8 +292,11 @@ selectFromCsv() {
    linefrom=${linefrom:=2}
    lineto=${lineto:=80}
    coloredLog "${csvfile}" '1;37;44'
-   headers=$(head -1 "$csvfile" | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
-   selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
+   headers=$(head -1 "$csvfile" | sed 's/ /_/g' \
+       | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
+   selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") \
+       | perl -pe "s/((?<=,)|(?<=^)),/ ,/g;" \
+       | column -t -s, | less -S' '.*' 192 1 "$preselection" "$xdarkprocessing"
 }
 
 #################################################
@@ -318,9 +322,18 @@ coloredCsvTable() { #show csv file with header line in nice format
    coloredLog "${csvfile}" '1;37;44'
    ! [ "${heading}" = "" ] && coloredLog "${heading}"
    if [ "${width}" = "" ]; then
-     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | alternateRows 1
+     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") \
+        | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' \
+        | column -t -s, \
+        | less -S \
+        | alternateRows 1
    else
-     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' | column -t -s, | less -S | awk -v m=${width} '{printf("[%-'${width}'s]\n", $0)}' | alternateRows 1
+     (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") \
+        | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' \
+        | column -t -s, \
+        | less -S \
+        | awk -v m=${width} '{printf("[%-'${width}'s]\n", $0)}' \
+        | alternateRows 1
    fi
 }
 
