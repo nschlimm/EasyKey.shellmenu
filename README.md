@@ -33,13 +33,15 @@ You can also look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellme
 Use `menuInit` to initialize a new menu.  
 Use `submenuHead` to structure your menu into sub sections.  
 Use `menuItem` to define keys in single column menus.  
-Use `menuItemClm` to define keys for multi column menus (allows more actions in the menu).  
+Use `menuItemClm` to define keys for multi column menus (allows more actions in the menu).
+Use `startMenu` to start your menu in your shell window.  
 
 ```
 menuInit <menu title>
 submenuHead <sub menu title>
 menuItem <key> <description> <shell command>
 menuItemClm <key> <description> <shell command> <key> <description> <shell command>
+startMenu
 ```
 
 # Maven demo menu
@@ -48,7 +50,6 @@ The following example are taken from `maven_example.sh` for illustration.
 
 ```
 source ./shellmenu.sh
-while ${continuemenu:=true}; do
 clear
 menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
@@ -63,9 +64,7 @@ menuInit "Maven demo menu"
     menuItem e "Show effective settings" "mvn help:effective-settings"
     menuItem r "Show local repo location" "mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'" 
     menuItem l "Show global settings file location" showGlobalSettingFile
-    echo && importantLog $(pwd)
-  choice
-done
+startMenu
 echo "bye, bye, homie!"
 ```
 Result is the following menu:

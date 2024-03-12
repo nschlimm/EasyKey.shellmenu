@@ -9,6 +9,7 @@ source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-git-functions.sh"
 
 globalClmWidth=35
+immediateMode=true
 
 git fetch --all --tags 2> /dev/null
 
