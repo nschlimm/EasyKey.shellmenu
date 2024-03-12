@@ -50,14 +50,12 @@ The following example are taken from `maven_example.sh` for illustration.
 
 ```
 source ./shellmenu.sh
-clear
 menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
      menuItem c "Clean all" "mvn clean:clean"
      menuItem x "Compile" "mvn clean compile" 
      menuItem t "Test" "mvn clean test" 
      menuItem i "Install" "mvn clean install"  
-  echo
   submenuHead "Also usefull:"
     menuItem d "Analyze dependencies" "mvn dependency:analyze"
     menuItem u "Clean compile force updates" "mvn clean compile -U -DskipTests" 
@@ -65,7 +63,6 @@ menuInit "Maven demo menu"
     menuItem r "Show local repo location" "mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'" 
     menuItem l "Show global settings file location" showGlobalSettingFile
 startMenu
-echo "bye, bye, homie!"
 ```
 Result is the following menu:
 
