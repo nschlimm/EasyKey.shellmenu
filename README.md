@@ -49,7 +49,7 @@ startMenu
 The following example are taken from `maven_example.sh` for illustration.
 
 ```
-source ./shellmenu.sh
+source "/path/to/shellmenu.sh"
 menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
      menuItem c "Clean all" "mvn clean:clean"
