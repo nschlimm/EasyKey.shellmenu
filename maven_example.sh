@@ -22,7 +22,8 @@ showGlobalSettingFile() {
   fi
 }
 
-while ${continuemenu:=true}; do
+immediateMode=false
+
 clear
 menuInit "Maven demo menu"
   submenuHead "Life cycle commands:"
@@ -37,6 +38,5 @@ menuInit "Maven demo menu"
     menuItem e "Show effective settings" "mvn help:effective-settings"
     menuItem r "Show local repo location" "mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'" 
     menuItem l "Show global settings file location" showGlobalSettingFile
-  choice
-done
+startMenu
 echo "bye, bye, homie!"

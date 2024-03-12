@@ -9,6 +9,7 @@ source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-kubectl-functions.sh"
 
 continuemenu=true
+immediateMode=true
 
 while ${continuemenu:=true}; do
 clear

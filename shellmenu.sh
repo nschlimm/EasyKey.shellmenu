@@ -5,9 +5,10 @@
 #################################
 
 # Globals
-waitonexit=true;
+waitonexit=true
 continuemenu=true
 globalClmWidth=45
+immediateMode=false
 
 ############################
 ############################
@@ -25,9 +26,7 @@ globalClmWidth=45
 menuInit () {
   actualmenu="$1"
   menudatamap=()
-  export GREP_COLOR='1;37;44'
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
+  ${immediateMode} && printMenuHeading "$1"
   echo
 }
 
@@ -40,9 +39,7 @@ menuInit () {
 #################################################
 submenuHead () { 
   actualsubmenuname="$1"
-  export GREP_COLOR='1;36'
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
+  ${immediateMode} && printSubmenuHeading "$1"
 }
 
 #################################################
@@ -61,8 +58,8 @@ submenuHead () {
 #   Prints the menu item to standard out.
 #################################################
 menuItem () {
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
-   echo "$1. $2"
+   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
+   ${immediateMode} && printMenuItem "$1" "$2"
 }
 
 #################################################
@@ -87,14 +84,22 @@ menuItem () {
 #################################################
 menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu")
-   menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu")
-   echo -e "${1}.,${2},${4}.,${5}" \
-      | awk -F , -v OFS=, '{printf "%-3s",$1; 
-                            printf "%-'"${clmLocalWidth}"'s",$2; 
-                            printf "%-3s",$3; 
-                            printf "%-'"${clmLocalWidth}"'s",$4; 
-                            printf("\n"); }'
+   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
+   menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu#2")
+   ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
+}
+
+#################################################
+# The entry method to display the menu in non
+# immediate mode (the default mode)
+# Outputs:
+#   the menu written to stdout
+#################################################
+startMenu() {
+   while ${continuemenu:=true}; do
+      generateMenu
+      choice
+   done
 }
 
 #####################################
@@ -353,6 +358,8 @@ waitonexit () {
 #################################################
 # Calls the function or shell command associated
 # to the key pressed by the user.
+# Arguments:
+#   $1: pressed key
 # Globals:
 #   menudatamap - the menu data
 # Outputs:
@@ -371,6 +378,38 @@ callKeyFunktion () {
          fi
    done
    return 5
+}
+
+#################################################
+# Generates the menu from the menudatamap.
+# Globals:
+#   menudatamap - the menu data
+# Outputs:
+#   the menu written to stdout
+#################################################
+generateMenu () { 
+  OLD_IFS=$IFS
+  local previoussubmenu previouscolumn submenucount;
+  submenucount=0
+  clear
+  for ((index=0; index<${#menudatamap[@]}; index++)); do
+    IFS="#" read -r key description action submenu menu column <<< "${menudatamap[index]}"
+    IFS="#" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
+    if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
+    if [ "$submenu" != "$previoussubmenu" ]; then 
+       if [ "$submenucount" -gt 0 ]; then echo; fi
+       printSubmenuHeading "$submenu" && echo; 
+       submenucount=$((submenucount+1));
+    fi
+    if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
+      printMenuItemClm "$key" "$description" "$action" "$nextkey" "$nextdescription" "$nextaction" 
+    else
+      printMenuItem "$key" "$description" "$action" 
+    fi
+    previoussubmenu="$submenu"
+    previouscolumn="$column"
+  done
+  IFS="$OLD_IFS"
 }
 
 #################################################
@@ -416,6 +455,63 @@ choice () {
     fi
   fi
 
+}
+
+#################################################
+# Print a double column menu line. 
+# Arguments:
+#   $1: first column key
+#   $2: first column description
+#   $3: second column key
+#   $4: second column description
+# Outputs:
+#   The menu line to stdout
+#################################################
+printMenuItemClm() {
+  echo -e "${1}.,${2},${3}.,${4}" \
+          | awk -F , -v OFS=, '{printf "%-3s",$1; 
+                                printf "%-'"${clmLocalWidth}"'s",$2; 
+                                printf "%-3s",$3; 
+                                printf "%-'"${clmLocalWidth}"'s",$4; 
+                                printf("\n"); }'
+}
+
+#################################################
+# Print a single column menu line. 
+# Arguments:
+#   $1: column key
+#   $2: column description
+# Outputs:
+#   The menu line to stdout
+#################################################
+printMenuItem() {
+   echo "$1. $2"
+}
+
+#################################################
+# Print the menu head. 
+# Arguments:
+#   $1: menu head description
+# Outputs:
+#   The menu head to stdout
+#################################################
+printMenuHeading(){
+  export GREP_COLOR='1;37;44'
+  echo "$1" | grep --color ".*"
+  export GREP_COLOR='01;31'
+}
+
+#################################################
+# Print the sub menu head. 
+# Arguments:
+#   $1: sub menu head description
+# Outputs:
+#   The sub menu head to stdout
+#################################################
+printSubmenuHeading(){
+  export GREP_COLOR='1;36'
+  echo "$1" | grep --color ".*"
+  export GREP_COLOR='01;31'
 }
 
 quit () {
