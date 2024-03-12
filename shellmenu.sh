@@ -25,6 +25,7 @@ immediateMode=false
 #################################################
 menuInit () {
   actualmenu="$1"
+  actualsubmenuname="Your commands:"
   menudatamap=()
   ${immediateMode} && printMenuHeading "$1"
   echo
