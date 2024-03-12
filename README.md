@@ -33,7 +33,7 @@ You can also look into [EasyKey.git](https://github.com/nschlimm/EasyKey.shellme
 Use `menuInit` to initialize a new menu.  
 Use `submenuHead` to structure your menu into sub sections.  
 Use `menuItem` to define keys in single column menus.  
-Use `menuItemClm` to define keys for multi column menus (allows more actions in the menu).
+Use `menuItemClm` to define keys for multi column menus (allows more actions in the menu).  
 Use `startMenu` to start your menu in your shell window.  
 
 ```
