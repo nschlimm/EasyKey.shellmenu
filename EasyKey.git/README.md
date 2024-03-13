@@ -1,6 +1,6 @@
 # EasyKey.git
 
-This is my menu I use for git. It has many functions. Here is the menu:
+This is a sample menu for git. It has many functions. 
 
 <img width="566" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/a5ecfda6-f518-4b87-b13b-4efe027b56e2">
 
