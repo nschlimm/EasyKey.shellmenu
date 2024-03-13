@@ -1,6 +1,6 @@
 # EasyKey.kubectl
 
-EasyKey.kubectl is my personal `kubectl` menu I use in my daily work. Here is the menu:
+EasyKey.kubectl is a sample `kubectl` menu used for daily work with Kubernetes. Here is the menu:
 
 <img width="617" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5e10b707-f628-4f94-b34a-5024bd190f22">
 
