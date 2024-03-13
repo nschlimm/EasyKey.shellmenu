@@ -38,6 +38,7 @@ menuItemClm x "Show deployment manifest (desired/observed)" showDeploymentManife
 menuItemClm z "List replicasets (ns=current)" "kubectl get rs -o wide" 1 "Describe replica set" describeReplicaset
 menuItemClm 2 "Redeploy" redeploy 3 "Deployment history" deplHist
 menuItemClm 4 "Undo deployment" rollbackDeployment 5 "Deployment status" deployState
+menuItem E "Edit deployment" editDeployment
 echo
 submenuHead "Services:"
 menuItemClm 6 "List services (ns=current)" "kubectl get services -o wide" 7 "List services (all namespaces)" "kubectl get services --all-namespaces -o wide"
@@ -46,7 +47,7 @@ echo
 submenuHead "Other stuff:"
 menuItemClm I "List images in contexts" listImagesInUse J "Ingress configuration" "kubectl get ing -o json | jq -r '.items[].spec.rules[].http.paths[]'"
 menuItemClm K "Describe ingress" "kubectl describe ing" "L" "Edit config map" editConfigMap
-
+menuItem T "Edit Ingress" "kubectl edit ingress"
 choice
 done
 echo "bye, bye, homie!"

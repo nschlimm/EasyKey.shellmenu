@@ -219,3 +219,10 @@ deplomentActualStatus() {
     fi
 
 }
+
+editDeployment() {
+    selectItem "kubectl get deployments" "awk '{print \$1}'"
+    if [[ $fname == "" ]]; then return 0; fi
+    executeCommand "kubectl edit deployment $fname"
+}
+
