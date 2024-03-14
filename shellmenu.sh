@@ -437,7 +437,6 @@ generateMenu () {
       printMenuItem "$key" "$description" "$action" 
     fi
     previoussubmenu="$submenu"
-    previouscolumn="$column"
   done
   IFS="$OLD_IFS"
 }
@@ -476,7 +475,7 @@ choice () {
   else
     callKeyFunktion "$REPLY"
     if [[ $? -gt 1 ]]; then
-      importantLog "Huh ($request)?"
+      importantLog "Huh ($REPLY)?"
     fi
     if $waitstatus; then
       read -p $'\n<Press any key to return>' -n 1 -r
