@@ -55,7 +55,7 @@ function addContext() {
 }
 
 function showPodManifest() {
-    selectItem "kubectl get pods" "awk '{print \$1}'" 100 1 "2"
+    selectItem "kubectl get pods" "awk '{print \$1}'" 100 1 ""
     if [[ $fname == "" ]]; then return 0; fi
     executeCommand "kubectl get pods $fname -o yaml"
 }

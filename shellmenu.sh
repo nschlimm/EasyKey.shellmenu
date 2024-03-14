@@ -4,12 +4,27 @@
 # EasyKey.shellmenu main script #
 #################################
 
+# Colors
+clrBlack=0
+clrRed=1
+clrGreen=2
+clrYewllow=3
+clrBlue=4
+clrPurple=5
+clrCyan=6
+clrWhite=7
+
 # Globals
-waitonexit=true
+waitstatus=true
 continuemenu=true
 globalClmWidth=45
 immediateMode=false
 actualmenu="EasyKey.shellmenu"
+actualsubmenuname="Your commands:"
+menuHeadingFGClr="$clrWhite"
+menuHeadingBGClr="$clrBlue"
+submenuFGClr="$clrCyan"
+submenuBGClr="$clrBlack"
 
 ############################
 ############################
@@ -115,14 +130,17 @@ startMenu() {
 # Colored log to standard out.
 # Arguments:
 #   $1: log text
-#   $2: color code, e.g. "01;31"
+#   $2: optional: foreground color (0-7)
+#   $3: optional: background color (0-7)
 # Outputs:
 #   Writes colored log to standard out
 #######################################
 coloredLog () {
-  export GREP_COLOR="$2"
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
+    set_foreground=$(tput setaf "${2:-7}")
+    set_background=$(tput setab "${3:-0}")
+    echo -n "$set_background$set_foreground"
+    printf "%s\n" "$1"
+    tput sgr0
 }
 
 #######################################
@@ -135,7 +153,7 @@ coloredLog () {
 #######################################
 blueLog() {
   log="$1"
-  coloredLog "${log}" '1;37;44'
+  coloredLog "${log}" "$clrWhite" "$clrBlue"
 }
 
 #######################################
@@ -148,7 +166,7 @@ blueLog() {
 #######################################
 greenLog() {
   log="$1"
-  coloredLog "${log}" '1;97;42'
+  coloredLog "${log}" "$clrWhite" "$clrGreen"
 }
 
 #######################################
@@ -161,7 +179,7 @@ greenLog() {
 #######################################
 redLog() {
   log="$1"
-  coloredLog "${log}" '1;37;44'
+  coloredLog "${log}" "$clrRed" "$clrBlack"
 }
 
 #######################################
@@ -172,9 +190,7 @@ redLog() {
 #   Writes log to standard out
 #######################################
 importantLog() {
-   echo -e -n "\033[1;36m"
-   echo $1
-   echo -e -n '\033[0m'
+  coloredLog "$1" "$clrCyan" "$clrBlack"
 }
 
 #################################################
@@ -291,7 +307,7 @@ selectFromCsv() {
    xdarkprocessing="$5"
    linefrom=${linefrom:=2}
    lineto=${lineto:=80}
-   coloredLog "${csvfile}" '1;37;44'
+   importantLog "${csvfile}"
    headers=$(head -1 "$csvfile" | sed 's/ /_/g' \
        | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
    selectItem '(echo "${headers}" && sed -n '"${linefrom}"','"${lineto}"'p "${csvfile}") \
@@ -319,7 +335,7 @@ coloredCsvTable() { #show csv file with header line in nice format
    heading="$5" # count of heading lines
    if [ "${linefromXX}" = "1" ]; then linefromXX="2"; fi
    headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
-   coloredLog "${csvfile}" '1;37;44'
+   importantLog "${csvfile}"
    ! [ "${heading}" = "" ] && coloredLog "${heading}"
    if [ "${width}" = "" ]; then
      (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") \
@@ -386,7 +402,7 @@ callKeyFunktion () {
          if [ "$1" = "$keys2" ]
            then
               method=$(echo "$i" | cut -f3 -d#)
-              clear && coloredLog "$method" '1;37;44'
+              clear && importantLog "$method"
               eval "$method"
               return 1
          fi
@@ -460,7 +476,7 @@ choice () {
   else
     callKeyFunktion "$REPLY"
     if [[ $? -gt 1 ]]; then
-      coloredLog "Huh ($request)?" "1;31"
+      importantLog "Huh ($request)?"
     fi
     if $waitstatus; then
       read -p $'\n<Press any key to return>' -n 1 -r
@@ -510,9 +526,7 @@ printMenuItem() {
 #   The menu head to stdout
 #################################################
 printMenuHeading(){
-  export GREP_COLOR='1;37;44'
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
+  coloredLog "$1" "$menuHeadingFGClr" "$menuHeadingBGClr"
 }
 
 #################################################
@@ -523,9 +537,7 @@ printMenuHeading(){
 #   The sub menu head to stdout
 #################################################
 printSubmenuHeading(){
-  export GREP_COLOR='1;36'
-  echo "$1" | grep --color ".*"
-  export GREP_COLOR='01;31'
+  coloredLog "$1" "$submenuFGClr" "$submenuBGClr"
 }
 
 quit () {
