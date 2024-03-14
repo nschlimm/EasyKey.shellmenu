@@ -25,6 +25,7 @@ menuHeadingFGClr="$clrWhite"
 menuHeadingBGClr="$clrBlue"
 submenuFGClr="$clrCyan"
 submenuBGClr="$clrBlack"
+delimiter=⊕
 
 ############################
 ############################
@@ -75,7 +76,7 @@ submenuHead () {
 #   Prints the menu item to standard out.
 #################################################
 menuItem () {
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
    ${immediateMode} && printMenuItem "$1" "$2"
 }
 
@@ -101,8 +102,8 @@ menuItem () {
 #################################################
 menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
-   menudatamap+=("$1#$2#$3#$actualsubmenuname#$actualmenu#1")
-   menudatamap+=("$4#$5#$6#$actualsubmenuname#$actualmenu#2")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
+   menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter2")
    ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
 }
 
@@ -396,18 +397,19 @@ waitonexit () {
 #   The executed user defined function or command
 #################################################
 callKeyFunktion () { 
+   OLD_IFS=$IFS
    for i in "${menudatamap[@]}"
      do
-       keys2=$(echo "$i" | cut -d'#' -f1)
-         if [ "$1" = "$keys2" ]
+       IFS="$delimiter" read -r key description action submenu menu column <<< "$i"
+         if [ "$1" = "$key" ]
            then
-              method=$(echo "$i" | cut -f3 -d#)
-              clear && importantLog "$method"
-              eval "$method"
+              clear && importantLog "$action"
+              eval "$action"
               return 1
          fi
    done
    return 5
+   IFS=$OLD_IFS
 }
 
 #################################################
@@ -423,8 +425,8 @@ generateMenu () {
   submenucount=0
   clear
   for ((index=0; index<${#menudatamap[@]}; index++)); do
-    IFS="#" read -r key description action submenu menu column <<< "${menudatamap[index]}"
-    IFS="#" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
+    IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
+    IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
     if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
     if [ "$submenu" != "$previoussubmenu" ]; then 
        if [ "$submenucount" -gt 0 ]; then echo; fi
