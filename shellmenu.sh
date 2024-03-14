@@ -136,8 +136,8 @@ startMenu() {
 #   Writes colored log to standard out
 #######################################
 coloredLog () {
-    set_foreground=$(tput setaf "${2:-7}")
-    set_background=$(tput setab "${3:-0}")
+    set_foreground=$(tput setaf "${2:-$clrWhite}")
+    set_background=$(tput setab "${3:-$clrBlack}")
     echo -n "$set_background$set_foreground"
     printf "%s\n" "$1"
     tput sgr0
