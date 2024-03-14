@@ -26,6 +26,9 @@ menuHeadingBGClr="$clrBlue"
 submenuFGClr="$clrCyan"
 submenuBGClr="$clrBlack"
 delimiter=⊕
+formattedTop=""
+formattedBottom=""
+formattedMiddle=""
 
 ############################
 ############################
@@ -558,9 +561,18 @@ exitGently () {
    exit 1
 }
 
-formattedTop=""
-formattedBottom=""
-formattedMiddle=""
+#################################################
+# Draw title graphic 
+# Globals:
+#   formattedTop - top line of graphic
+#   formattedMiddle - middle line of graphic
+#   formattedBottom - bottom line of graphic
+#   tput colors
+# Arguments:
+#   $1: menu head description
+# Outputs:
+#   The menu head graphic to stdout
+#################################################
 draw_rounded_square() {
 
     # Menu title cache
