@@ -45,7 +45,6 @@ menuInit () {
   actualsubmenuname="Your commands:"
   menudatamap=()
   ${immediateMode} && printMenuHeading "$1"
-  echo
 }
 
 #################################################
@@ -115,6 +114,7 @@ menuItemClm () {
 #################################################
 startMenu() {
    while ${continuemenu:=true}; do
+      clear
       generateMenu
       choice
    done
@@ -423,7 +423,6 @@ generateMenu () {
   OLD_IFS=$IFS
   local previoussubmenu previouscolumn submenucount;
   submenucount=0
-  clear
   for ((index=0; index<${#menudatamap[@]}; index++)); do
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
@@ -527,7 +526,7 @@ printMenuItem() {
 #   The menu head to stdout
 #################################################
 printMenuHeading(){
-  coloredLog "$1" "$menuHeadingFGClr" "$menuHeadingBGClr"
+  draw_rounded_square "$1"
 }
 
 #################################################
@@ -541,6 +540,12 @@ printSubmenuHeading(){
   coloredLog "$1" "$submenuFGClr" "$submenuBGClr"
 }
 
+printLogo() {
+  echo "╭───────────────────╮"
+  echo "│ EasyKey.shellmenu │"
+  echo "╰───────────────────╯"
+}
+
 quit () {
    echo "bye bye, homie!"
    nowaitonexit
@@ -551,5 +556,52 @@ exitGently () {
    echo "bye bye, homie!"
    nowaitonexit
    exit 1
+}
+
+formattedTop=""
+formattedBottom=""
+formattedMiddle=""
+draw_rounded_square() {
+
+    # Menu title cache
+    if [ "$formattedTop" != "" ]; then
+      echo -e "$formattedTop"
+      echo -e "$formattedMiddle"
+      echo -e "$formattedBottom"
+      return
+    fi
+
+    local text="$1"
+    local width=${#text}
+
+    local horizontal_line="─"
+    local top_left_corner="┌"
+    local top_right_corner="┐"
+    local bottom_left_corner="└"
+    local bottom_right_corner="┘"
+    local vertical_line="│"
+    
+    local border=""
+    border+="$top_left_corner"
+    for (( i=0; i<width+2; i++ )); do
+        border+="$horizontal_line"
+    done
+    border+="$top_right_corner"
+    
+    formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
+    formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
+
+    echo -e "$formattedTop"
+    echo -e "$formattedMiddle"
+    
+    border="$bottom_left_corner"
+    for (( i=0; i<width+2; i++ )); do
+        border+="$horizontal_line"
+    done
+    border+="$bottom_right_corner"
+
+    formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
+    echo -e "$formattedBottom"
+
 }
 
