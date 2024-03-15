@@ -1,5 +1,28 @@
 #!/bin/bash
 
+enableLogging() {
+   echo "SQL:"
+   echo "logging:"
+   echo "  level:"
+   echo "    org: "
+   echo "      springframework: "
+   echo "        test: "
+   echo "          context:"
+   echo "            jdbc: DEBUG"
+   echo "        jdbc:"
+   echo "          datasource:"
+   echo "            init: DEBUG"
+   echo "Autoconfig:"
+   echo "logging.level.org.springframework=DEBUG"
+   echo "logging.level.com.myapp=DEBUG"
+}
+
+showProperties() {
+   selectItem "find ./src -type f -name 'application*.*'" "awk '{print \$1}'"
+   if [[ $fname == "" ]]; then return 0; fi
+   vim "$fname"
+}
+
 mvnCleanEclipse(){
     mvn clean:clean
     mvn eclipse:clean
