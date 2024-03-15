@@ -80,14 +80,7 @@ Option 1: Use absolute paths
 source "/path/to/shellmenu.sh"
 ```
 
-Option 2: Relative paths
-
-```
-# Source shellmenu.sh using relative paths
-source "relative/path/to/shellmenu.sh"
-```
-
-Option 3: Set a variable for script directory
+Option 2: Set a variable for script directory
 
 ```
 # Set the variable for the main script directory
