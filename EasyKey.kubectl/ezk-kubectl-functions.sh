@@ -2,8 +2,9 @@
 
 function listImagesInUse() {
 
-    namespaces=("sls-alfred" "sls-pennyworth")
-
+    selectItem "kubectl get ns" "awk '{print \$1}'"
+    if [[ $fname == "" ]]; then return 0; fi
+    namespaces=("$fname")
     contexts=$(kubectl config get-contexts -o name)
 
     for context in $contexts; do

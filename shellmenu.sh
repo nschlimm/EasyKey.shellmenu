@@ -26,6 +26,9 @@ menuHeadingBGClr="$clrBlue"
 submenuFGClr="$clrCyan"
 submenuBGClr="$clrBlack"
 delimiter=⊕
+formattedTop=""
+formattedBottom=""
+formattedMiddle=""
 
 ############################
 ############################
@@ -45,7 +48,6 @@ menuInit () {
   actualsubmenuname="Your commands:"
   menudatamap=()
   ${immediateMode} && printMenuHeading "$1"
-  echo
 }
 
 #################################################
@@ -102,8 +104,8 @@ menuItem () {
 #################################################
 menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
-   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
-   menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter2")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
+   menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
    ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
 }
 
@@ -115,6 +117,7 @@ menuItemClm () {
 #################################################
 startMenu() {
    while ${continuemenu:=true}; do
+      clear
       generateMenu
       choice
    done
@@ -423,8 +426,12 @@ generateMenu () {
   OLD_IFS=$IFS
   local previoussubmenu previouscolumn submenucount;
   submenucount=0
-  clear
+  skipnext=false
   for ((index=0; index<${#menudatamap[@]}; index++)); do
+    if [ "$skipnext" = "true" ]; then 
+      skipnext=false
+      continue
+    fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
     if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
@@ -434,9 +441,10 @@ generateMenu () {
        submenucount=$((submenucount+1));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
-      printMenuItemClm "$key" "$description" "$action" "$nextkey" "$nextdescription" "$nextaction" 
+      printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription" 
+      skipnext=true
     else
-      printMenuItem "$key" "$description" "$action" 
+      printMenuItem "$key" "$description"
     fi
     previoussubmenu="$submenu"
   done
@@ -527,7 +535,7 @@ printMenuItem() {
 #   The menu head to stdout
 #################################################
 printMenuHeading(){
-  coloredLog "$1" "$menuHeadingFGClr" "$menuHeadingBGClr"
+  draw_rounded_square "$1"
 }
 
 #################################################
@@ -551,5 +559,61 @@ exitGently () {
    echo "bye bye, homie!"
    nowaitonexit
    exit 1
+}
+
+#################################################
+# Draw title graphic 
+# Globals:
+#   formattedTop - top line of graphic
+#   formattedMiddle - middle line of graphic
+#   formattedBottom - bottom line of graphic
+#   tput colors
+# Arguments:
+#   $1: menu head description
+# Outputs:
+#   The menu head graphic to stdout
+#################################################
+draw_rounded_square() {
+
+    # Menu title cache
+    if [ "$formattedTop" != "" ]; then
+      echo -e "$formattedTop"
+      echo -e "$formattedMiddle"
+      echo -e "$formattedBottom"
+      return
+    fi
+
+    local text="$1"
+    local width=${#text}
+
+    local horizontal_line="─"
+    local top_left_corner="┌"
+    local top_right_corner="┐"
+    local bottom_left_corner="└"
+    local bottom_right_corner="┘"
+    local vertical_line="│"
+    
+    local border=""
+    border+="$top_left_corner"
+    for (( i=0; i<width+2; i++ )); do
+        border+="$horizontal_line"
+    done
+    border+="$top_right_corner"
+    
+    formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
+    formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
+
+    echo -e "$formattedTop"
+    echo -e "$formattedMiddle"
+    
+    border="$bottom_left_corner"
+    for (( i=0; i<width+2; i++ )); do
+        border+="$horizontal_line"
+    done
+    border+="$bottom_right_corner"
+
+    formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
+    echo -e "$formattedBottom"
+
 }
 
