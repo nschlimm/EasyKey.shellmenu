@@ -9,6 +9,7 @@ source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-maven-functions.sh"
 
 enableLogging() {
+   echo "SQL:"
    echo "logging:"
    echo "  level:"
    echo "    org: "
@@ -19,11 +20,15 @@ enableLogging() {
    echo "        jdbc:"
    echo "          datasource:"
    echo "            init: DEBUG"
+   echo "Autoconfig:"
+   echo "logging.level.org.springframework=DEBUG"
+   echo "logging.level.com.myapp=DEBUG"
+}
 
-echo "logging.level.org.springframework=DEBUG"
-echo "logging.level.com.myapp=DEBUG"
-
-echo "org.springframework.boot.autoconfigure=DEBUG"
+showProperties() {
+   selectItem "find ./src -type f -name 'application*.*'" "awk '{print \$1}'"
+   if [[ $fname == "" ]]; then return 0; fi
+   vim "$fname"
 }
 
 menuInit "Super MAVEN Home"
@@ -34,7 +39,13 @@ menuInit "Super MAVEN Home"
   menuItemClm g "Show global settings" showGlobalSettings h "Show local settings" showLocalSettings  
   menuItemClm i "Re-resolve project dependencies" "mvn dependency:purge-local-repository" j "List repositories" "mvn dependency:list-repositories"  
   menuItemClm k "Download sources" downLoadSources l "Build with deps" "mvn clean compile assembly:single"  
-  menuItemClm m "New project from archetype" newProject "p" "Effective pom" "mvn help:effective-pom"
+  menuItemClm m "New project from archetype" newProject p "Effective pom" "mvn help:effective-pom"
+  menuItemClm t "Dependency tree" "mvn dependency:tree" u "Display dependency updates" "mvn versions:display-dependency-updates -DexcludeReactor=true"
+ submenuHead "Lifecycle:"
+  menuItemClm C "Clean compile" "mvn clean compile" T "Clean test" "mvn clean test"
+  menuItemClm I "Clean install" "mvn clean install -DskipTests" P "Clean package" "mvn clean package -DskipTests"
+  menuItem D "Clean deploy" "mvn clean deploy -DskipTests"
  submenuHead "Spring-Boot:"
-  menuItemClm o "Start Spring Boot App" startSpringBoot p "Enable logging" enableLogging
+  menuItemClm o "Start Spring Boot App" startSpringBoot r "Enable logging" enableLogging
+  menuItem s "View application properties" showProperties
 startMenu

@@ -78,7 +78,7 @@ submenuHead () {
 #   Prints the menu item to standard out.
 #################################################
 menuItem () {
-   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    ${immediateMode} && printMenuItem "$1" "$2"
 }
 
