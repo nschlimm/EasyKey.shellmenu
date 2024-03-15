@@ -1,3 +1,5 @@
+#!/bin/bash
+
 mvnCleanEclipse(){
     mvn clean:clean
     mvn eclipse:clean
@@ -41,3 +43,25 @@ downLoadSources() {
    mvn eclipse:eclipse -DdownloadSources=true
 }
 
+toRepo() {
+   repo=$(mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]')
+   cd "$repo"
+   echo "Now in: $(pwd)"
+   exit
+}
+
+newProject() {
+   echo "Command expects the user to be in the new cloned repo folder. <taste drücken>"
+   read
+   echo "Project name?"
+   read projektname
+   mvn archetype:generate -DartifactId=$projektname \
+                          -DinteractiveMode=true
+   mv $projektname/* .
+   rm -rf $projektname/
+   mvn compile
+   mvn eclipse:eclipse
+   git status > .gitignore
+   vim .gitignore
+   break
+}
