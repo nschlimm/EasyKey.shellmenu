@@ -104,8 +104,8 @@ menuItem () {
 #################################################
 menuItemClm () {
    clmLocalWidth=${globalClmWidth:=45}
-   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
-   menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter2")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
+   menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
    ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
 }
 
@@ -426,7 +426,12 @@ generateMenu () {
   OLD_IFS=$IFS
   local previoussubmenu previouscolumn submenucount;
   submenucount=0
+  skipnext=false
   for ((index=0; index<${#menudatamap[@]}; index++)); do
+    if [ "$skipnext" = "true" ]; then 
+      skipnext=false
+      continue
+    fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
     if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
@@ -436,9 +441,10 @@ generateMenu () {
        submenucount=$((submenucount+1));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
-      printMenuItemClm "$key" "$description" "$action" "$nextkey" "$nextdescription" "$nextaction" 
+      printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription" 
+      skipnext=true
     else
-      printMenuItem "$key" "$description" "$action" 
+      printMenuItem "$key" "$description"
     fi
     previoussubmenu="$submenu"
   done
@@ -541,12 +547,6 @@ printMenuHeading(){
 #################################################
 printSubmenuHeading(){
   coloredLog "$1" "$submenuFGClr" "$submenuBGClr"
-}
-
-printLogo() {
-  echo "╭───────────────────╮"
-  echo "│ EasyKey.shellmenu │"
-  echo "╰───────────────────╯"
 }
 
 quit () {
