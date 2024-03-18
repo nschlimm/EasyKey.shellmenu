@@ -66,7 +66,7 @@ startMenu
 ```
 Result is the following menu:
 
-<img width="273" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5cbf1c4c-1027-4e47-b858-9a7fa131e7db">
+<img width="293" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/8f5ea85c-7ff1-4b87-a99e-eacf77f825fb">
 
 # Example double column menu
 
