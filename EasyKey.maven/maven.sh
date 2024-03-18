@@ -24,5 +24,5 @@ menuInit "Super MAVEN Home"
   menuItem D "Clean deploy" "mvn clean deploy -DskipTests"
  submenuHead "Spring-Boot:"
   menuItemClm o "Start Spring Boot App" startSpringBoot r "Enable logging" enableLogging
-  menuItem s "View application properties" showProperties
+  menuItemClm s "View application properties" showProperties v "Usefull notes" useFull
 startMenu

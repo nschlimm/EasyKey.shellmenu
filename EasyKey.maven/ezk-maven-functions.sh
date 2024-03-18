@@ -1,5 +1,19 @@
 #!/bin/bash
 
+useFull() {
+   echo "Validate JPA Entities on startup"
+   echo "spring.jpa.hibernate.ddl-auto=validate"
+   echo "Generate and log statistics"
+   echo "spring.jpa.properties.hibernate.generate_statistics=true"
+   echo "logging.level.org.hibernate.stat=DEBUG"
+# Log slow queries
+echo "spring.jpa.properties.hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS=1"
+# Log all SQL statements
+echo "logging.level.org.hibernate.SQL=DEBUG"
+# Log cache operations
+echo "logging.level.org.hibernate.cache=DEBUG"
+}
+
 enableLogging() {
    echo "Root logger (global default logging level):"
    echo "logging.level.root=warn"
@@ -54,9 +68,8 @@ mvnCleanEclipse(){
 }
 
 startSpringBoot() {
-   echo "Which profile? (optional)"
+   echo "Which profile?"
    read defprofiles
-   defprofiles=-Dspring-boot.run.profiles=${defprofiles}
    my_array=("logging.level.web=DEBUG" \
              "logging.level.sql=DEBUG" \
              "logging.level.web=TRACE" \
@@ -65,7 +78,7 @@ startSpringBoot() {
    concatenated=$(printf "%s\n" "${my_array[@]}")
    selectItem 'printf "%s\n" "${my_array[@]}"' "awk '{print \$1}'"
    if [[ $fname == "" ]]; then return 0; fi
-   mvn spring-boot:run -Dspring-boot.run.arguments=--"$fname" ${defprofiles}
+   executeCommand "SPRING_PROFILES_ACTIVE="$defprofiles" mvn spring-boot:run -Dspring-boot.run.arguments=--"$fname""
 }
 
 showGlobalSettings(){
