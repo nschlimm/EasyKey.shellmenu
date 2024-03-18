@@ -44,7 +44,7 @@ menuItemClm <key> <description> <shell command> <key> <description> <shell comma
 startMenu
 ```
 
-# Maven demo menu
+# Maven demo menu (single column)
 
 The following example are taken from `maven_example.sh` for illustration.
 
