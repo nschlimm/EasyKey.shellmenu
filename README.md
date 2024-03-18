@@ -66,7 +66,13 @@ startMenu
 ```
 Result is the following menu:
 
-<img width="273" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5cbf1c4c-1027-4e47-b858-9a7fa131e7db">
+<img width="293" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/8f5ea85c-7ff1-4b87-a99e-eacf77f825fb">
+
+# Example double column menu
+
+The following menu example is tyken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) urility.
+
+<img width="604" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/cf923abb-e589-4f1d-a7a9-45d0b1f18404">
 
 # Tipp: sourcing shellmenu.sh 
 
