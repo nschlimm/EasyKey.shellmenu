@@ -33,7 +33,7 @@ initConfig () {
         continue
       fi
       if [ -n "$configline" ]; then
-         eval "${configsectioname[i]}='$configline'"
+         eval "${configsectioname}+=('$configline')"
       fi
       ((i++))
    done <<< "$(echo -e "$configlines")"
@@ -44,28 +44,7 @@ initConfig
 clear
 thekeys=($(echo {a..p}) $(echo {r..z}) $(echo {1..9}) $(echo {A..Z}))
 declare -x keycounter=0
-menuInit "Favorite locations"
-submenuHead "Locations:"
-if [ -n ${locations+x} ]; then
-	for j in "${locations[@]}"
-	do
-		locationname=$(echo "$j" | cut -f1 -d'=')
-		locationdir=$(echo "$j" | cut -f2 -d'=')
-		menuItem "${thekeys[$keycounter]}" "$locationname" "toDirAndTerminate $locationdir"
-        ((keycounter++))
-    done
-fi
-echo
-submenuHead "Workspaces:"
-if [ -n ${workspaces+x} ]; then
-	for j in "${workspaces[@]}"
-	do
-		locationname=$(echo "$j" | cut -f1 -d'=')
-		locationdir=$(echo "$j" | cut -f2 -d'=')
-		menuItem "${thekeys[$keycounter]}" "$locationname" "toDir $locationdir"
-        ((keycounter++))
-    done
-fi
+menuInit "GIT locations"
 echo
 uncached=false
 priorlocation=$(pwd) # remember actual location
@@ -88,6 +67,7 @@ fi
 eval cd "${priorlocation// /\\ }" # return to previous location
 # print out git location cache
 submenuHead "GIT repos inside workspaces:"
+echo
 for (( i = 0; i < ${#gitlocations[@]}; i++ )); do
     arrIN=(${gitlocations[$i]})
 	IFSOLD=$IFS
@@ -97,14 +77,10 @@ for (( i = 0; i < ${#gitlocations[@]}; i++ )); do
 	menuItem "${arrIN[0]}" "${arrIN[1]}" "${arrIN[2]} ${arrIN[3]}" 
 done
 if $uncached; then coloredLog "NEW" "1;42"; else coloredLog "CACHED" "1;42"; fi
-echo
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
 echo
 menuItem q "Quit" quit
-echo
-coloredLog "$(pwd)" "1;44"
-
 choice
 
 unset locations workspaces
