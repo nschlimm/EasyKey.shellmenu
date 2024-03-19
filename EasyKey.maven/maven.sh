@@ -23,6 +23,6 @@ menuInit "Super MAVEN Home"
   menuItemClm I "Clean install" "mvn clean install -DskipTests" P "Clean package" "mvn clean package -DskipTests"
   menuItem D "Clean deploy" "mvn clean deploy -DskipTests"
  submenuHead "Spring-Boot:"
-  menuItemClm o "Start Spring Boot App" startSpringBoot r "Enable logging" enableLogging
-  menuItemClm s "View application properties" showProperties v "Usefull notes" useFull
-startMenu
+  menuItemClm o "Start Spring Boot App" startSpringBoot s "View application properties" showProperties
+  menuItem v "Usefull notes" useFull
+startMenu "$(pwd)"

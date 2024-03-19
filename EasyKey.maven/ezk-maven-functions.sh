@@ -1,59 +1,20 @@
 #!/bin/bash
 
 useFull() {
-   echo "Validate JPA Entities on startup"
-   echo "spring.jpa.hibernate.ddl-auto=validate"
-   echo "Generate and log statistics"
-   echo "spring.jpa.properties.hibernate.generate_statistics=true"
-   echo "logging.level.org.hibernate.stat=DEBUG"
-# Log slow queries
-echo "spring.jpa.properties.hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS=1"
-# Log all SQL statements
-echo "logging.level.org.hibernate.SQL=DEBUG"
-# Log cache operations
-echo "logging.level.org.hibernate.cache=DEBUG"
-}
-
-enableLogging() {
-   echo "Root logger (global default logging level):"
-   echo "logging.level.root=warn"
-   echo "Stuff in my app:"
-   echo "logging.level.com.myapp=DEBUG"
-   echo "All Spring:"
-   echo "logging.level.org.springframework=DEBUG"
-   echo "Spring Web:"
-   echo "logging.level.org.springframework.web=debug"
-   echo "Display endpoints at startup:"
-   echo "logging.level.web=TRACE"
-   echo "logging.level.web=DEBUG"
-   echo "Rest:"
-   echo "logging.group.rest=org.springframework.web,org.springframework.http"
-   echo "logging.level.rest=DEBUG"
-   echo "Tomcat:"
-   echo "logging.group.tomcat=org.apache.catalina, org.apache.coyote, org.apache.tomcat"
-   echo "logging.level.tomcat=DEBUG"
-   echo "Hibernate:"
-   echo "logging.level.org.hibernate=error"
-   echo "Autoconfig:"
-   echo "logging.level.org.springframework.boot.autoconfigure=DEBUG"
-   echo "SQL"
-   echo "logging.level.sql=DEBUG"
-   echo "logging:"
-   echo "  level:"
-   echo "    org: "
-   echo "      springframework: "
-   echo "        test: "
-   echo "          context:"
-   echo "            jdbc: DEBUG"
-   echo "        jdbc:"
-   echo "          datasource:"
-   echo "            init: DEBUG"
-   echo "JPA SQL:"
-   echo "spring.jpa.show-sql=true"
-   echo "With Actuator:"
-   echo "management.endpoints.web.exposure.include=mappings"
-   echo "http://localhost:8080/actuator/mappings"
-}
+   echo "Usefull stuff to remember:"
+   echo
+   echo "Printout mappings at application start:"
+   echo -e " \n
+    @EventListener \n
+    public void handleContextRefresh(ContextRefreshedEvent event) { \n
+        ApplicationContext applicationContext = event.getApplicationContext(); \n
+        RequestMappingHandlerMapping requestMappingHandlerMapping = applicationContext \n
+            .getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class); \n
+        Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping \n
+            .getHandlerMethods(); \n
+        map.forEach((key, value) -> log.info("{} {}", key, value)); \n
+    }"
+ }
 
 showProperties() {
    selectItem "find ./src -type f -name 'application*.*'" "awk '{print \$1}'"
@@ -70,11 +31,21 @@ mvnCleanEclipse(){
 startSpringBoot() {
    echo "Which profile?"
    read defprofiles
-   my_array=("logging.level.web=DEBUG" \
+   my_array=("logging.level.root=DEBUG" \
+             "logging.level.web=DEBUG" \
              "logging.level.sql=DEBUG" \
              "logging.level.web=TRACE" \
              "logging.level.sql=TRACE" \
-             "spring.jpa.show-sql=true")
+             "spring.jpa.show-sql=true" \
+             "logging.level.org.springframework=DEBUG" \
+             "management.endpoints.web.exposure.include=mappings" \
+             "logging.group.tomcat=org.apache.catalina,org.apache.coyote,org.apache.tomcat,--logging.level.tomcat=DEBUG" \
+             "logging.level.org.hibernate=DEBUG" \
+             "logging.level.org.springframework.boot.autoconfigure=DEBUG" \
+             "logging.level.org.springframework.test.context.jdbc=DEBUG" \
+             "logging.level.org.springframework.jdbc.datasource.init=DEBUG" \
+             "spring.jpa.hibernate.ddl-auto=validate" \
+             "spring.jpa.properties.hibernate.generate_statistics=true,--logging.level.org.hibernate.stat=DEBUG,--spring.jpa.properties.hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS=1,--logging.level.org.hibernate.SQL=DEBUG,--logging.level.org.hibernate.cache=DEBUG")
    concatenated=$(printf "%s\n" "${my_array[@]}")
    selectItem 'printf "%s\n" "${my_array[@]}"' "awk '{print \$1}'"
    if [[ $fname == "" ]]; then return 0; fi
