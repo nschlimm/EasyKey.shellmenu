@@ -86,8 +86,8 @@ Result is the following menu:
 
 # Example double column menu
 
-The following menu example is taken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) utility.
-The Git menu has many functions and sub sections in two columns to enable maximum amount auf commands in your menu.
+The following menu example is taken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) utility.
+The `kubectl` menu has many functions and sub sections in two columns to enable maximum amount auf commands in your menu.
 
 <img width="604" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/cf923abb-e589-4f1d-a7a9-45d0b1f18404">
 
