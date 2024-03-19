@@ -41,7 +41,7 @@ menuInit <menu title>
 submenuHead <sub menu title>
 menuItem <key> <description> <shell command>
 menuItemClm <key> <description> <shell command> <key> <description> <shell command>
-startMenu
+startMenu <optional: status info>
 ```
 
 # Simplest example menu
