@@ -78,7 +78,7 @@ submenuHead () {
 #   Prints the menu item to standard out.
 #################################################
 menuItem () {
-   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu$delimiter1")
+   menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    ${immediateMode} && printMenuItem "$1" "$2"
 }
 
@@ -112,6 +112,9 @@ menuItemClm () {
 #################################################
 # The entry method to display the menu in non
 # immediate mode (the default mode)
+# Arguments:
+#   $1: a custom output at the bottom of menu
+#       (e.g. current directory)
 # Outputs:
 #   the menu written to stdout
 #################################################
@@ -119,7 +122,7 @@ startMenu() {
    while ${continuemenu:=true}; do
       clear
       generateMenu
-      choice
+      choice "$1"
    done
 }
 
@@ -474,6 +477,10 @@ terminate () { continuemenu=false; }
 #      and initiates execution of command selected
 #################################################
 choice () {
+  if [ -n "$1" ]; then
+     echo
+     importantLog "$1"
+  fi
   echo
   echo "Press 'q' to quit"
   echo
