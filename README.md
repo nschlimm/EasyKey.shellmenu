@@ -44,9 +44,25 @@ menuItemClm <key> <description> <shell command> <key> <description> <shell comma
 startMenu
 ```
 
+# Simplest example menu
+
+The simplest menu requires this code:
+
+```
+source "./shellmenu.sh"
+menuItem c "Clean all" "mvn clean:clean"
+menuItem x "Compile" "mvn clean compile" 
+menuItem t "Test" "mvn clean test" 
+menuItem i "Install" "mvn clean install"  
+startMenu
+```
+
+<img width="175" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5b273c27-59f4-4bff-aaa6-b8fbf174bbf9">
+
 # Maven demo menu (single column)
 
-The following example are taken from `maven_example.sh` for illustration.
+The following example are taken from `maven_example.sh` for illustration.  
+The Maven demo has its own heading and sub menu sections, but has only one column.
 
 ```
 source "/path/to/shellmenu.sh"
@@ -70,7 +86,8 @@ Result is the following menu:
 
 # Example double column menu
 
-The following menu example is tyken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) urility.
+The following menu example is taken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.git) utility.
+The Git menu has many functions and sub sections in two columns to enable maximum amount auf commands in your menu.
 
 <img width="604" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/cf923abb-e589-4f1d-a7a9-45d0b1f18404">
 
