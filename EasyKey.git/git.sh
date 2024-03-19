@@ -39,8 +39,7 @@ menuItemClm 5 "Git extras" gitExtras 6 "Change Git Passwords" gitPasswort
 echo
 submenuHead "Shortcuts"
 menuItemClm P "Change project" changeProject B "Change branch" changeBranch
-menuItemClm F "Fetch all" fetachAll C "Compile favorites" compileMenu
-menuItem X "Purge cache" purgeCash
+menuItem F "Fetch all" fetachAll 
 echo
 showStatus
 choice
