@@ -30,7 +30,7 @@ menuItem r "Show branch history" showBranchHisto
 echo
 submenuHead "Other usefull actions:"
 menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView
-menuItem c "Change last commit message" "git commit --amend"
+menuItemClm c "Change last commit message" "git commit --amend" x "Descrease repo size" repoSize
 echo
 submenuHead "Git admin actions:"
 menuItemClm 1 "Show local git config" localGitConfig 2 "Show global git config" globalGitConfig
