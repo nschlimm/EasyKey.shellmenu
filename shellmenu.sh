@@ -636,3 +636,35 @@ wait_for_keypress() {
     REPLY=$(dd bs=1 count=1 2> /dev/null)
     stty -raw
 }
+
+######################################################
+# A magic function that reads a file with sections
+# into global arrays named by this section.
+# Sections in the file start with [<section name>].
+# After that section heading the config lines follow.
+# A new section begins with [<new section name>].
+# Arguments:
+#   $1: the config filename to read
+# Outputs:
+#   Global arrays that have the name of the sections
+#   in the config file.
+######################################################
+initConfig () {
+   # read config to global arrays
+   INPUT="$1"
+   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
+   i=0
+   configlines=$(cat "$INPUT")
+   while read -r configline; do
+      if echo "$configline" | grep -q "\[.*\]"; then
+        configsection=$(echo "$configline" | grep -o "\[.*\]")
+        configsectioname=${configsection:1:${#configsection}-2}
+        i=0
+        continue
+      fi
+      if [ -n "$configline" ]; then
+         eval "${configsectioname}+=('$configline')"
+      fi
+      ((i++))
+   done <<< "$(echo -e "$configlines")"
+}

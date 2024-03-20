@@ -19,27 +19,9 @@ function purgDirCache () {
 	unset gitlocations
 }
 
-initConfig () {
-   # read config to global arrays
-   INPUT="$script_dir"/"$configfilename"
-   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
-   i=0
-   configlines=$(cat "$INPUT")
-   while read -r configline; do
-      if echo "$configline" | grep -q "\[.*\]"; then
-        configsection=$(echo "$configline" | grep -o "\[.*\]")
-        configsectioname=${configsection:1:${#configsection}-2}
-        i=0
-        continue
-      fi
-      if [ -n "$configline" ]; then
-         eval "${configsectioname}+=('$configline')"
-      fi
-      ((i++))
-   done <<< "$(echo -e "$configlines")"
-}
-
-initConfig
+# Reads the config into global array "workspaces"
+# The config needs to have that section [workspaces]
+initConfig "${script_dir}/${configfilename}"
 
 clear
 thekeys=($(echo {a..p}) $(echo {r..z}) $(echo {1..9}) $(echo {A..Z}))
@@ -79,8 +61,6 @@ done
 if $uncached; then coloredLog "NEW" "1;42"; else coloredLog "CACHED" "1;42"; fi
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
-echo
-menuItem q "Quit" quit
 choice
 
 unset locations workspaces

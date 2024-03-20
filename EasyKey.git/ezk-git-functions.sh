@@ -287,6 +287,7 @@ function atlassiansView() {
 
 function changeProject () {
   source $script_dir/../EasyKey.git/ezk-git-loca.sh
+  noterminate
   nowaitonexit
 }
 
