@@ -5,7 +5,7 @@ unset locations
 script_dir="$1"
 source "${script_dir}/shellmenu.sh"
 
-configfilename=.ezk-git-loca-conf
+configfilename=.ezk-bash-config
 
 function toDirAndTerminate () {
   vars="$*" # all splitted words back to one var
@@ -16,7 +16,7 @@ function toDirAndTerminate () {
 
 # Reads the config into global array "workspaces"
 # The config needs to have that section [workspaces]
-initConfig "${script_dir}/EasyKey.git/${configfilename}"
+initConfig "${script_dir}/EasyKey.bash/${configfilename}"
 
 echo "${locations[@]}"
 
