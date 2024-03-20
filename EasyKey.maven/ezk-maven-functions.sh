@@ -32,6 +32,7 @@ startSpringBoot() {
    echo "Which profile?"
    read defprofiles
    my_array=("logging.level.root=DEBUG" \
+             "logging.level.org.springframework.web=TRACE"
              "logging.level.web=DEBUG" \
              "logging.level.sql=DEBUG" \
              "logging.level.web=TRACE" \
