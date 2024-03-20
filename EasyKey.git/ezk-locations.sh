@@ -4,5 +4,5 @@ wait_for_keypress() {
     stty -raw
 }
 
-wait_for_keypress
+echo -n "Make your choice: " && wait_for_keypress
 echo "$REPLY"

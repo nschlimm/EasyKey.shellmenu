@@ -484,7 +484,7 @@ choice () {
   echo
   echo "Press 'q' to quit"
   echo
-  read -p "Make your choice: " -n 1 -r
+  echo -n "Your choice: " && wait_for_keypress
   echo
 
   if [[ $REPLY == "q" ]]; then
@@ -495,7 +495,7 @@ choice () {
       importantLog "Huh ($REPLY)?"
     fi
     if $waitstatus; then
-      read -p $'\n<Press any key to return>' -n 1 -r
+      echo -n "<Press any key to return>" && wait_for_keypress
     else
       waitonexit # back to default after method execution
     fi
@@ -624,3 +624,15 @@ draw_rounded_square() {
 
 }
 
+######################################################
+# Reading single key input that works on most
+# shells. Usage example:
+#     echo -n "Your choice: " && wait_for_keypress
+# Outputs:
+#   REPLY - contains user selection (the key pressed)
+######################################################
+wait_for_keypress() {
+    stty raw
+    REPLY=$(dd bs=1 count=1 2> /dev/null)
+    stty -raw
+}
