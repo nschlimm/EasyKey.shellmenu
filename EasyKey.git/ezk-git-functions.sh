@@ -287,6 +287,7 @@ function atlassiansView() {
 
 function changeProject () {
   source $script_dir/../EasyKey.git/ezk-git-loca.sh
+  noterminate
   nowaitonexit
 }
 
@@ -364,4 +365,16 @@ diffDrillDownAdvanced () {
         fi
    done
   fi
+}
+
+repoSize() {
+   executeCommand "git gc"
+   executeCommand "git count-objects -vH"
+   executeCommand "git rev-list --objects --all | grep -f <(git verify-pack -v  .git/objects/pack/*.idx| sort -k 3 -n | cut -f 1 -d ' ' | tail -10)"
+   echo "Enter file pattern to REMOVE in repo history:"
+   read filePattern
+   [ "${filename}" = "" ] && waitonexit && return 
+   executeCommand "git filter-repo --path-glob '"${filePattern}"' --invert-paths --force"
+   executeCommand "git gc"
+   executeCommand "git count-objects -vH"
 }

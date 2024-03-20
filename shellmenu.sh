@@ -484,7 +484,7 @@ choice () {
   echo
   echo "Press 'q' to quit"
   echo
-  read -p "Make your choice: " -n 1 -r
+  echo -n "Your choice: " && wait_for_keypress
   echo
 
   if [[ $REPLY == "q" ]]; then
@@ -495,7 +495,7 @@ choice () {
       importantLog "Huh ($REPLY)?"
     fi
     if $waitstatus; then
-      read -p $'\n<Press any key to return>' -n 1 -r
+      echo -n "<Press any key to return>" && wait_for_keypress
     else
       waitonexit # back to default after method execution
     fi
@@ -624,3 +624,47 @@ draw_rounded_square() {
 
 }
 
+######################################################
+# Reading single key input that works on most
+# shells. Usage example:
+#     echo -n "Your choice: " && wait_for_keypress
+# Outputs:
+#   REPLY - contains user selection (the key pressed)
+######################################################
+wait_for_keypress() {
+    stty raw
+    REPLY=$(dd bs=1 count=1 2> /dev/null)
+    stty -raw
+}
+
+######################################################
+# A magic function that reads a file with sections
+# into global arrays named by this section.
+# Sections in the file start with [<section name>].
+# After that section heading the config lines follow.
+# A new section begins with [<new section name>].
+# Arguments:
+#   $1: the config filename to read
+# Outputs:
+#   Global arrays that have the name of the sections
+#   in the config file.
+######################################################
+initConfig () {
+   # read config to global arrays
+   INPUT="$1"
+   [ ! -f "$INPUT" ] && { echo "Config file not found: $INPUT"; wait_for_keypress; }
+   i=0
+   configlines=$(cat "$INPUT")
+   while read -r configline; do
+      if echo "$configline" | grep -q "\[.*\]"; then
+        configsection=$(echo "$configline" | grep -o "\[.*\]")
+        configsectioname=${configsection:1:${#configsection}-2}
+        i=0
+        continue
+      fi
+      if [ -n "$configline" ]; then
+         eval "${configsectioname}+=('$configline')"
+      fi
+      ((i++))
+   done <<< "$(echo -e "$configlines")"
+}

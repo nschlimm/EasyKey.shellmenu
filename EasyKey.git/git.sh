@@ -30,7 +30,7 @@ menuItem r "Show branch history" showBranchHisto
 echo
 submenuHead "Other usefull actions:"
 menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView
-menuItem c "Change last commit message" "git commit --amend"
+menuItemClm c "Change last commit message" "git commit --amend" x "Descrease repo size" repoSize
 echo
 submenuHead "Git admin actions:"
 menuItemClm 1 "Show local git config" localGitConfig 2 "Show global git config" globalGitConfig
@@ -39,8 +39,7 @@ menuItemClm 5 "Git extras" gitExtras 6 "Change Git Passwords" gitPasswort
 echo
 submenuHead "Shortcuts"
 menuItemClm P "Change project" changeProject B "Change branch" changeBranch
-menuItemClm F "Fetch all" fetachAll C "Compile favorites" compileMenu
-menuItem X "Purge cache" purgeCash
+menuItem F "Fetch all" fetachAll 
 echo
 showStatus
 choice
