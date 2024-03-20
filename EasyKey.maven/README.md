@@ -9,5 +9,5 @@ EasyKey.maven is a sample menu used for daily work with Maven. Here is the menu:
 To get startet with the full functionality:
 
 1. Install `mvn` (Maven) on the command line.
-2. Clone this repository using `git clone `
+2. Clone this repository using `git clone https://github.com/nschlimm/EasyKey.shellmenu.git`
 3. Start the menu with `bash maven.sh` or with `bash path/to/maven.sh`
