@@ -2,7 +2,7 @@
 
 EasyKey.maven is a sample menu used for daily work with Maven. Here is the menu:
 
-<img width="574" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/37f76f5e-55af-445a-987d-b2787473a057">
+<img width="582" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/efe43d59-0f52-4c0b-b889-3e813b3236a7">
 
 # Get started
 
