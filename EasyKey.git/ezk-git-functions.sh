@@ -371,10 +371,11 @@ repoSize() {
    executeCommand "git gc"
    executeCommand "git count-objects -vH"
    executeCommand "git rev-list --objects --all | grep -f <(git verify-pack -v  .git/objects/pack/*.idx| sort -k 3 -n | cut -f 1 -d ' ' | tail -10)"
-   echo "Enter file pattern to REMOVE in repo history:"
+   echo "Enter file pattern to REMOVE in repo history (e.g. *.jar or full qualified filename or */folder/*):"
    read filePattern
-   [ "${filename}" = "" ] && waitonexit && return 
-   executeCommand "git filter-repo --path-glob '"${filePattern}"' --invert-paths --force"
-   executeCommand "git gc"
+   [ "${filePattern}" = "" ] && waitonexit && return 
+   executeCommand "git filter-repo --path-glob '${filePattern}' --invert-paths --force"
+   executeCommand "git reflog expire --expire=now --all"
+   executeCommand "git gc --prune=now"
    executeCommand "git count-objects -vH"
 }
