@@ -652,7 +652,7 @@ wait_for_keypress() {
 initConfig () {
    # read config to global arrays
    INPUT="$1"
-   [ ! -f "$INPUT" ] && { echo "$INPUT file not found"; exit 99; }
+   [ ! -f "$INPUT" ] && { echo "Config file not found: $INPUT"; wait_for_keypress; }
    i=0
    configlines=$(cat "$INPUT")
    while read -r configline; do
