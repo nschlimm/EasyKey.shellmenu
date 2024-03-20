@@ -2,7 +2,7 @@
 
 This is a sample menu for git. It has many functions. 
 
-<img width="566" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/a5ecfda6-f518-4b87-b13b-4efe027b56e2">
+<img width="604" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/cce803e3-50f0-41c4-ae9a-d0eb4fed45b8">
 
 # Get started
 
