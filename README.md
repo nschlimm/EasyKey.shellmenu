@@ -17,6 +17,8 @@ EasyKey.shellmenu is a simple script to generate menus for command execution in 
 
 👌 Increase your productivity and relax !
 
+Please leave a star ⭐ if you like EasyKey.shellmenu. If you experience any problems, please let me know 😊
+
 # Get started
 
 Easy ! 😎 
