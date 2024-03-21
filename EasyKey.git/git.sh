@@ -20,12 +20,12 @@ echo
 submenuHead "Working with remotes:"
 menuItemClm a "Gently push current" pushActual b "Set remote origin repo" setRemoteOrigin
 menuItemClm e "Set upstream to current" setUpstream f "Administer remotes" adminRemotes
-menuItem g "Show repository history" showRepoHisto
 echo
 submenuHead "Working on local branches:"
-menuItemClm r "Show branch history" showBranchHisto k "New local/remote branch checkout" newLocalBranch
+menuItemClm r "Show branch history" showBranchHisto g "Show reflog" showRepoHisto
 menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
 menuItemClm o "Merge source to target branch" mergeSourceToTarget p "Show all branches (incl. remote)" showAllBranches
+menuItem k "New local/remote branch checkout" newLocalBranch
 echo
 submenuHead "Other usefull actions:"
 menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView
@@ -38,7 +38,7 @@ menuItemClm 5 "Git extras" gitExtras 6 "Change Git Passwords" gitPasswort
 echo
 submenuHead "Shortcuts"
 menuItemClm P "Change project" changeProject B "Change branch" changeBranch
-menuItem F "Fetch all" fetachAll 
+menuItem F "Fetch all" fetchAll 
 echo
 showStatus
 choice

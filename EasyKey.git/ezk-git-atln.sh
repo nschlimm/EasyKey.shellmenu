@@ -22,6 +22,11 @@ function undoingChanges () {
 	nowaitonexit
 }
 
+function mergeRebase () {
+	source $script_dir/../EasyKey.git/ezk-git-reme.sh
+	nowaitonexit
+}
+
 while ${continuemenu:=true}; do
 clear
 menuInit "Atlassian's View"
@@ -33,19 +38,6 @@ menuItem b "Saving changes" savingChanges
 menuItem c "Inspecting a repository" inspectingRepos
 menuItem d "Undoing changes" undoingChanges
 menuItem e "Rewriting history" 
-echo
-submenuHead "Collaborating with your homies"
-menuItem i "Syncing" 
-menuItem k "Making a pull request" 
-menuItem l "Using branches" 
-echo
-submenuHead "Advanced stuff"
-menuItem n "Merging vs. Rebasing" 
-menuItem o "Reset, checkout and revert" 
-menuItem p "Advanced Git log" 
-menuItem q "Git Hooks" 
-menuItem r "Refs and the Reflog" 
-menuItem s "Git LFS" 
 echo
 showStatus
 choice

@@ -133,7 +133,8 @@ function adminRemotes() {
 }
 
 function showRepoHisto() {
-            git log --pretty=format:'%Cred%h%Creset | %Cgreen%ad%Creset | %s %C(yellow)%d%Creset %C(bold blue)[%an]%Creset %Cgreen(%cr)%Creset' --graph --date=short --all
+   git reflog
+   echo && echo "To go back to a commit type: git checkout HEAD@{1}. Then create a branch from there." && echo
 }
 
 function cloneRemote() {
@@ -266,9 +267,9 @@ function changeBranch () {
        git checkout $bname
 }
 
-function fetachAll () {
-       git fetch --prune
-       git fetch --all
+function fetchAll () {
+   git fetch --prune
+   git fetch --all
 }
 
 # submenus
