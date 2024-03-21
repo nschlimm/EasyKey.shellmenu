@@ -23,10 +23,9 @@ menuItemClm e "Set upstream to current" setUpstream f "Administer remotes" admin
 menuItem g "Show repository history" showRepoHisto
 echo
 submenuHead "Working on local branches:"
-menuItemClm k "New local/remote branch checkout" newLocalBranch L "Push local branch to remote" pushLocalBranch
+menuItemClm r "Show branch history" showBranchHisto k "New local/remote branch checkout" newLocalBranch
 menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
 menuItemClm o "Merge source to target branch" mergeSourceToTarget p "Show all branches (incl. remote)" showAllBranches
-menuItem r "Show branch history" showBranchHisto
 echo
 submenuHead "Other usefull actions:"
 menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView

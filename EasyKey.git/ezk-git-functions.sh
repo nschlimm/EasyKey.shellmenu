@@ -115,14 +115,17 @@ function adminRemotes() {
                 "b")
                     echo "What is the adress?"
                     read adress
+                    [ "${adress}" = "" ] && waitonexit && return 
                     echo "Type an alias for this remote?"
                     read ralias
+                    [ "${ralias}" = "" ] && waitonexit && return 
                     git remote add $ralias $adress
                 ;;
                 "c")
                     git remote -v
                     echo "Name of the remote to inspect"
                     read rname
+                    [ "${rname}" = "" ] && waitonexit && return 
                     git remote show $rname
                 ;;
             esac
@@ -143,25 +146,17 @@ function cloneRemote() {
 }
 
 function newLocalBranch() {
-              echo "Name des neuen Branch?"
-            read branchname
-            git branch $branchname 
-            git checkout $branchname
-            read -p "Set upstream? " -n 1 -r
-            echo    # (optional) move to a new line
-            if [[ $REPLY =~ ^[Yy]$ ]]
-                then
-                   git push --set-upstream origin $branchname
-            fi      
-}
-
-function pushLocalBranch() {
     echo "Name des neuen Branch?"
     read branchname
     [ "${branchname}" = "" ] && waitonexit && return 
     git branch $branchname 
     git checkout $branchname
-    git git push -u origin $branchname
+    read -p "Set upstream? " -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+           git push --set-upstream origin $branchname
+    fi      
 }
 
 function rollBackLast() {
@@ -180,26 +175,29 @@ function rollBackLast() {
 }
 
 function deleteBranch() {
-              git branch
-            echo "Welchen Branch löschen?"
-            read dbranch
-            git branch -d $dbranch
-            read -p "Delete remote? " -n 1 -r
-            echo    # (optional) move to a new line
-            if [[ $REPLY =~ ^[Yy]$ ]]
-                then
-                   git push origin --delete $dbranch
-            fi 
+  git branch
+  echo "Welchen Branch löschen?"
+  read dbranch
+  [ "${dbranch}" = "" ] && waitonexit && return 
+  git branch -d $dbranch
+  read -p "Delete remote? " -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+       git push origin --delete $dbranch
+  fi 
 }
 
 function mergeSourceToTarget(){
-              git branch --all
-            echo "Enter merge target branch"
-            read target
-            echo "Enter merge source branch"
-            read bsource
-            git checkout $target
-            git merge $bsource
+    git branch --all
+    echo "Enter merge target branch"
+    read target
+    [ "${target}" = "" ] && waitonexit && return 
+    echo "Enter merge source branch"
+    read bsource
+    [ "${bsource}" = "" ] && waitonexit && return 
+    git checkout $target
+    git merge $bsource
 }
 
 function showAllBranches () {
@@ -215,31 +213,31 @@ function setUpstream() {
 }
 
 function localGitConfig() {
-            vim .git/config
+  vim .git/config
 }
 
 function globalGitConfig() {
-            vim ~/.gitconfig
+  vim ~/.gitconfig
 }
 
 function adminAliases() {
-            echo $'\nActual aliases:'
-            git config --get-regexp alias
-            read -p "Add or delete aliases (a/d)? " -n 1 -r
-            echo    # (optional) move to a new line
-            if [[ $REPLY =~ ^[a]$ ]]
-                then
-                    echo "Which command?"
-                    read bcommand
-                    echo "Define alias:"
-                    read calias
-                    git config --global alias.$calias $bcommand
-                    echo "Alias $calias create for $bcommand!"
-                else
-                    echo "Which alias to delete:"
-                    read calias
-                    git config --global --unset alias.$calias
-            fi      
+    echo $'\nActual aliases:'
+    git config --get-regexp alias
+    read -p "Add or delete aliases (a/d)? " -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[a]$ ]]
+        then
+            echo "Which command?"
+            read bcommand
+            echo "Define alias:"
+            read calias
+            git config --global alias.$calias $bcommand
+            echo "Alias $calias create for $bcommand!"
+        else
+            echo "Which alias to delete:"
+            read calias
+            git config --global --unset alias.$calias
+    fi      
 }
 
 function gitIgnore() {
@@ -330,6 +328,7 @@ function coRemoteBranch () {
 function setRemoteOrigin() {
    echo "Enter remot origin address:"
    read originaddress
+   [ "${originaddress}" = "" ] && waitonexit && return 
    executeCommand "git remote set-url origin $originaddress"
 }
 
