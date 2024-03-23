@@ -98,8 +98,8 @@ echo "   dir                        local        remote   "
 echo
 submenuHead "Different diff options:"
 menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
-menuItem b "actual working dir   vs. actual branch last commit  -> tree vs. local repository" dirHead
-menuItem c "actual working dir   vs. other commits              -> tree vs. local repository" treeCommit
+menuItem b "actual working dir   vs. actual branch last commit  -> work dir vs. local repository" dirHead
+menuItem c "actual working dir   vs. other commits              -> work dir vs. local repository" treeCommit
 menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
 menuItem e "branch               vs. branch                     -> repository vs. repository (local/remote)" branchBranch
 echo
