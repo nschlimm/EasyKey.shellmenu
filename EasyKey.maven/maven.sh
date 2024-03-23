@@ -8,6 +8,8 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-maven-functions.sh"
 
+globalClmWidth=20
+
 menuInit "Super MAVEN Home"
  submenuHead "Maven:"
   menuItemClm a "Clean all eclipse" "mvnCleanEclipse" b "Maven analyze dependencies" "mvn dependency:analyze"

@@ -81,6 +81,7 @@ submenuHead () {
 menuItem () {
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    ${immediateMode} && printMenuItem "$1" "$2"
+   ${immediateMode} || update_column_width "$2"
 }
 
 #################################################
@@ -98,16 +99,16 @@ menuItem () {
 #   menudatamap - the menu data
 #   actualsubmenuname - the actual submenu 
 #   actualmenu - the actual main menu
-#   globalClmWidth - the column width
 # Outputs:
 #   Adds menu item data to menudatamap array.
 #   Prints the menu item to standard out.
 #################################################
 menuItemClm () {
-   clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
    ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
+   ${immediateMode} || update_column_width "$2"
+   ${immediateMode} || update_column_width "$5"
 }
 
 #################################################
@@ -546,9 +547,9 @@ choice () {
 printMenuItemClm() {
   echo -e "${1}.,${2},${3}.,${4}" \
           | awk -F , -v OFS=, '{printf "%-3s",$1; 
-                                printf "%-'"${clmLocalWidth}"'s",$2; 
+                                printf "%-'"${globalClmWidth}"'s",$2; 
                                 printf "%-3s",$3; 
-                                printf "%-'"${clmLocalWidth}"'s",$4; 
+                                printf "%-'"${globalClmWidth}"'s",$4; 
                                 printf("\n\r"); }'
 }
 
@@ -726,4 +727,21 @@ draw_border() {
 
   # Print the bottom line of the square
   echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
+}
+
+######################################################
+# Updates global column width in non immediate mode
+# Arguments:
+#   $1: string to measure (typically the menu item name)
+# Globals:
+#   globalClmWidth - the global clm width setting
+# Output:
+#   Updated globalClmWidth
+######################################################
+update_column_width() {
+   desclength=${#1}
+   clmLocalWidth=$(( 3 + desclength + 3 ))
+   if [ "$clmLocalWidth" -gt "$globalClmWidth" ]; then
+      globalClmWidth="$clmLocalWidth"
+   fi
 }
