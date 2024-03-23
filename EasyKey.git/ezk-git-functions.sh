@@ -257,10 +257,11 @@ function interactiveStage () {
 }
 
 function changeBranch () {
-       git branch --all
-       echo "Which branch?"
-       read bname
-       git checkout $bname
+   git branch --all
+   echo "Which branch?"
+   read bname
+   [ "${bname}" = "" ] && waitonexit && return 
+   git checkout $bname
 }
 
 function fetchAll () {
