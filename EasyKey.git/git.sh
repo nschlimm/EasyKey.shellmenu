@@ -15,7 +15,7 @@ git fetch --all --tags 2> /dev/null
 
 while ${continuemenu:=true}; do
 clear
-menuInit "Super GIT Home"
+menuInit "EasyKey.git"
 echo
 submenuHead "Working with remotes:"
 menuItemClm a "Gently push current" pushActual b "Set remote origin repo" setRemoteOrigin
