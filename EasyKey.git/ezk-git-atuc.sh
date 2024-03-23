@@ -49,10 +49,10 @@ clear
 menuInit "Undoing changes"
 coloredLog "   ALWAYS PREFER REVERT   " "$clrPurple" "$clrWhite"
 submenuHead "Undoing changes"
-menuItem a "Revert last commit - (keep commit history)" revertLastCommit
-menuItem b "Revert commit - (keep commit history)" revertToCommit
-menuItem c "(Soft) Reset commit - (delete some commits)" resetToCommit
-menuItem d "(Hard) Reset commit - (delete some commits)" resetToCommitHard
+menuItem a "Revert last commit - (keep commit history - create new commit)" revertLastCommit
+menuItem b "Revert commit - (keep commit history - create new commit)" revertToCommit
+menuItem c "(Soft) Reset commit - (delete some commits - keep current working dir)" resetToCommit
+menuItem d "(Hard) Reset commit - (delete some commits - overwrite working dir)" resetToCommitHard
 menuItem e "Undo local changes (only effects untracked files)" clean
 
 echo
