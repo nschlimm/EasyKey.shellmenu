@@ -29,6 +29,7 @@ delimiter=⊕
 formattedTop=""
 formattedBottom=""
 formattedMiddle=""
+generatedmenu=""
 
 ############################
 ############################
@@ -121,7 +122,10 @@ menuItemClm () {
 startMenu() {
    while ${continuemenu:=true}; do
       clear
-      generateMenu
+      if [ "$generatedmenu" = "" ]; then
+        generateMenu
+      fi
+      printf "$generatedmenu"
       choice "$1"
    done
 }
@@ -139,6 +143,7 @@ startMenu() {
 #   $1: log text
 #   $2: optional: foreground color (0-7)
 #   $3: optional: background color (0-7)
+#   $4: optional: width of heading line
 # Outputs:
 #   Writes colored log to standard out
 #######################################
@@ -146,8 +151,33 @@ coloredLog () {
     set_foreground=$(tput setaf "${2:-$clrWhite}")
     set_background=$(tput setab "${3:-$clrBlack}")
     echo -n "$set_background$set_foreground"
-    printf "%s\n" "$1"
+    printf "%s" "$1"
     tput sgr0
+    if [ $# -eq 4 ]; then
+      length=${#1}
+      width=73
+      pad=$(( width - length ))
+      set_foreground=$(tput setaf "$3")
+      set_background=$(tput setab "$clrBlack")
+      echo -n "$set_background$set_foreground"
+      printf "%s" $(pad_string_with_stars "─" $pad)
+      tput sgr0
+    fi
+    printf "\n\r"
+}
+
+pad_string_with_stars() {
+    local string="$1"
+    local count="$2"
+    local padded_string=""
+
+    for ((i = 0; i < count; i++)); do
+        padded_string+="─"
+    done
+
+    padded_string+="$string"
+
+    echo -n "$padded_string"
 }
 
 #######################################
@@ -278,7 +308,6 @@ selectItem () {
 #   Writes a colored or non-colored line to stdout
 #################################################
 alternateRows() {
-   #!/bin/bash
    header="$1"
    i=1
    while read -r line
@@ -422,6 +451,7 @@ callKeyFunktion () {
 # Generates the menu from the menudatamap.
 # Globals:
 #   menudatamap - the menu data
+#   generatedmenu - the generated menu (string)
 # Outputs:
 #   the menu written to stdout
 #################################################
@@ -437,17 +467,17 @@ generateMenu () {
     fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
-    if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
+    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); fi
     if [ "$submenu" != "$previoussubmenu" ]; then 
-       if [ "$submenucount" -gt 0 ]; then echo; fi
-       printSubmenuHeading "$submenu" && echo; 
-       submenucount=$((submenucount+1));
+       if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf "\n\r"); fi
+       generatedmenu+=$(printSubmenuHeading "$submenu" && echo) 
+       submenucount=$(( submenucount+1 ));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
-      printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription" 
+      generatedmenu+=$(printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription")
       skipnext=true
     else
-      printMenuItem "$key" "$description"
+      generatedmenu+=$(printMenuItem "$key" "$description")
     fi
     previoussubmenu="$submenu"
   done
@@ -519,7 +549,7 @@ printMenuItemClm() {
                                 printf "%-'"${clmLocalWidth}"'s",$2; 
                                 printf "%-3s",$3; 
                                 printf "%-'"${clmLocalWidth}"'s",$4; 
-                                printf("\n"); }'
+                                printf("\n\r"); }'
 }
 
 #################################################
@@ -531,7 +561,7 @@ printMenuItemClm() {
 #   The menu line to stdout
 #################################################
 printMenuItem() {
-   echo "$1. $2"
+   printf "%s. %s\n\r" "$1" "$2"
 }
 
 #################################################
@@ -610,8 +640,8 @@ draw_rounded_square() {
     formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
     formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
 
-    echo -e "$formattedTop"
-    echo -e "$formattedMiddle"
+    printf "$formattedTop\n\r"
+    printf "$formattedMiddle\n\r"
     
     border="$bottom_left_corner"
     for (( i=0; i<width+2; i++ )); do
@@ -620,8 +650,9 @@ draw_rounded_square() {
     border+="$bottom_right_corner"
 
     formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    echo -e "$formattedBottom"
+    printf "$formattedBottom\n\r"
 
+    printf "\n\r"
 }
 
 ######################################################

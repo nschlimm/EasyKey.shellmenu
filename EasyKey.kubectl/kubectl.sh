@@ -14,7 +14,6 @@ immediateMode=true
 while ${continuemenu:=true}; do
 clear
 menuInit "Super KUBECTL Home"
-echo
 echo "Current context: $(kubectl config current-context)"
 echo "Namespace: $(kubectl config view --minify -o jsonpath='{..namespace}')"
 echo
