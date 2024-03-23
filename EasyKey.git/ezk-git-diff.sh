@@ -89,12 +89,11 @@ echo
 echo "Note: GIT diff cann compare four locations with each other: "
 echo "      your working directory, the stage, the repository."
 echo
-echo "  _____         _____         _____        _____ "
-echo " |     |       |     |       |     |      |     |"
-echo " |     |       |     |       |     |      |     |"
-echo " |_____|   --> |_____|   --> |_____|  --> |_____|"
-echo " working        stage       repository   repository "
-echo "   dir                        local        remote   "
+coloredLog "┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐" "$clrPurple" "$clrBlack"
+coloredLog "│        │    │        │    │        │    │        │" "$clrPurple" "$clrBlack"
+coloredLog "│        │ -> │        │ -> │        │ -> │        │" "$clrPurple" "$clrBlack"
+coloredLog "└────────┘    └────────┘    └────────┘    └────────┘" "$clrPurple" "$clrBlack"
+coloredLog " work dir       stage       local repo    remote repo" "$clrWhite" "$clrBlack"
 echo
 submenuHead "Different diff options:"
 menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
