@@ -73,10 +73,11 @@ function openLocalConfig () {
 }
 
 function defineMergeTool () {
-	echo "Enter merge tool name (the command how you call it in the shell):"
+	echo "Enter merge tool name (e.g. vimdiff):"
 	read editor
 	[ "${editor}" = "" ] && waitonexit && return 
    git config --global merge.tool $editor
+   git config --global diff.tool $editor
 }
 
 function adminAliases() {
@@ -116,7 +117,7 @@ submenuHead "Configure repositories:"
 menuItem e "Define the author name and email to be used for all commits" defineAuthor
 menuItem f "Administering aliases" adminAliases
 menuItem g "Define the text editor used by commands" textEditor
-menuItem h "Define merge tool" defineMergeTool
+menuItem h "Define merge/diff tool" defineMergeTool
 menuItem i "Open global config" openGlobalConfig
 menuItem j "Open system config" openSystemConfig
 menuItem k "Open local config" openLocalConfig
