@@ -61,24 +61,34 @@ function addAllUntracked () {
 }
 
 function mergeChanges () {
-    echo ""
-    importantLog "Checking for updates from origin/$actual"
-    if git diff $actual origin/$actual | grep -q ".*"; then
-       echo "... found diff between $actual and origin/$actual ..."
-       if git status | grep "Your branch is ahead"; then
-          echo "... your local branch is ahead of origin/$actual ... nothing to merge"
-        else
-          echo "... your local branch is behind of origin/$actual ... recommend merge !"
-          diffDrillDownAdvanced "git diff --name-status $actual origin/$actual" " .*" "$actual" "origin/$actual"
-          executeCommand "git diff --name-status $actual origin/$actual"
-          read -p "Merge (y/n)? " -n 1 -r
-          echo    # (optional) move to a new line
-          if [[ $REPLY =~ ^[Yy]$ ]]; then
-             executeCommand "git merge origin/$actual"
-          fi
+
+    # Get the name of the current branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+    # Check if the current branch has an upstream (remote)
+    if [ -z "$(git rev-parse --abbrev-ref --symbolic-full-name ${current_branch}@{upstream} 2>/dev/null)" ]; then
+        echo "The current branch '$current_branch' doesn't have an upstream branch."
+        exit 1
+    fi
+
+    # Get the number of commits ahead of the remote branch
+    ahead_count=$(git rev-list --count ${current_branch}@{upstream}..${current_branch})
+    behind_count=$(git rev-list --count ${current_branch}..${current_branch}@{upstream})
+
+    # Check if the current branch is ahead of the remote branch
+    if [ $ahead_count -gt 0 ]; then
+        echo "Your current branch '$current_branch' is ahead of its remote counterpart by $ahead_count commit(s)."
+        echo "... nothing to merge ..."
+    elif [ $behind_count -gt 0 ]; then
+        echo "Your current branch '$current_branch' is behind of its remote counterpart."
+        coloredLog "   MERGE RECOMMENDED   " "$clrPurple" "$clrWhite"
+        diffDrillDownAdvanced "git diff --name-status origin/$actual $actual" "awk '{print \$2}'" "origin/$actual" "$actual"
+        executeCommand "git diff --name-status origin/$actual $actual"
+        read -p "Merge (y/n)? " -n 1 -r
+        echo    # (optional) move to a new line
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+           executeCommand "git merge origin/$actual"
         fi
-    else
-       echo "... nothing to merge ... up to date"
     fi
 }
 
