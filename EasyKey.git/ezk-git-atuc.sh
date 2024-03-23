@@ -47,7 +47,6 @@ function resetToCommitHard () {
 while ${continuemenu:=true}; do
 clear
 menuInit "Undoing changes"
-coloredLog "   ALWAYS PREFER REVERT   " "$clrPurple" "$clrWhite"
 submenuHead "Undoing changes"
 menuItem a "Revert last commit - (keep commit history)" revertLastCommit
 menuItem b "Revert commit - (keep commit history)" revertToCommit
