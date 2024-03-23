@@ -245,7 +245,7 @@ selectItem () {
   selected=""
   dfltln=${xpreselection}
   if [ "$xdarkprocessing" = "" ]; then
-    echo "Select line or hit enter for preselection [${xpreselection}]:"
+    echo "Select line or hit ENTER to select nothing:"
     read -r linenumber
   fi
   linenumber=${linenumber:-$dfltln}

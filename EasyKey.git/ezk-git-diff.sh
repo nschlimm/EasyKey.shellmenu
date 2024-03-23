@@ -92,13 +92,11 @@ clear
 menuInit "Working with diffs"
 echo "Note: GIT diff cann compare three locations with each other: the tree (your working directory), the stage, the repository."
 submenuHead "Different diff options:"
-menuItem a "actual HEAD          vs. origin/actual branch HEAD  -> repository vs. repository" headHead
-menuItem b "actual working dir   vs. HEAD                       -> tree vs. repository" dirHead
-menuItem c "actual working dir   vs. other commits              -> tree vs. repository" treeCommit
-menuItem d "actual working dir   vs. stage                      -> tree vs. index" treeStage
-menuItem e "commit               vs. commit                     -> repository vs. repository" commitCommit
-menuItem f "branch head          vs. branch head                -> repository vs. repository" branchBranch
-menuItem g "actual branch head   vs. branch head                -> repository vs. repositoty" actualHeadbranchHead
+menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
+menuItem b "actual working dir   vs. actual branch last commit  -> tree vs. local repository" dirHead
+menuItem c "actual working dir   vs. other commits              -> tree vs. local repository" treeCommit
+menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
+menuItem e "branch               vs. branch                     -> repository vs. repository" branchBranch
 echo
 submenuHead "Specific diffs:"
 menuItem k "Diff since date" diffDate

@@ -20,9 +20,9 @@ function pushActual() {
   executeCommand "git fetch --all"
   importantLog "Checking your head state"
   if git status | grep -q "HEAD detached"; then
-     echo "... you seem to be on a detached head state ... can't push ..."
+     redLog "... you seem to be on a detached head state ... can't push ..."
   else
-    echo "... your HEAD is attached to $actual ..."
+    echo "... your HEAD is attached to '$actual' branch ..."
     mergeChanges
     addAllUntracked
     commitChanges
@@ -61,6 +61,7 @@ function addAllUntracked () {
 }
 
 function mergeChanges () {
+    echo ""
     importantLog "Checking for updates from origin/$actual"
     if git diff $actual origin/$actual | grep -q ".*"; then
        echo "... found diff between $actual and origin/$actual ..."
@@ -181,7 +182,7 @@ function deleteBranch() {
   read dbranch
   [ "${dbranch}" = "" ] && waitonexit && return 
   git branch -d $dbranch
-  read -p "Delete remote? " -n 1 -r
+  read -p "Delete remote [y/n]? " -n 1 -r
   echo    # (optional) move to a new line
   if [[ $REPLY =~ ^[Yy]$ ]]
     then
@@ -202,7 +203,7 @@ function mergeSourceToTarget(){
 }
 
 function showAllBranches () {
-              git branch --all
+   git branch --all
 }
 
 function showBranchHisto(){
@@ -210,7 +211,12 @@ function showBranchHisto(){
 }
 
 function setUpstream() {
-   git push --set-upstream origin $actual
+  read -p "Do you wish to connect origin '${actual}' to local '${actual}'? " -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      git push --set-upstream origin $actual
+  fi 
 }
 
 function localGitConfig() {
