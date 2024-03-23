@@ -227,26 +227,6 @@ function globalGitConfig() {
   vim ~/.gitconfig
 }
 
-function adminAliases() {
-    echo $'\nActual aliases:'
-    git config --get-regexp alias
-    read -p "Add or delete aliases (a/d)? " -n 1 -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[a]$ ]]
-        then
-            echo "Which command?"
-            read bcommand
-            echo "Define alias:"
-            read calias
-            git config --global alias.$calias $bcommand
-            echo "Alias $calias create for $bcommand!"
-        else
-            echo "Which alias to delete:"
-            read calias
-            git config --global --unset alias.$calias
-    fi      
-}
-
 function gitIgnore() {
             vim .gitignore
 }
@@ -384,4 +364,9 @@ repoSize() {
    executeCommand "git reflog expire --expire=now --all"
    executeCommand "git gc --prune=now"
    executeCommand "git count-objects -vH"
+}
+
+function settingUp () {
+    source $script_dir/../EasyKey.git/ezk-git-atsu.sh
+    nowaitonexit
 }

@@ -25,16 +25,16 @@ submenuHead "Working on local branches:"
 menuItemClm r "Show branch history" showBranchHisto g "Show reflog" showRepoHisto
 menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
 menuItemClm o "Merge source to target branch" mergeSourceToTarget p "Show all branches (incl. remote)" showAllBranches
-menuItem k "New local/remote branch checkout" newLocalBranch
+menuItemClm k "New local/remote branch checkout" newLocalBranch c "Change last commit message" "git commit --amend" 
 echo
 submenuHead "Other usefull actions:"
-menuItemClm s "Working with diffs" workingDiffs w "Atlassian's view" atlassiansView
-menuItemClm c "Change last commit message" "git commit --amend" x "Descrease repo size" repoSize
+menuItemClm s "Working with diffs" workingDiffs w "Working with commits" atlassiansView
+menuItemClm y "Setting up repositories" settingUp 5 "Git extras" gitExtras
 echo
 submenuHead "Git admin actions:"
 menuItemClm 1 "Show local git config" localGitConfig 2 "Show global git config" globalGitConfig
 menuItemClm 3 "Administering aliases" adminAliases 4 "Show .gitignore" gitIgnore
-menuItemClm 5 "Git extras" gitExtras 6 "Change Git Passwords" gitPasswort
+menuItem x "Descrease repo size" repoSize
 echo
 submenuHead "Shortcuts"
 menuItemClm P "Change project" changeProject B "Change branch" changeBranch

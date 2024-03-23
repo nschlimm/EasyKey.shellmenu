@@ -3,7 +3,10 @@
 function atLocalGit () {
 
 	pwd
-	gentlyCommandNY "Do you want to create a repository in current directory (y/n)?" "git init"
+	echo -n "Do you want to create a repository in current directory (y/n)? " && wait_for_keypress && echo
+   if [[ $REPLY =~ ^[Yy]$ ]]; then #push
+   	executeCommand "git init"
+   fi
 
 }
 
@@ -11,46 +14,50 @@ function atLocalGitWithDir () {
 	pwd
 	echo "Enter the target directory (absolute or relative position):"
 	read directory
+	[ "${directory}" = "" ] && waitonexit && return 
 	start=${directory:0:1}
-	if [ "$start" == "/" ]; then
-		breakOnNo "You entered an absolut path, continue? (y/n)? "
-    fi
-    gentlyCommandNY "Do you want to create a directory and repository in ${directory} (y/n)?" "git init $directory"
+	echo -n "Do you want to create a repository in that directory '$directory' (y/n)? " && wait_for_keypress && echo
+   if [[ $REPLY =~ ^[Yy]$ ]]; then #push
+   	executeCommand "git init $directory"
+   fi
 }
 
 function atLocalGitBare () {
 	pwd
 	echo "Enter the target directory name (absolute or relative position, e.g. my-repo.git):"
 	read directory
+	[ "${directory}" = "" ] && waitonexit && return 
 	start=${directory:0:1}
-	if [ "$start" == "/" ]; then
-		breakOnNo "You entered an absolut path, continue? (y/n)? "
-    fi
-    gentlyCommandNY "Do you want to create a shared directory and repository in ${directory} (y/n)?" "git init --bare $directory"
+	echo -n "Do you want to create a repository in that directory '$directory' (y/n)? " && wait_for_keypress && echo
+   if [[ $REPLY =~ ^[Yy]$ ]]; then #push
+   	executeCommand "git init --bare $directory"
+   fi
 }
 
 function cloneRemote () {
-      echo "Where?"
-     . ~/Personal/fl.sh
      pwd
      echo "Remote repository url:"
      read url
+     [ "${url}" = "" ] && waitonexit && return 
      git clone $url
 }
 
 function defineAuthor () {
 	echo "Enter author name:"
 	read aname
+	[ "${aname}" = "" ] && waitonexit && return 
 	git config --global user.name $aname
 	echo "Ente email:"
 	read email
+	[ "${email}" = "" ] && waitonexit && return 
 	git config --global user.email $email
 }
 
 function textEditor () {
 	echo "Enter text editor name (the command how you call it in the shell):"
 	read editor
-    git config --system core.editor $editor
+	[ "${editor}" = "" ] && waitonexit && return 
+   git config --system core.editor $editor
 }
 
 function openGlobalConfig () {
@@ -68,7 +75,32 @@ function openLocalConfig () {
 function defineMergeTool () {
 	echo "Enter merge tool name (the command how you call it in the shell):"
 	read editor
-    git config --global merge.tool $editor
+	[ "${editor}" = "" ] && waitonexit && return 
+   git config --global merge.tool $editor
+}
+
+function adminAliases() {
+    echo $'\nActual aliases:'
+    git config --get-regexp alias
+    read -p "Add or delete aliases (a/d)? " -n 1 -r
+    [ "${REPLY}" = "" ] && waitonexit && return 
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[a]$ ]]
+        then
+            echo "Which command?"
+            read bcommand
+            [ "${bcommand}" = "" ] && waitonexit && return 
+            echo "Define alias:"
+            read calias
+            [ "${calias}" = "" ] && waitonexit && return 
+            git config --global alias.$calias $bcommand
+            echo "Alias $calias create for $bcommand!"
+        else
+            echo "Which alias to delete:"
+            read calias
+            [ "${calias}" = "" ] && waitonexit && return 
+            git config --global --unset alias.$calias
+    fi      
 }
 
 while ${continuemenu:=true}; do

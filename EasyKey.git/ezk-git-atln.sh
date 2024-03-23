@@ -2,11 +2,6 @@
 
 # submenus
 
-function settingUp () {
-	source $script_dir/../EasyKey.git/ezk-git-atsu.sh
-    nowaitonexit
-}
-
 function savingChanges () {
 	source $script_dir/../EasyKey.git/ezk-git-atsc.sh
     nowaitonexit
@@ -33,7 +28,6 @@ menuInit "Atlassian's View"
 echo "Atlassians view on GIT, https://de.atlassian.com/git/tutorials"
 echo 
 submenuHead "Working on your local repository"
-menuItem a "Setting up a repository" settingUp
 menuItem b "Saving changes" savingChanges
 menuItem c "Inspecting a repository" inspectingRepos
 menuItem d "Undoing changes" undoingChanges

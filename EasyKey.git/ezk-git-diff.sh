@@ -90,13 +90,23 @@ git fetch --all
 while ${continuemenu:=true}; do
 clear
 menuInit "Working with diffs"
-echo "Note: GIT diff cann compare three locations with each other: the tree (your working directory), the stage, the repository."
+echo
+echo "Note: GIT diff cann compare four locations with each other: "
+echo "      your working directory, the stage, the repository."
+echo
+echo "  _____         _____         _____        _____ "
+echo " |     |       |     |       |     |      |     |"
+echo " |     |       |     |       |     |      |     |"
+echo " |_____|   --> |_____|   --> |_____|  --> |_____|"
+echo " working        stage       repository   repository "
+echo "   dir                        local        remote   "
+echo
 submenuHead "Different diff options:"
 menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
 menuItem b "actual working dir   vs. actual branch last commit  -> tree vs. local repository" dirHead
 menuItem c "actual working dir   vs. other commits              -> tree vs. local repository" treeCommit
 menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
-menuItem e "branch               vs. branch                     -> repository vs. repository " branchBranch
+menuItem e "branch               vs. branch                     -> repository vs. repository (local/remote)" branchBranch
 echo
 submenuHead "Specific diffs:"
 menuItem k "Diff since date" diffDate
