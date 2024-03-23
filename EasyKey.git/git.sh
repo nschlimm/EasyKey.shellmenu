@@ -16,6 +16,7 @@ git fetch --all --tags 2> /dev/null
 while ${continuemenu:=true}; do
 clear
 menuInit "EasyKey.git"
+echo
 submenuHead "Working with remotes:"
 menuItemClm a "Gently push current" pushActual b "Set remote origin repo" setRemoteOrigin
 menuItemClm e "Set upstream to current" setUpstream f "Administer remotes" adminRemotes

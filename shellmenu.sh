@@ -467,10 +467,10 @@ generateMenu () {
     fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
-    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); fi
+    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); generatedmenu+=$(printf "\n\r"); fi
     if [ "$submenu" != "$previoussubmenu" ]; then 
        if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf "\n\r"); fi
-       generatedmenu+=$(printSubmenuHeading "$submenu" && echo) 
+       generatedmenu+=$(printSubmenuHeading "$submenu") 
        submenucount=$(( submenucount+1 ));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
@@ -614,9 +614,9 @@ draw_rounded_square() {
 
     # Menu title cache
     if [ "$formattedTop" != "" ]; then
-      echo -e "$formattedTop"
-      echo -e "$formattedMiddle"
-      echo -e "$formattedBottom"
+      printf "$formattedTop\n\r"
+      printf "$formattedMiddle\n\r"
+      printf "$formattedBottom\n\r"
       return
     fi
 
@@ -652,7 +652,6 @@ draw_rounded_square() {
     formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
     printf "$formattedBottom\n\r"
 
-    printf "\n\r"
 }
 
 ######################################################
@@ -698,4 +697,33 @@ initConfig () {
       fi
       ((i++))
    done <<< "$(echo -e "$configlines")"
+}
+
+draw_border() {
+  multiline_string="$1"
+
+  lines=()
+  while IFS= read -r line; do
+     lines+=("$line")
+  done <<< "$multiline_string"
+
+  # Find the longest line length
+  max_length=0
+  for line in "${lines[@]}"; do
+      length=${#line}
+      if (( length > max_length )); then
+          max_length=$length
+      fi
+  done
+
+  # Print the top line of the square
+  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
+
+  # Print the multiline string with side borders
+  for line in "${lines[@]}"; do
+      printf "| %-${max_length}s |\n" "$line"
+  done
+
+  # Print the bottom line of the square
+  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
 }
