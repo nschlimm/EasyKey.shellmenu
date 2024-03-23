@@ -68,19 +68,14 @@ function showCommits () {
 }
 
 function diffDate () {
-   echo "Enter date since in [yyyy-mm-dd]:"
+   echo "Enter date since in [yyyy-mm-dd hh:mm:ss]:"
    read sincedate
-   lastcommitdate=$(git log --pretty=format:'%h %ad' --graph --date=format:"%Y-%m-%d" --since "$sincedate 00:00:00" | cut -f3 -d' ' | tail -1) # the last commit date since the date given
-   echo "first commit date equal or after since date: $lastcommitdate"
-   commitpriortolast=$(git log --pretty=format:'%h %ad' --graph --date=format:"%Y-%m-%d" | grep "$lastcommitdate" -A 1 | tail -1 | cut -f2 -d' ') # commit before the last commit in period
-   echo "next commit date prior since date: $commitpriortolast"
-   commitdatepriortolast=$(git log --pretty=format:'%h %ad' --graph --date=format:"%Y-%m-%d" | grep "$lastcommitdate" -A 1 | tail -1 | cut -f3 -d' ') # commit date before the last commit in period
-   echo "next commit date prior since date: $commitpriortolast ... on: $commitdatepriortolast"
-   newestcommit=$(git log --pretty=format:'%h %ad' --graph --date=format:"%Y-%m-%d" | head -1 | cut -f2 -d' ') # the newest commit in the branch (actual head state)
-   echo "latest commit in this branch hstory: $newestcommit"
-   newestcommitdate=$(git log --pretty=format:'%h %ad' --graph --date=format:"%Y-%m-%d" | head -1 | cut -f3 -d' ') # the newest commit date
-   coloredLog "changes since $sincedate 12 a.m. / midnight: comparing commit $commitpriortolast made on $commitdatepriortolast against $newestcommit (latest commit) made on $newestcommitdate"
-   diffDrillDownAdvanced "git diff --name-status $commitpriortolast $newestcommit" "awk '{print \$2}'" "$commitpriortolast" "$newestcommit"
+   [ "${sincedate}" = "" ] && waitonexit && return 
+   sincedate=$(echo "$sincedate" | cut -d' ' -f1)
+   sincetime=$(echo "$sincedate" | cut -d' ' -f2)
+   newestcommit=$(git log --pretty=format:'%h %ad' --date=format:"%Y-%m-%d %H:%M:%S" --since "2024-03-20 12:00:00" | head -1 | cut -d' ' -f1)
+   thatcommit=$(git log --pretty=format:'%h %ad' --date=format:"%Y-%m-%d %H:%M:%S" --since "2024-03-20 12:00:00" | tail -1 | cut -d' ' -f1)
+   diffDrillDownAdvanced "git diff --name-status $newestcommit $thatcommit" "awk '{print \$2}'" "$commitpriortolast" "$newestcommit"
    #git log --oneline | grep --color -E 'Add slack integration to pipeline|$'
    # why git log is so strange: http://stackoverflow.com/questions/14618022/how-does-git-log-since-count why 
    # alternative: git diff 'HEAD@{2017-03-03T00:00:00}' HEAD --name-status | nl
