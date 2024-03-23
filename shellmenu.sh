@@ -453,7 +453,7 @@ callKeyFunktion () {
 #   menudatamap - the menu data
 #   generatedmenu - the generated menu (string)
 # Outputs:
-#   the menu written to stdout
+#   the menu written to generatedmenu variable
 #################################################
 generateMenu () { 
   OLD_IFS=$IFS
