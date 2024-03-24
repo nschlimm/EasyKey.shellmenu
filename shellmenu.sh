@@ -14,11 +14,10 @@ clrPurple=5
 clrCyan=6
 clrWhite=7
 
-# Globals
+# Globals (SUBJECT TO CUSTOMIZATION)
 waitstatus=true                     # whether to wait for key press after menu command finished
 continuemenu=true                   # whether to continue menu loop (quit will set this to false)
 globalClmWidth=20                   # the default (minimum) column width
-calculatedMenuWidth=43              # the calculated column width (internal)
 actualmenu="EasyKey.shellmenu"      # the default menu heading
 actualsubmenuname="Your commands:"  # the default sub menu heading
 menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
@@ -26,10 +25,15 @@ menuHeadingBGClr="$clrBlue"         # the default menu heading background color
 submenuFGClr="$clrCyan"             # the default sub menu heading foreground color
 submenuBGClr="$clrBlack"            # the default sub menu heading background color
 delimiter=⊕                         # the delimiter used in menu array
+submenu_pad_symbol="─"              # Default submenu border symbol
+submenu_corner_symbol="┐"           # Default submenu corner symbol
+
+# Internal global variables (DO NOT CHANGE)
 formattedheading=""                 # the cache for formatted heading
 generatedmenu=""                    # the menu cache (menu will be compiled once and then cached)
 menudatamap=()                      # the menu data
-has_two_clms=false                  # whether the menu hast two columns (internal)
+has_two_clms=false                  # whether the menu hast two columns
+calculatedMenuWidth=$(( 2 * globalClmWidth + 3 )) # the calculated column width
 
 ############################
 ############################
@@ -564,8 +568,8 @@ printMenuHeading(){
 #################################################
 printSubmenuHeading(){
   local width="${2:-$calculatedMenuWidth}"
-  local symbol="${3:-"─"}"
-  local paddedline="$(r_pad "$1" "$width" "$symbol")┐"
+  local symbol="${3:-$submenu_pad_symbol}"
+  local paddedline="$(r_pad "$1" "$width" "$symbol")$submenu_corner_symbol"
   coloredLog "$paddedline\n\r" "$submenuFGClr" "$submenuBGClr"
 }
 
