@@ -18,6 +18,7 @@ clrWhite=7
 waitstatus=true                     # whether to wait for key press after menu command finished
 continuemenu=true                   # whether to continue menu loop (quit will set this to false)
 globalClmWidth=20                   # the default (minimum) column width
+calculatedMenuWidth=43              # the calculated column width (internal)
 actualmenu="EasyKey.shellmenu"      # the default menu heading
 actualsubmenuname="Your commands:"  # the default sub menu heading
 menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
@@ -562,11 +563,9 @@ printMenuHeading(){
 #   The sub menu head to stdout
 #################################################
 printSubmenuHeading(){
-  $has_two_clms && local dfltwidth=$(( globalClmWidth * 2 + 3 ))
-  $has_two_clms || local dfltwidth=$(( globalClmWidth + 3 ))
-  local width="${2:-$dfltwidth}"
+  local width="${2:-$calculatedMenuWidth}"
   local symbol="${3:-"─"}"
-  local paddedline="$(r_pad "$1" "$width" "$symbol")"
+  local paddedline="$(r_pad "$1" "$width" "$symbol")┐"
   coloredLog "$paddedline\n\r" "$submenuFGClr" "$submenuBGClr"
 }
 
@@ -639,7 +638,7 @@ draw_rounded_square() {
     done
     border+="$top_right_corner"
     
-    formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
+    formattedMiddle=$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)"$vertical_line "$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)$text$(tput sgr0)$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)" $vertical_line"$(tput sgr0)
 
     formattedheading+=$(coloredLog "$border\n\r" 7 20)
     formattedheading+=$(printf '%s\n\r' "$formattedMiddle")
@@ -701,35 +700,6 @@ initConfig () {
    done <<< "$(echo -e "$configlines")"
 }
 
-draw_border() {
-  multiline_string="$1"
-
-  lines=()
-  while IFS= read -r line; do
-     lines+=("$line")
-  done <<< "$multiline_string"
-
-  # Find the longest line length
-  max_length=0
-  for line in "${lines[@]}"; do
-      length=${#line}
-      if (( length > max_length )); then
-          max_length=$length
-      fi
-  done
-
-  # Print the top line of the square
-  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
-
-  # Print the multiline string with side borders
-  for line in "${lines[@]}"; do
-      printf "| %-${max_length}s |\n" "$line"
-  done
-
-  # Print the bottom line of the square
-  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
-}
-
 ######################################################
 # Updates global column width in non immediate mode
 # Arguments:
@@ -740,9 +710,11 @@ draw_border() {
 #   Updated globalClmWidth
 ######################################################
 update_column_width() {
-   desclength=${#1}
-   clmLocalWidth=$(( 3 + desclength + 3 ))
+   local desclength=${#1}
+   local clmLocalWidth=$(( 3 + desclength + 3 ))
    if [ "$clmLocalWidth" -gt "$globalClmWidth" ]; then
       globalClmWidth="$clmLocalWidth"
+      $has_two_clms && calculatedMenuWidth=$(( globalClmWidth * 2 + 3 ))
+      $has_two_clms || calculatedMenuWidth=$(( globalClmWidth + 3 ))
    fi
 }
