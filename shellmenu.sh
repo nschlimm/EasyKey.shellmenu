@@ -19,7 +19,7 @@ waitstatus=true                     # whether to wait for key press after menu c
 continuemenu=true                   # whether to continue menu loop (quit will set this to false)
 globalClmWidth=20                   # the default (minimum) column width
 actualmenu="EasyKey.shellmenu"      # the default menu heading
-actualsubmenuname="Your commands:"  # the default sub menu heading
+actualsubmenuname="Your commands "  # the default sub menu heading
 menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
 menuHeadingBGClr="$clrBlue"         # the default menu heading background color
 submenuFGClr="$clrCyan"             # the default sub menu heading foreground color
@@ -34,7 +34,7 @@ formattedheading=""                 # the cache for formatted heading
 generatedmenu=""                    # the menu cache (menu will be compiled once and then cached)
 menudatamap=()                      # the menu data
 has_two_clms=false                  # whether the menu hast two columns
-calculatedMenuWidth=$(( 2 * globalClmWidth + 3 )) # the calculated column width
+calculatedMenuWidth=$(( globalClmWidth + 3 )) # the calculated column width
 
 ############################
 ############################
