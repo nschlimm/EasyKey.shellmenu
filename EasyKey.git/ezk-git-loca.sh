@@ -63,7 +63,7 @@ for (( i = 0; i < ${#gitlocations[@]}; i++ )); do
 	IFS=$IFSOLD
 	menuItem "${arrIN[0]}" "${arrIN[1]}" "${arrIN[2]} ${arrIN[3]}" 
 done
-if $uncached; then coloredLog "NEW" "1;42"; else coloredLog "CACHED" "1;42"; fi
+if $uncached; then coloredLog "NEW" "1;42" && printf "\n\r"; else coloredLog "CACHED" "1;42" && printf "\n\r"; fi
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
 startMenu
