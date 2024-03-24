@@ -631,8 +631,8 @@ draw_rounded_square() {
     formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
     formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
 
-    formattedheading+=$(printf '%s' "$formattedTop\n\r")
-    formattedheading+=$(printf '%s' "$formattedMiddle\n\r")
+    formattedheading+=$(printf '%s\n\r' "$formattedTop")
+    formattedheading+=$(printf '%s\n\r' "$formattedMiddle")
     
     border="$bottom_left_corner"
     for (( i=0; i<width+2; i++ )); do
@@ -641,7 +641,7 @@ draw_rounded_square() {
     border+="$bottom_right_corner"
 
     formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    formattedheading+=$(printf '%s' "$formattedBottom\n\r")
+    formattedheading+=$(printf '%s\n\r' "$formattedBottom")
 
     printf '%s' "$formattedheading"
 

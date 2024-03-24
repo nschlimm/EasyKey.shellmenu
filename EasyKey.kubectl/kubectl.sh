@@ -4,18 +4,11 @@
 # EasyKey.kubectl utility main script #
 #######################################
 
-kubeContext() {
-	echo "Current context: $(kubectl config current-context)"
-	echo "Namespace: $(kubectl config view --minify -o jsonpath='{..namespace}')"
-	echo
-	deplomentActualStatus
-}
-
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-kubectl-functions.sh"
 
-menuInit "Super KUBECTL Home"
+menuInit "EasyKey.kubectl"
   submenuHead "Kubectl Config:" "Test:"
     menuItemClm a "Show config" "kubectl config view" b "Switch context" switchContext
     menuItemClm c "Switch namespace" switchNamespace d "Add cluster" addCluster 
