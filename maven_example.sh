@@ -33,5 +33,5 @@ menuInit "Maven demo menu"
     menuItem e "Show effective settings" "mvn help:effective-settings"
     menuItem r "Show local repo location" "mvn help:evaluate -Dexpression=settings.localRepository | grep -v '\[INFO\]'" 
     menuItem l "Show global settings file location" showGlobalSettingFile
-startMenu
+startMenu "pwd"
 echo "bye, bye, homie!"
