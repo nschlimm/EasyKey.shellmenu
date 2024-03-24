@@ -27,6 +27,7 @@ submenuBGClr="$clrBlack"            # the default sub menu heading background co
 delimiter=⊕                         # the delimiter used in menu array
 submenu_pad_symbol="─"              # Default submenu border symbol
 submenu_corner_symbol="┐"           # Default submenu corner symbol
+sub_menu_bold=false                 # whether to print out submenu bold
 
 # Internal global variables (DO NOT CHANGE)
 formattedheading=""                 # the cache for formatted heading
@@ -142,10 +143,13 @@ startMenu() {
 #   $1: log text
 #   $2: optional: foreground color
 #   $3: optional: background color
+#   $4: optional: bold
 # Outputs:
 #   Writes colored log to standard out
 #######################################
 coloredLog () {
+    local bold=${4:-false}
+    $bold && printf "\033[1m\e[38;5;%sm\e[48;5;%sm%s\e[38;5;7m\e[48;5;0m\033[0m" "$2" "$3" "$1" && return
     printf "\e[38;5;%sm\e[48;5;%sm%s\e[38;5;7m\e[48;5;0m" "$2" "$3" "$1"
 }
 
@@ -570,7 +574,7 @@ printSubmenuHeading(){
   local width="${2:-$calculatedMenuWidth}"
   local symbol="${3:-$submenu_pad_symbol}"
   local paddedline="$(r_pad "$1" "$width" "$symbol")$submenu_corner_symbol"
-  coloredLog "$paddedline\n\r" "$submenuFGClr" "$submenuBGClr"
+  coloredLog "$paddedline\n\r" "$submenuFGClr" "$submenuBGClr" $sub_menu_bold
 }
 
 #################################################

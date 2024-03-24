@@ -91,11 +91,11 @@ diffStatus() {
   echo "Note: GIT diff cann compare four locations with each other: "
   echo "      your working directory, the stage, the repository."
   echo
-  coloredLog "┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐" "$clrPurple" "$clrBlack"
-  coloredLog "│        │    │        │    │        │    │        │" "$clrPurple" "$clrBlack"
-  coloredLog "│        │ -> │        │ -> │        │ -> │        │" "$clrPurple" "$clrBlack"
-  coloredLog "└────────┘    └────────┘    └────────┘    └────────┘" "$clrPurple" "$clrBlack"
-  coloredLog " work dir       stage       local repo    remote repo" "$clrWhite" "$clrBlack"
+  coloredLog "┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐" "$clrPurple" "$clrBlack" && printf "\n\r"
+  coloredLog "│        │    │        │    │        │    │        │" "$clrPurple" "$clrBlack" && printf "\n\r"
+  coloredLog "│        │ -> │        │ -> │        │ -> │        │" "$clrPurple" "$clrBlack" && printf "\n\r"
+  coloredLog "└────────┘    └────────┘    └────────┘    └────────┘" "$clrPurple" "$clrBlack" && printf "\n\r"
+  coloredLog " work dir       stage       local repo    remote repo" "$clrWhite" "$clrBlack" && printf "\n\r"
 }
 
 git fetch --all
