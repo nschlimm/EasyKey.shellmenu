@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function atLocalGit () {
 
@@ -104,15 +108,12 @@ function adminAliases() {
     fi      
 }
 
-while ${continuemenu:=true}; do
-clear
 menuInit "Repositories"
 submenuHead "Setting up repositories"
 menuItem a "Transform the current directory into a git repository" atLocalGit
 menuItem b "Setting up a git repository in a directory" atLocalGitWithDir
 menuItem c "Setting up a shared git repository in a directory" atLocalGitBare
 menuItem d "Clone a remote repository" cloneRemote
-echo
 submenuHead "Configure repositories:"
 menuItem e "Define the author name and email to be used for all commits" defineAuthor
 menuItem f "Administering aliases" adminAliases
@@ -121,7 +122,6 @@ menuItem h "Define merge/diff tool" defineMergeTool
 menuItem i "Open global config" openGlobalConfig
 menuItem j "Open system config" openSystemConfig
 menuItem k "Open local config" openLocalConfig
-
-choice
-done
+startMenu
+noterminate
 noterminate

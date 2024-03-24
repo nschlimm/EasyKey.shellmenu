@@ -12,33 +12,29 @@ function toDirAndTerminate () {
   blueLog "toDir $vars"
   eval "cd ${vars// /\\ }" # escape spaces
   nowaitonexit
+  terminate
 }
 
 # Reads the config into global array "workspaces"
 # The config needs to have that section [workspaces]
 initConfig "${script_dir}/EasyKey.bash/${configfilename}"
 
-echo "${locations[@]}"
-
 clear
 thekeys=($(echo {a..p}) $(echo {r..z}) $(echo {1..9}) $(echo {A..Z}))
 declare -x keycounter=1
 
-immediateMode=true
-
-menuInit "Quick Locations"
-echo
-submenuHead "Registered locations:"
+echo "Quick locations:"
 OLD_IFS=$IFS
 for (( i = 1; i < (( ${#locations[@]} + 1 )); i++ )); do
     IFS="=" read -r locname locdestination <<< "${locations[i]}"
     menuItem "${thekeys[keycounter]}" "$locdestination" "toDirAndTerminate ${locdestination}"
+    echo "${thekeys[keycounter]}". "$locdestination"
     ((keycounter++))
 done
 IFS=$OLD_IFS
-echo
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
 choice
 
+source "${script_dir}/shellmenu.sh"
 unset locations

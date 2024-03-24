@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function interStage () {
 	git add -p
@@ -131,47 +135,36 @@ function ignoreMenu () {
 	nowaitonexit
 }
 
-while ${continuemenu:=true}; do
-clear
 menuInit "Saving changes"
 submenuHead "Adding changes to stage:"
 menuItem a "Git add all gently" addAllGently
 menuItem b "Git interactive staging session" interactiveStage
 menuItem c "Git interactive staging detail session" interStage
-echo
 submenuHead "Commit changes:"
 menuItem d "Commit staged snapshot - vim (stage -> archive)" commitStagedSnapshot
 menuItem f "Commit all changes of tracked files - vim (tree -> stage -> archive)" commitChangesVim
 menuItem g "Commit all changes of tracked files - read (tree -> stage -> archive)" commitChanges
-echo
 submenuHead "Stash current changes:"
 menuItem h "Stash current changes" stash
 menuItem i "Reapply stash to current directory (pop - deletes stash)" stashPop
 menuItem j "Reapply stash to current directory (apply - leaves stash alive)" stashApply
 menuItem k "Stash current changes - include untracked" stashAllIncludeUntracked
 menuItem l "Stash current changes - include all untracked and ignored" stashAll
-echo
 submenuHead "Managing multiple stashes:"
 menuItem m "List stashes" stashList
 menuItem n "Stash with message" stashWithMessage
 menuItem o "Reapply stash to current directory from stash list (pop)" stashPopFromList
 menuItem p "Reapply stash to current directory from stash list (apply)" stashApplyFromList
-echo
 submenuHead "Clean up stashes:"
 menuItem r "Delete all stashes" stashDeleteAll
 menuItem s "Delete specific stash" stashDeleteSpecific
-echo
 submenuHead "Other stash stuff:"
 menuItem t "View summary of a stash (stash state vs. original parent commit)" stashSummary
 menuItem u "View diff of a stash (stash state vs. original parent commit)" stashDiff
 menuItem v "Stash single files" stashSingle
 menuItem w "Create branch from stash" stashBranch
 menuItem x "Inspect stashes" inspectStash
-echo
 submenuHead "Ignoring files:"
 menuItem y "Ignore menu" ignoreMenu
-echo
-showStatus
-choice
-done
+startMenu
 noterminate

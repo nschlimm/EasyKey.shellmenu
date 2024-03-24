@@ -1,11 +1,18 @@
 #!/bin/bash
 
+oldmenudata=("${menudatamap[@]}")
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
+
 configfilename=.ezk-git-loca-conf
 
 function toDir () {
 	vars="$*" # all splitted words back to one var
 	eval cd "${vars// /\\ }" # escape spaces
 	nowaitonexit
+    terminate
 }
 
 function toDirAndTerminate () {
@@ -23,11 +30,9 @@ function purgDirCache () {
 # The config needs to have that section [workspaces]
 initConfig "${script_dir}/${configfilename}"
 
-clear
 thekeys=($(echo {a..p}) $(echo {r..z}) $(echo {1..9}) $(echo {A..Z}))
 declare -x keycounter=0
 menuInit "GIT locations"
-echo
 uncached=false
 priorlocation=$(pwd) # remember actual location
 if [ -z ${gitlocations+x} ]; then
@@ -61,6 +66,9 @@ done
 if $uncached; then coloredLog "NEW" "1;42"; else coloredLog "CACHED" "1;42"; fi
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
-choice
+startMenu
 
-unset locations workspaces
+source "$script_dir/../shellmenu.sh"
+menudatamap=("${oldmenudata[@]}")
+
+noterminate

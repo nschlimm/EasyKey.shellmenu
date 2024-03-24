@@ -15,20 +15,19 @@ clrCyan=6
 clrWhite=7
 
 # Globals
-waitstatus=true
-continuemenu=true
-globalClmWidth=45
-immediateMode=false
-actualmenu="EasyKey.shellmenu"
-actualsubmenuname="Your commands:"
-menuHeadingFGClr="$clrWhite"
-menuHeadingBGClr="$clrBlue"
-submenuFGClr="$clrWhite"
-submenuBGClr="$clrPurple"
-delimiter=⊕
-formattedTop=""
-formattedBottom=""
-formattedMiddle=""
+waitstatus=true                     # whether to wait for key press after menu command finished
+continuemenu=true                   # whether to continue menu loop (quit will set this to false)
+globalClmWidth=45                   # the default (minimum) column width
+actualmenu="EasyKey.shellmenu"      # the default menu heading
+actualsubmenuname="Your commands:"  # the default sub menu heading
+menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
+menuHeadingBGClr="$clrBlue"         # the default menu heading background color
+submenuFGClr="$clrWhite"            # the default sub menu heading foreground color
+submenuBGClr="$clrPurple"           # the default sub menu heading background color
+delimiter=⊕                         # the delimiter used in menu array
+formattedheading=""                 # the cache for formatted heading
+generatedmenu=""                    # the menu cache (menu will be compiled once and then cached)
+menudatamap=()                      # the menu data
 
 ############################
 ############################
@@ -40,14 +39,10 @@ formattedMiddle=""
 # Writes the menu title and prepares menu array.
 # Arguments:
 #   $1: menu title, e.g. "Git Utility"
-# Outputs:
-#   Creates menudatamap global variable
 #################################################
 menuInit () {
   actualmenu="$1"
   actualsubmenuname="Your commands:"
-  menudatamap=()
-  ${immediateMode} && printMenuHeading "$1"
 }
 
 #################################################
@@ -59,7 +54,6 @@ menuInit () {
 #################################################
 submenuHead () { 
   actualsubmenuname="$1"
-  ${immediateMode} && printSubmenuHeading "$1"
 }
 
 #################################################
@@ -79,7 +73,7 @@ submenuHead () {
 #################################################
 menuItem () {
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
-   ${immediateMode} && printMenuItem "$1" "$2"
+   update_column_width "$2"
 }
 
 #################################################
@@ -97,16 +91,14 @@ menuItem () {
 #   menudatamap - the menu data
 #   actualsubmenuname - the actual submenu 
 #   actualmenu - the actual main menu
-#   globalClmWidth - the column width
 # Outputs:
 #   Adds menu item data to menudatamap array.
 #   Prints the menu item to standard out.
 #################################################
 menuItemClm () {
-   clmLocalWidth=${globalClmWidth:=45}
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
-   ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
+   update_column_width "$2" &&    update_column_width "$5"
 }
 
 #################################################
@@ -114,14 +106,18 @@ menuItemClm () {
 # immediate mode (the default mode)
 # Arguments:
 #   $1: a custom output at the bottom of menu
-#       (e.g. current directory)
+#       (e.g. current directory); function(!)
 # Outputs:
 #   the menu written to stdout
 #################################################
 startMenu() {
    while ${continuemenu:=true}; do
       clear
-      generateMenu
+      if [ "$generatedmenu" = "" ]; then
+        generateMenu
+      fi
+      printf "$generatedmenu"
+      echo
       choice "$1"
    done
 }
@@ -139,6 +135,7 @@ startMenu() {
 #   $1: log text
 #   $2: optional: foreground color (0-7)
 #   $3: optional: background color (0-7)
+#   $4: optional: width of heading line
 # Outputs:
 #   Writes colored log to standard out
 #######################################
@@ -146,8 +143,33 @@ coloredLog () {
     set_foreground=$(tput setaf "${2:-$clrWhite}")
     set_background=$(tput setab "${3:-$clrBlack}")
     echo -n "$set_background$set_foreground"
-    printf "%s\n" "$1"
+    printf "%s" "$1"
     tput sgr0
+    if [ $# -eq 4 ]; then
+      length=${#1}
+      width=73
+      pad=$(( width - length ))
+      set_foreground=$(tput setaf "$3")
+      set_background=$(tput setab "$clrBlack")
+      echo -n "$set_background$set_foreground"
+      printf "%s" $(pad_string_with_stars "─" $pad)
+      tput sgr0
+    fi
+    printf "\n\r"
+}
+
+pad_string_with_stars() {
+    local string="$1"
+    local count="$2"
+    local padded_string=""
+
+    for ((i = 0; i < count; i++)); do
+        padded_string+="─"
+    done
+
+    padded_string+="$string"
+
+    echo -n "$padded_string"
 }
 
 #######################################
@@ -278,7 +300,6 @@ selectItem () {
 #   Writes a colored or non-colored line to stdout
 #################################################
 alternateRows() {
-   #!/bin/bash
    header="$1"
    i=1
    while read -r line
@@ -422,8 +443,9 @@ callKeyFunktion () {
 # Generates the menu from the menudatamap.
 # Globals:
 #   menudatamap - the menu data
+#   generatedmenu - the generated menu (string)
 # Outputs:
-#   the menu written to stdout
+#   the menu written to generatedmenu variable
 #################################################
 generateMenu () { 
   OLD_IFS=$IFS
@@ -437,17 +459,17 @@ generateMenu () {
     fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
-    if [ "$index" -eq "0" ]; then printMenuHeading "$menu" && echo; fi
+    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); generatedmenu+=$(printf '%s' "\n\r"); fi
     if [ "$submenu" != "$previoussubmenu" ]; then 
-       if [ "$submenucount" -gt 0 ]; then echo; fi
-       printSubmenuHeading "$submenu" && echo; 
-       submenucount=$((submenucount+1));
+       if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf '%s' "\n\r"); fi
+       generatedmenu+=$(printSubmenuHeading "$submenu") 
+       submenucount=$(( submenucount+1 ));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
-      printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription" 
+      generatedmenu+=$(printMenuItemClm "$key" "$description" "$nextkey" "$nextdescription")
       skipnext=true
     else
-      printMenuItem "$key" "$description"
+      generatedmenu+=$(printMenuItem "$key" "$description")
     fi
     previoussubmenu="$submenu"
   done
@@ -478,8 +500,7 @@ terminate () { continuemenu=false; }
 #################################################
 choice () {
   if [ -n "$1" ]; then
-     echo
-     importantLog "$1"
+     eval "$1"
   fi
   echo
   echo "Press 'q' to quit"
@@ -516,10 +537,10 @@ choice () {
 printMenuItemClm() {
   echo -e "${1}.,${2},${3}.,${4}" \
           | awk -F , -v OFS=, '{printf "%-3s",$1; 
-                                printf "%-'"${clmLocalWidth}"'s",$2; 
+                                printf "%-'"${globalClmWidth}"'s",$2; 
                                 printf "%-3s",$3; 
-                                printf "%-'"${clmLocalWidth}"'s",$4; 
-                                printf("\n"); }'
+                                printf "%-'"${globalClmWidth}"'s",$4; 
+                                printf("\n\r"); }'
 }
 
 #################################################
@@ -531,7 +552,7 @@ printMenuItemClm() {
 #   The menu line to stdout
 #################################################
 printMenuItem() {
-   echo "$1. $2"
+   printf "%s. %s\n\r" "$1" "$2"
 }
 
 #################################################
@@ -577,16 +598,16 @@ exitGently () {
 #   tput colors
 # Arguments:
 #   $1: menu head description
+# Globals:
+#   formattedheading - the heading cache
 # Outputs:
 #   The menu head graphic to stdout
 #################################################
 draw_rounded_square() {
 
     # Menu title cache
-    if [ "$formattedTop" != "" ]; then
-      echo -e "$formattedTop"
-      echo -e "$formattedMiddle"
-      echo -e "$formattedBottom"
+    if [ "$formattedheading" != "" ]; then
+      printf '%s\n\r' "$formattedheading"
       return
     fi
 
@@ -610,8 +631,8 @@ draw_rounded_square() {
     formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
     formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
 
-    echo -e "$formattedTop"
-    echo -e "$formattedMiddle"
+    formattedheading+=$(printf '%s\n\r' "$formattedTop")
+    formattedheading+=$(printf '%s\n\r' "$formattedMiddle")
     
     border="$bottom_left_corner"
     for (( i=0; i<width+2; i++ )); do
@@ -620,7 +641,9 @@ draw_rounded_square() {
     border+="$bottom_right_corner"
 
     formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    echo -e "$formattedBottom"
+    formattedheading+=$(printf '%s\n\r' "$formattedBottom")
+
+    printf '%s' "$formattedheading"
 
 }
 
@@ -667,4 +690,50 @@ initConfig () {
       fi
       ((i++))
    done <<< "$(echo -e "$configlines")"
+}
+
+draw_border() {
+  multiline_string="$1"
+
+  lines=()
+  while IFS= read -r line; do
+     lines+=("$line")
+  done <<< "$multiline_string"
+
+  # Find the longest line length
+  max_length=0
+  for line in "${lines[@]}"; do
+      length=${#line}
+      if (( length > max_length )); then
+          max_length=$length
+      fi
+  done
+
+  # Print the top line of the square
+  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
+
+  # Print the multiline string with side borders
+  for line in "${lines[@]}"; do
+      printf "| %-${max_length}s |\n" "$line"
+  done
+
+  # Print the bottom line of the square
+  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
+}
+
+######################################################
+# Updates global column width in non immediate mode
+# Arguments:
+#   $1: string to measure (typically the menu item name)
+# Globals:
+#   globalClmWidth - the global clm width setting
+# Output:
+#   Updated globalClmWidth
+######################################################
+update_column_width() {
+   desclength=${#1}
+   clmLocalWidth=$(( 3 + desclength + 3 ))
+   if [ "$clmLocalWidth" -gt "$globalClmWidth" ]; then
+      globalClmWidth="$clmLocalWidth"
+   fi
 }

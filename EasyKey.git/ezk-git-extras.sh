@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function changeBlame () {
 	git log --pretty=format:'%Cred%h%Creset | %Cgreen%ad%Creset | %s %C(yellow)%d%Creset %C(bold blue)[%an]%Creset %Cgreen(%cr)%Creset' --graph --date=short
@@ -38,8 +42,6 @@ function obliterate () {
 	
 }
 
-while ${continuemenu:=true}; do
-clear
 menuInit "Git extras menu"
 submenuHead "Project information"
 menuItem a "Project summary in commits" "git summary"
@@ -50,17 +52,13 @@ menuItem e "Show information about the repo" "git info"
 menuItem f "Generate changelog" "git changelog -a"
 menuItem g "Show tree" "git show-tree"
 menuItem h "Show activity calendar" "git cal"
-echo
 submenuHead "Author information"
 menuItem k "List authors" "git authors --list"
 menuItem l "Find out what somebody did since ..." findOut
 menuItem m "Display change in blame between two revisions" changeBlame
-echo
 submenuHead "Effect repository actions"
 menuItem q "Remove latest commits and add their changes to stage" removeLatest
 menuItem r "Completely remove a file from the repository" obliterate
 menuItem s "Setup git repository in current dir" "git setup"
-echo
-choice
-done
+startMenu
 noterminate
