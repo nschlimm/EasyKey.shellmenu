@@ -1,6 +1,8 @@
 #!/bin/bash
 
 oldmenudata=("${menudatamap[@]}")
+old_calculatedMenuWidth=$calculatedMenuWidth
+old_globalClmWidth=$globalClmWidth
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/../shellmenu.sh"
@@ -70,5 +72,7 @@ startMenu
 
 source "$script_dir/../shellmenu.sh"
 menudatamap=("${oldmenudata[@]}")
+calculatedMenuWidth=$old_calculatedMenuWidth
+globalClmWidth=$old_globalClmWidth
 
 noterminate
