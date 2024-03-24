@@ -27,4 +27,4 @@ menuInit "Super MAVEN Home"
  submenuHead "Spring-Boot:"
   menuItemClm o "Start Spring Boot App" startSpringBoot s "View application properties" showProperties
   menuItem v "Usefull notes" useFull
-startMenu "$(pwd)"
+startMenu "pwd"

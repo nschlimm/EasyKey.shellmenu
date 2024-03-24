@@ -1,24 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 
-# submenus
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function savingChanges () {
-	source $script_dir/../EasyKey.git/ezk-git-atsc.sh
+	bash $script_dir/../EasyKey.git/ezk-git-atsc.sh
     nowaitonexit
 }
 
 function inspectingRepos () {
-	source $script_dir/../EasyKey.git/ezk-git-atis.sh
+	bash $script_dir/../EasyKey.git/ezk-git-atis.sh
 	nowaitonexit
 }
 
 function undoingChanges () {
-	source $script_dir/../EasyKey.git/ezk-git-atuc.sh
+	bash $script_dir/../EasyKey.git/ezk-git-atuc.sh
 	nowaitonexit
 }
 
 function mergeRebase () {
-	source $script_dir/../EasyKey.git/ezk-git-reme.sh
+	bash $script_dir/../EasyKey.git/ezk-git-reme.sh
 	nowaitonexit
 }
 
@@ -31,18 +33,15 @@ cherryPick() {
    git cherry-pick "$cname" 
 }
 
-while ${continuemenu:=true}; do
-clear
+atlnStatus() {
+  echo "Atlassians view on GIT, https://de.atlassian.com/git/tutorials"
+}
+
 menuInit "Atlassian's View"
-echo "Atlassians view on GIT, https://de.atlassian.com/git/tutorials"
-echo 
 submenuHead "Working on your local repository"
 menuItem b "Saving changes" savingChanges
 menuItem c "Inspecting a repository" inspectingRepos
 menuItem d "Undoing changes" undoingChanges
 menuItem e "Cherry pick commit" cherryPick 
-echo
-showStatus
-choice
-done
+startMenu "atlnStatus"
 noterminate

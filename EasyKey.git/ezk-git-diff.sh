@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function numberedList () {
   kommando="$1"
@@ -81,34 +85,30 @@ function diffDate () {
    # alternative: git diff 'HEAD@{2017-03-03T00:00:00}' HEAD --name-status | nl
 }
 
+diffStatus() {
+  showStatus
+  echo
+  echo "Note: GIT diff cann compare four locations with each other: "
+  echo "      your working directory, the stage, the repository."
+  echo
+  coloredLog "┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐" "$clrPurple" "$clrBlack"
+  coloredLog "│        │    │        │    │        │    │        │" "$clrPurple" "$clrBlack"
+  coloredLog "│        │ -> │        │ -> │        │ -> │        │" "$clrPurple" "$clrBlack"
+  coloredLog "└────────┘    └────────┘    └────────┘    └────────┘" "$clrPurple" "$clrBlack"
+  coloredLog " work dir       stage       local repo    remote repo" "$clrWhite" "$clrBlack"
+}
+
 git fetch --all
-while ${continuemenu:=true}; do
-clear
 menuInit "Working with diffs"
-echo
-echo "Note: GIT diff cann compare four locations with each other: "
-echo "      your working directory, the stage, the repository."
-echo
-coloredLog "┌────────┐    ┌────────┐    ┌────────┐    ┌────────┐" "$clrPurple" "$clrBlack"
-coloredLog "│        │    │        │    │        │    │        │" "$clrPurple" "$clrBlack"
-coloredLog "│        │ -> │        │ -> │        │ -> │        │" "$clrPurple" "$clrBlack"
-coloredLog "└────────┘    └────────┘    └────────┘    └────────┘" "$clrPurple" "$clrBlack"
-coloredLog " work dir       stage       local repo    remote repo" "$clrWhite" "$clrBlack"
-echo
-submenuHead "Different diff options:"
-menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
-menuItem b "actual working dir   vs. actual branch last commit  -> work dir vs. local repository" dirHead
-menuItem c "actual working dir   vs. other commits              -> work dir vs. local repository" treeCommit
-menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
-menuItem e "branch               vs. branch                     -> repository vs. repository (local/remote)" branchBranch
-echo
-submenuHead "Specific diffs:"
-menuItem k "Diff since date" diffDate
-echo
-submenuHead "Other usefull stuff here:"
-menuItem h "show commits" showCommits
-echo
-showStatus
-choice
-done
+  submenuHead "Different diff options:"
+    menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
+    menuItem b "actual working dir   vs. actual branch last commit  -> work dir vs. local repository" dirHead
+    menuItem c "actual working dir   vs. other commits              -> work dir vs. local repository" treeCommit
+    menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
+    menuItem e "branch               vs. branch                     -> repository vs. repository (local/remote)" branchBranch
+  submenuHead "Specific diffs:"
+    menuItem k "Diff since date" diffDate
+  submenuHead "Other usefull stuff here:"
+    menuItem h "show commits" showCommits
+startMenu "diffStatus"
 noterminate

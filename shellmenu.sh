@@ -15,21 +15,19 @@ clrCyan=6
 clrWhite=7
 
 # Globals
-waitstatus=true
-continuemenu=true
-globalClmWidth=45
-immediateMode=false
-actualmenu="EasyKey.shellmenu"
-actualsubmenuname="Your commands:"
-menuHeadingFGClr="$clrWhite"
-menuHeadingBGClr="$clrBlue"
-submenuFGClr="$clrWhite"
-submenuBGClr="$clrPurple"
-delimiter=⊕
-formattedTop=""
-formattedBottom=""
-formattedMiddle=""
-generatedmenu=""
+waitstatus=true                     # whether to wait for key press after menu command finished
+continuemenu=true                   # whether to continue menu loop (quit will set this to false)
+globalClmWidth=45                   # the default (minimum) column width
+actualmenu="EasyKey.shellmenu"      # the default menu heading
+actualsubmenuname="Your commands:"  # the default sub menu heading
+menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
+menuHeadingBGClr="$clrBlue"         # the default menu heading background color
+submenuFGClr="$clrWhite"            # the default sub menu heading foreground color
+submenuBGClr="$clrPurple"           # the default sub menu heading background color
+delimiter=⊕                         # the delimiter used in menu array
+formattedheading=""                 # the cache for formatted heading
+generatedmenu=""                    # the menu cache (menu will be compiled once and then cached)
+menudatamap=()                      # the menu data
 
 ############################
 ############################
@@ -41,14 +39,10 @@ generatedmenu=""
 # Writes the menu title and prepares menu array.
 # Arguments:
 #   $1: menu title, e.g. "Git Utility"
-# Outputs:
-#   Creates menudatamap global variable
 #################################################
 menuInit () {
   actualmenu="$1"
   actualsubmenuname="Your commands:"
-  menudatamap=()
-  ${immediateMode} && printMenuHeading "$1"
 }
 
 #################################################
@@ -60,7 +54,6 @@ menuInit () {
 #################################################
 submenuHead () { 
   actualsubmenuname="$1"
-  ${immediateMode} && printSubmenuHeading "$1"
 }
 
 #################################################
@@ -80,8 +73,7 @@ submenuHead () {
 #################################################
 menuItem () {
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
-   ${immediateMode} && printMenuItem "$1" "$2"
-   ${immediateMode} || update_column_width "$2"
+   update_column_width "$2"
 }
 
 #################################################
@@ -106,9 +98,7 @@ menuItem () {
 menuItemClm () {
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
-   ${immediateMode} && printMenuItemClm "$1" "$2" "$4" "$5"
-   ${immediateMode} || update_column_width "$2"
-   ${immediateMode} || update_column_width "$5"
+   update_column_width "$2" &&    update_column_width "$5"
 }
 
 #################################################
@@ -116,7 +106,7 @@ menuItemClm () {
 # immediate mode (the default mode)
 # Arguments:
 #   $1: a custom output at the bottom of menu
-#       (e.g. current directory)
+#       (e.g. current directory); function(!)
 # Outputs:
 #   the menu written to stdout
 #################################################
@@ -127,6 +117,7 @@ startMenu() {
         generateMenu
       fi
       printf "$generatedmenu"
+      echo
       choice "$1"
    done
 }
@@ -468,9 +459,9 @@ generateMenu () {
     fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
-    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); generatedmenu+=$(printf "\n\r"); fi
+    if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); generatedmenu+=$(printf '%s' "\n\r"); fi
     if [ "$submenu" != "$previoussubmenu" ]; then 
-       if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf "\n\r"); fi
+       if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf '%s' "\n\r"); fi
        generatedmenu+=$(printSubmenuHeading "$submenu") 
        submenucount=$(( submenucount+1 ));
     fi
@@ -509,8 +500,7 @@ terminate () { continuemenu=false; }
 #################################################
 choice () {
   if [ -n "$1" ]; then
-     echo
-     importantLog "$1"
+     eval "$1"
   fi
   echo
   echo "Press 'q' to quit"
@@ -608,16 +598,16 @@ exitGently () {
 #   tput colors
 # Arguments:
 #   $1: menu head description
+# Globals:
+#   formattedheading - the heading cache
 # Outputs:
 #   The menu head graphic to stdout
 #################################################
 draw_rounded_square() {
 
     # Menu title cache
-    if [ "$formattedTop" != "" ]; then
-      printf "$formattedTop\n\r"
-      printf "$formattedMiddle\n\r"
-      printf "$formattedBottom\n\r"
+    if [ "$formattedheading" != "" ]; then
+      printf '%s\n\r' "$formattedheading"
       return
     fi
 
@@ -641,8 +631,8 @@ draw_rounded_square() {
     formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
     formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
 
-    printf "$formattedTop\n\r"
-    printf "$formattedMiddle\n\r"
+    formattedheading+=$(printf '%s' "$formattedTop\n\r")
+    formattedheading+=$(printf '%s' "$formattedMiddle\n\r")
     
     border="$bottom_left_corner"
     for (( i=0; i<width+2; i++ )); do
@@ -651,7 +641,9 @@ draw_rounded_square() {
     border+="$bottom_right_corner"
 
     formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    printf "$formattedBottom\n\r"
+    formattedheading+=$(printf '%s' "$formattedBottom\n\r")
+
+    printf '%s' "$formattedheading"
 
 }
 

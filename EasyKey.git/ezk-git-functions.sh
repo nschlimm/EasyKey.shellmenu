@@ -272,12 +272,13 @@ function fetchAll () {
 # submenus
 
 function workingDiffs() {
-  source $script_dir/../EasyKey.git/ezk-git-diff.sh
+  unset form
+  bash $script_dir/../EasyKey.git/ezk-git-diff.sh
   nowaitonexit
 }
 
 function atlassiansView() {
-  source $script_dir/../EasyKey.git/ezk-git-atln.sh
+  bash $script_dir/../EasyKey.git/ezk-git-atln.sh
   nowaitonexit
 }
 
@@ -288,7 +289,7 @@ function changeProject () {
 }
 
 function gitExtras () {
-  source $script_dir/../EasyKey.git/ezk-git-extras.sh
+  bash $script_dir/../EasyKey.git/ezk-git-extras.sh
   nowaitonexit
 }
 
@@ -378,6 +379,6 @@ repoSize() {
 }
 
 function settingUp () {
-    source $script_dir/../EasyKey.git/ezk-git-atsu.sh
+    bash $script_dir/../EasyKey.git/ezk-git-atsu.sh
     nowaitonexit
 }

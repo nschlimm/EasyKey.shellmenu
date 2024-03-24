@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-# all your menu actions here
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
 
 function listAuthorCommits () {
 	executeCommand "git authors --list"
@@ -31,12 +33,9 @@ function oneCommit () {
 	git diff $commit^ $commit --name-status
 }
 
-while ${continuemenu:=true}; do
-clear
 menuInit "Inspecting repositories"
 submenuHead "State of working tree and stage (git status)"
 menuItem a "List which files are staged, unstaged, and untracked" "git status -s"
-echo
 submenuHead "Information regarding the committed project history (git log)"
 menuItem b "Display commit history in one line" "git log --oneline"
 menuItem c "Show which files were altered in commits" "git log --stat"
@@ -45,7 +44,5 @@ menuItem e "Search for commits by a particular author" listAuthorCommits
 menuItem f "Only display commits that include the specified file" listFileCommits
 menuItem g "Display a full diff of all the changes someone has made to a file" authorDiffFile
 menuItem h "Display contents of one commit" oneCommit
-echo
-choice
-done
+startMenu
 noterminate
