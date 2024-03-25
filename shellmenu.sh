@@ -4,6 +4,9 @@
 # EasyKey.shellmenu main script #
 #################################
 
+# Release
+release=2.3.0-SNAPSHOT
+
 # Colors
 clrBlack=0
 clrRed=1
@@ -24,6 +27,7 @@ menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
 menuHeadingBGClr="$clrBlue"         # the default menu heading background color
 submenuFGClr="$clrCyan"             # the default sub menu heading foreground color
 submenuBGClr="$clrBlack"            # the default sub menu heading background color
+releaseNoClr=137                    # the default release number color
 delimiter=⊕                         # the delimiter used in menu array
 submenu_pad_symbol="─"              # Default submenu border symbol
 submenu_corner_symbol="┐"           # Default submenu corner symbol
@@ -657,9 +661,9 @@ draw_rounded_square() {
     done
     border+="$bottom_right_corner"
 
-    formattedheading+=$(coloredLog "$border\n\r" 7 20)
+    formattedheading+=$(coloredLog "$border" $menuHeadingFGClr $menuHeadingBGClr)
 
-    printf '%s' "$formattedheading"
+    printf '%s' "$formattedheading" && coloredLog " $release" $releaseNoClr 0 && printf "\n\r"
 
 }
 
