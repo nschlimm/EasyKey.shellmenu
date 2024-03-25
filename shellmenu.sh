@@ -5,7 +5,7 @@
 #################################
 
 # Release
-release=2.3.0-SNAPSHOT
+release=2.3.0
 
 # Colors
 clrBlack=0
