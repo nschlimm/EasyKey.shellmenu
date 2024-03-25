@@ -31,5 +31,5 @@ menuInit "EasyKey.git"
   submenuHead "Shortcuts "
     menuItemClm P "Change project" changeProject B "Change branch" changeBranch
     menuItem F "Fetch all" fetchAll 
-startMenu "git status"
+startMenu "showStatus"
 echo "bye, bye, homie!"
