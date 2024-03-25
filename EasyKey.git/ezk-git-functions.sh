@@ -421,3 +421,9 @@ ammendCommit() {
 prettyLog() {
   git log --all --graph --decorate --oneline --format='%C(auto)%ad %h %d %C(bold blue)%an%Creset %s %C(bold red)%D' --date=format:'%Y-%m-%d %H:%M'
 }
+
+allBranches() {
+  git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+  executeCommand "git fetch --all"
+  executeCommand "git pull --all"
+}
