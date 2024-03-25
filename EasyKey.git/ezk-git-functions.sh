@@ -389,7 +389,15 @@ ammendCommit() {
         echo "Your branch is behind remote branch! Update first using git pull."
         return
     fi
-    coloredLog "   DO NOT DO THIS IN SHARED BRANCHES !   " "$clrPurple" "$clrWhite" && printf "\n\r"
+    coloredLog "   BE CAREFULL IN SHARED BRANCHES !   " "$clrPurple" "$clrWhite" && printf "\n\r"
+    echo
+    echo "If you do this in shared branches, and you have pushed the commits to remote repo already,"
+    echo "some developers might have the commit object your going to change as predecessor to their"
+    echo "commits. Actually you will replace that object with a new one. This changes the commit "
+    echo "history which can result in conflicts."
+    echo 
+    echo "If you are the only developer working in that branch, the change is NOT critical."
+    echo 
     echo -n "Change some commit messages (y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
     git rebase -i HEAD~1
