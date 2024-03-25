@@ -20,6 +20,7 @@ function undoingChanges () {
 }
 
 function mergeRebase () {
+	# Comment added 
 	bash $script_dir/../EasyKey.git/ezk-git-reme.sh
 	nowaitonexit
 }
