@@ -384,6 +384,11 @@ function settingUp () {
 }
 
 ammendCommit() {
+    behind_count=$(git rev-list --count ${current_branch}..${current_branch}@{upstream})
+    if [ $behind_count -gt 0 ]; then
+        echo "Your branch is behind remote branch! Update first using git pull."
+        return
+    fi
     echo -n "Change some commit messages(y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
     git rebase -i HEAD~10
