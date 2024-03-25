@@ -385,8 +385,8 @@ function settingUp () {
 
 ammendCommit() {
    behind_count=$(git rev-list --count ${current_branch}..${current_branch}@{upstream})
-   if [ "$behind_count" -lt 0 ]; then
-      echo "Your branch is behind remote branch. Please pull remot changes first!";
+   if [ "$behind_count" -gt 0 ]; then
+      echo "Your branch is behind remote branch. Please pull remote changes first!";
       return
    fi
    echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
