@@ -26,8 +26,7 @@ function mergeRebase () {
 }
 
 cherryPick() {
-   echo "Last 15 commits"
-   git log --all --oneline
+   git log --all --graph --decorate --oneline --format='%C(bold blue)%h%Creset %s %C(bold green)(%cd)%Creset %an' --date=format:'%Y-%m-%d %H:%M'
    echo "Enter commit you want to pick:"
    read cname
    [ "${cname}" = "" ] && waitonexit && return 
