@@ -37,11 +37,25 @@ atlnStatus() {
   echo "Atlassians view on GIT, https://de.atlassian.com/git/tutorials"
 }
 
+checkoutAndBranch(){
+   echo "Last 15 commits"
+   git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n 100
+   echo "Enter commit you want to checkout:"
+   read cname
+   [ "${cname}" = "" ] && waitonexit && return 
+   executeCommand "git checkout $cname"
+   echo "Enter new branch name:"
+   read cbranch
+   [ "${cbranch}" = "" ] && waitonexit && return 
+   executeCommand "git checkout -b $cbranch"
+}
+
 menuInit "Atlassian's View"
 submenuHead "Working on your local repository"
 menuItem b "Saving changes" savingChanges
 menuItem c "Inspecting a repository" inspectingRepos
 menuItem d "Undoing changes" undoingChanges
 menuItem e "Cherry pick commit" cherryPick 
+menuItem f "Checkout commit and branch" checkoutAndBranch 
 startMenu "atlnStatus"
 noterminate
