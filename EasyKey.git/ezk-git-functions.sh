@@ -188,7 +188,7 @@ function rollBackLast() {
 
 function deleteBranch() {
   git branch
-  echo "Welchen Branch löschen?"
+  echo "Which branch to delete?"
   read dbranch
   [ "${dbranch}" = "" ] && waitonexit && return 
   git branch -d $dbranch
@@ -331,12 +331,16 @@ function setRemoteOrigin() {
    executeCommand "git remote set-url origin $originaddress"
 }
 
+newStatus() {
+   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+   git status -s 
+}
+
 function showStatus () {
   importantLog $(pwd | grep -o "[^/]*$")
   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
   importantLog $actual 
-  git log --decorate --oneline -n 1
-  git status | grep "Your branch"
+  git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s' --abbrev-commit -n 1
   analyzeWorkingDir
   git remote -v
 }
