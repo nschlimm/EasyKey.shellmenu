@@ -2,4 +2,4 @@
 
 Experimental state of menu with usefull bash commands.
 
-<img width="268" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/c0947601-d80b-4d97-a14e-a21c3af3ba12">
+<img width="320" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/59bc4b8a-fcd0-41aa-9bcd-dee3a317ffd2">
