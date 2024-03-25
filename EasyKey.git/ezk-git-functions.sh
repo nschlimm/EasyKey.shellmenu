@@ -386,7 +386,7 @@ function settingUp () {
 ammendCommit() {
     echo -n "Change some commit messages(y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
-    git rebase -i HEAD~5
+    git rebase -i HEAD~10
     if [ $? -ne 0 ]; then
         importantLog "Rebase failed"
     else
