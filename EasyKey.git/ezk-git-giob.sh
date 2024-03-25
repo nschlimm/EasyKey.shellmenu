@@ -21,7 +21,7 @@ contCommit() {
 	echo "Enter commit to display:"
 	read cname
 	[ "${cname}" = "" ] && waitonexit && return 
-    git cat-file -p $cname
+    executCommand "git cat-file -p $cname"
 }
 
 setActual
@@ -32,7 +32,7 @@ menuItem b "Current HEAD pointer" "git symbolic-ref HEAD"
 menuItem c "Inspect current tree object" "git cat-file -p ${actual}^{tree}"
 menuItem d "Inspect current commit object" "git cat-file -p ${actual}^{commit}"
 menuItem e "Show contents of commit object" contCommit
-menuItem e "All branches" allBranches
-menuItem f "All tags" allTags
+menuItem f "All branches" allBranches
+menuItem g "All tags" allTags
 startMenu "setActual"
 noterminate
