@@ -8,14 +8,22 @@ setActual() {
   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
 }
 
+allBranches() {
+  find .git/refs/heads -type f -exec sh -c 'echo "File: $1"; cat "$1"' _ {} \;
+}
+
+allTags() {
+  find .git/refs/tags -type f -exec sh -c 'echo "File: $1"; cat "$1"' _ {} \;
+}
+
 setActual
 
 menuInit "Git object internals"
 submenuHead "Usefull commands "
 menuItem b "Current HEAD pointer" "git symbolic-ref HEAD"
-menuItem c "Inspect current tree" "git cat-file -p ${actual}^{tree}"
-menuItem d "Inspect current commit" "git cat-file -p ${actual}^{commit}"
-menuItem e "All branches" "tree .git/refs/heads"
-menuItem f "All tags" "git fetch --tags && tree .git/refs/tags"
+menuItem c "Inspect current tree object" "git cat-file -p ${actual}^{tree}"
+menuItem d "Inspect current commit object" "git cat-file -p ${actual}^{commit}"
+menuItem e "All branches" allBranches
+menuItem f "All tags" allTags
 startMenu "setActual"
 noterminate
