@@ -30,7 +30,19 @@ cherryPick() {
    echo "Enter commit you want to pick:"
    read cname
    [ "${cname}" = "" ] && waitonexit && return 
-   git cherry-pick "$cname" 
+   git branch
+   echo "Select target branch:"
+   read cbranch
+   [ "${cbranch}" = "" ] && waitonexit && return 
+   git checkout $cbranch
+   git cherry-pick $cname
+   echo -n "Cherry picked $cname. Add files to stage(y/n)?" && wait_for_keypress
+   [ "${REPLY}" != "y" ] && waitonexit && return 
+   git add .
+   git cherry-pick --continue
+   echo -n "Push changes(y/n)?" && wait_for_keypress
+   [ "${REPLY}" != "y" ] && waitonexit && return 
+   git push origin $cbranch
 }
 
 atlnStatus() {

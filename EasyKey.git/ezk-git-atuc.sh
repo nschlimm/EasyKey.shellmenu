@@ -49,10 +49,9 @@ function resetToCommitHard () {
 }
 
 atucStatus() {
-   coloredLog "   ALWAYS PREFER REVERT   " "$clrPurple" "$clrWhite" && printf "\n\r"
    echo
    echo "NOTE: if your work with remote repos and already 
-         pushed commits that you want to undo -> PREFER REVERT !!"
+         pushed commits that you want to undo -> PREFER REVERT OVER RESET !!"
 
 }
 
@@ -65,11 +64,11 @@ checkoutWay() {
 
 menuInit "Undoing changes"
 submenuHead "Undoing changes"
-menuItem a "Just checkout contents of previous commit into working dir" checkoutWay
-menuItem a "Revert last commit - (keep commit history - create new commit)" revertLastCommit
-menuItem b "Revert commit - (keep commit history - create new commit)" revertToCommit
-menuItem c "(Soft) Reset commit - (delete some commits - keep current working dir)" resetToCommit
-menuItem d "(Hard) Reset commit - (delete some commits - overwrite working dir)" resetToCommitHard
-menuItem e "Undo local changes (only effects untracked files)" clean
+menuItem a "Checkout a previous commit into workdir - (keep commit history - create new commit)" checkoutWay
+menuItem b "Revert last commit - (keep commit history - create new commit)" revertLastCommit
+menuItem c "Revert commit - (keep commit history - create new commit)" revertToCommit
+menuItem d "(Soft) Reset commit - (delete some commits - keep current working dir)" resetToCommit
+menuItem e "(Hard) Reset commit - (delete some commits - overwrite working dir)" resetToCommitHard
+menuItem f "Undo local changes (only effects untracked files)" clean
 startMenu "atucStatus"
 noterminate
