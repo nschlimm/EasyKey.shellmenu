@@ -44,7 +44,7 @@ if [ -z ${gitlocations+x} ]; then
    do
    	  locationdir=$(echo "$j" | cut -f2 -d'=')
    	  eval cd $locationdir
-   	  lines=$(eval find $locationdir -name ".git")
+   	  lines=$(eval find $locationdir -name ".git" -maxdepth 3)
       while read line; do
        	completelocation=${line::${#line}-5}
        	gitlocations[$index]="${thekeys[$keycounter]} $completelocation toDir $completelocation"
