@@ -293,6 +293,11 @@ function gitExtras () {
   nowaitonexit
 }
 
+objectInternals() {
+  bash $script_dir/../EasyKey.git/ezk-git-giob.sh
+  nowaitonexit
+}
+
 function reset () {
   executeCommand "git reset"
 }

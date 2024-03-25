@@ -23,6 +23,7 @@ menuInit "EasyKey.git"
   submenuHead "Other usefull actions "
     menuItemClm s "Working with diffs" workingDiffs w "Working with commits" atlassiansView
     menuItemClm y "Setting up repositories" settingUp 5 "Git extras" gitExtras
+    menuItem 9 "GIT object internals" objectInternals
   submenuHead "Git admin actions "
     menuItemClm 1 "Show local git config" localGitConfig 2 "Show global git config" globalGitConfig
     menuItemClm 3 "Administering aliases" adminAliases 4 "Show .gitignore" gitIgnore
