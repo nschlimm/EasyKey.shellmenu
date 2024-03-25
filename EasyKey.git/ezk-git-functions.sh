@@ -188,7 +188,7 @@ function rollBackLast() {
 
 function deleteBranch() {
   git branch
-  echo "Welchen Branch löschen?"
+  echo "Which branch to delete?"
   read dbranch
   [ "${dbranch}" = "" ] && waitonexit && return 
   git branch -d $dbranch
