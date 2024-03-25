@@ -390,6 +390,6 @@ ammendCommit() {
       return
    fi
    echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
-   [ "${REPLY}" = "y" ] && git commit --amend 
-   git push --force
+   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend"
+   executeCommand "git push --force"
 }
