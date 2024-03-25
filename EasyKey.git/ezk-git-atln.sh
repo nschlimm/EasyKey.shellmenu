@@ -37,11 +37,15 @@ cherryPick() {
    [ "${cbranch}" = "" ] && waitonexit && return 
    git checkout $cbranch
    git cherry-pick $cname
-   echo -n "Cherry picked $cname. Add files to stage(y/n)?" && wait_for_keypress
+   echo -n "Cherry picked $cname. Add files to stage(y/n)?" && wait_for_keypress && echo
    [ "${REPLY}" != "y" ] && waitonexit && return 
    git add .
-   git cherry-pick --continue
-   echo -n "Push changes(y/n)?" && wait_for_keypress
+   if [ -f .git/CHERRY_PICK_HEAD ]; then
+     git cherry-pick --continue
+   else
+     echo "No cherry-pick in progress"
+   fi
+   echo -n "Push changes(y/n)?" && wait_for_keypress && echo
    [ "${REPLY}" != "y" ] && waitonexit && return 
    git push origin $cbranch
 }
