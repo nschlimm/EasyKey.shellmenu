@@ -59,7 +59,7 @@ menuItem i "Install" "mvn clean install"
 startMenu
 ```
 
-<img width="175" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5b273c27-59f4-4bff-aaa6-b8fbf174bbf9">
+<img width="198" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/4a61a5f0-fadc-4018-b570-7b5e42551a02">
 
 # Maven demo menu (single column)
 
@@ -84,14 +84,14 @@ startMenu
 ```
 Result is the following menu:
 
-<img width="293" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/8f5ea85c-7ff1-4b87-a99e-eacf77f825fb">
+<img width="331" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/5ad8e8d4-966c-493d-b8d0-ef2a514e242e">
 
 # Example double column menu
 
 The following menu example is taken from the [EasyKey.kubectl](https://github.com/nschlimm/EasyKey.shellmenu/tree/main/EasyKey.kubectl) utility.
 The `kubectl` menu has many functions and sub sections in two columns to enable maximum amount auf commands in your menu.
 
-<img width="604" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/cf923abb-e589-4f1d-a7a9-45d0b1f18404">
+<img width="603" alt="image" src="https://github.com/nschlimm/EasyKey.shellmenu/assets/876604/9130ac29-0a4f-42ee-9d7b-abdb882c80ff">
 
 # Tipp: sourcing shellmenu.sh 
 
