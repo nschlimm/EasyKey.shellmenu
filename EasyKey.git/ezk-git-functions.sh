@@ -382,3 +382,8 @@ function settingUp () {
     bash $script_dir/../EasyKey.git/ezk-git-atsu.sh
     nowaitonexit
 }
+
+ammendCommit() {
+   echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
+   [ "${REPLY}" = "y" ] && git commit --amend 
+}
