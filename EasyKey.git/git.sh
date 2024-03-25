@@ -9,9 +9,7 @@ source "$script_dir/../shellmenu.sh"
 source "$script_dir/ezk-git-functions.sh"
 
 globalClmWidth=35
-
 git fetch --all --tags 2> /dev/null
-
 menuInit "EasyKey.git"
   submenuHead "Working with remotes "
     menuItemClm a "Gently push current" pushActual b "Set remote origin repo" setRemoteOrigin
