@@ -389,7 +389,13 @@ ammendCommit() {
       echo "Your branch is behind remote branch. Please pull remote changes first!";
       return
    fi
+
+   echo "Last 15 commits"
+   git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n 100
+   echo "Enter commit name to ammend"
+   read cname
+
    echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
-   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend"
+   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend ${cname}"
    executeCommand "git push --force"
 }
