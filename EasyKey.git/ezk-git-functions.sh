@@ -419,5 +419,5 @@ ammendCommit() {
 }
 
 prettyLog() {
-  git log --all --graph --decorate --oneline --format='%C(bold blue)%h%Creset %s %C(bold green)(%cd)%Creset %an' --date=format:'%Y-%m-%d %H:%M'
+  git log --all --graph --decorate --oneline --format='%C(auto)%ad %h %d %C(bold blue)%an%Creset %s %C(bold red)%D' --date=format:'%Y-%m-%d %H:%M'
 }
