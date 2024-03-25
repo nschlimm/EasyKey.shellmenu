@@ -22,12 +22,12 @@ showGlobalSettingFile() {
 
 clear
 menuInit "Maven demo menu"
-  submenuHead "Life cycle commands:"
+  submenuHead "Life cycle commands "
      menuItem c "Clean all" "mvn clean:clean"
      menuItem x "Compile" "mvn clean compile" 
      menuItem t "Test" "mvn clean test" 
      menuItem i "Install" "mvn clean install"  
-  submenuHead "Also usefull:"
+  submenuHead "Also usefull "
     menuItem d "Analyze dependencies" "mvn dependency:analyze"
     menuItem u "Clean compile force updates" "mvn clean compile -U -DskipTests" 
     menuItem e "Show effective settings" "mvn help:effective-settings"

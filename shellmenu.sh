@@ -14,20 +14,27 @@ clrPurple=5
 clrCyan=6
 clrWhite=7
 
-# Globals
+# Globals (SUBJECT TO CUSTOMIZATION)
 waitstatus=true                     # whether to wait for key press after menu command finished
 continuemenu=true                   # whether to continue menu loop (quit will set this to false)
-globalClmWidth=45                   # the default (minimum) column width
+globalClmWidth=20                   # the default (minimum) column width
 actualmenu="EasyKey.shellmenu"      # the default menu heading
-actualsubmenuname="Your commands:"  # the default sub menu heading
+actualsubmenuname="Your commands "  # the default sub menu heading
 menuHeadingFGClr="$clrWhite"        # the default menu heading foreground color
 menuHeadingBGClr="$clrBlue"         # the default menu heading background color
-submenuFGClr="$clrCyan"            # the default sub menu heading foreground color
-submenuBGClr="$clrBlack"           # the default sub menu heading background color
+submenuFGClr="$clrCyan"             # the default sub menu heading foreground color
+submenuBGClr="$clrBlack"            # the default sub menu heading background color
 delimiter=⊕                         # the delimiter used in menu array
+submenu_pad_symbol="─"              # Default submenu border symbol
+submenu_corner_symbol="┐"           # Default submenu corner symbol
+sub_menu_bold=false                 # whether to print out submenu bold
+
+# Internal global variables (DO NOT CHANGE)
 formattedheading=""                 # the cache for formatted heading
 generatedmenu=""                    # the menu cache (menu will be compiled once and then cached)
 menudatamap=()                      # the menu data
+has_two_clms=false                  # whether the menu hast two columns
+calculatedMenuWidth=$(( globalClmWidth + 3 )) # the calculated column width
 
 ############################
 ############################
@@ -98,7 +105,8 @@ menuItem () {
 menuItemClm () {
    menudatamap+=("$1$delimiter$2$delimiter$3$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}1")
    menudatamap+=("$4$delimiter$5$delimiter$6$delimiter$actualsubmenuname$delimiter$actualmenu${delimiter}2")
-   update_column_width "$2" &&    update_column_width "$5"
+   update_column_width "$2" && update_column_width "$5"
+   has_two_clms=true
 }
 
 #################################################
@@ -133,29 +141,16 @@ startMenu() {
 # Colored log to standard out.
 # Arguments:
 #   $1: log text
-#   $2: optional: foreground color (0-7)
-#   $3: optional: background color (0-7)
-#   $4: optional: width of heading line
+#   $2: optional: foreground color
+#   $3: optional: background color
+#   $4: optional: bold
 # Outputs:
 #   Writes colored log to standard out
 #######################################
 coloredLog () {
-    set_foreground=$(tput setaf "${2:-$clrWhite}")
-    set_background=$(tput setab "${3:-$clrBlack}")
-    echo -n "$set_background$set_foreground"
-    printf "%s" "$1"
-    tput sgr0
-    if [ $# -eq 4 ]; then
-      length=${#1}
-      width=73
-      pad=$(( width - length ))
-      set_foreground=$(tput setaf "$3")
-      set_background=$(tput setab "$clrBlack")
-      echo -n "$set_background$set_foreground"
-      printf "%s" $(pad_string_with_stars "─" $pad)
-      tput sgr0
-    fi
-    printf "\n\r"
+    local bold=${4:-false}
+    $bold && printf "\033[1m\e[38;5;%sm\e[48;5;%sm%s\e[38;5;7m\e[48;5;0m\033[0m" "$2" "$3" "$1" && return
+    printf "\e[38;5;%sm\e[48;5;%sm%s\e[38;5;7m\e[48;5;0m" "$2" "$3" "$1"
 }
 
 pad_string_with_stars() {
@@ -182,7 +177,7 @@ pad_string_with_stars() {
 #######################################
 blueLog() {
   log="$1"
-  coloredLog "${log}" "$clrWhite" "$clrBlue"
+  coloredLog "${log}" "$clrWhite" "$clrBlue" && printf "\n\r"
 }
 
 #######################################
@@ -195,7 +190,7 @@ blueLog() {
 #######################################
 greenLog() {
   log="$1"
-  coloredLog "${log}" "$clrWhite" "$clrGreen"
+  coloredLog "${log}" "$clrWhite" "$clrGreen" && printf "\n\r"
 }
 
 #######################################
@@ -208,7 +203,7 @@ greenLog() {
 #######################################
 redLog() {
   log="$1"
-  coloredLog "${log}" "$clrRed" "$clrBlack"
+  coloredLog "${log}" "$clrRed" "$clrBlack" && printf "\n\r"
 }
 
 #######################################
@@ -219,7 +214,7 @@ redLog() {
 #   Writes log to standard out
 #######################################
 importantLog() {
-  coloredLog "$1" "$clrCyan" "$clrBlack"
+  coloredLog "$1" "$clrCyan" "$clrBlack" && printf "\n\r"
 }
 
 #################################################
@@ -364,7 +359,7 @@ coloredCsvTable() { #show csv file with header line in nice format
    if [ "${linefromXX}" = "1" ]; then linefromXX="2"; fi
    headers=$(head -1 $csvfile | sed 's/ /_/g' | awk -F, 'BEGIN {i=1} {while (i<=NF) {str=str substr($i,1,12)","; i++;}} END {print str}')
    importantLog "${csvfile}"
-   ! [ "${heading}" = "" ] && coloredLog "${heading}"
+   ! [ "${heading}" = "" ] && coloredLog "${heading}\n\r"
    if [ "${width}" = "" ]; then
      (echo "${headers}" && sed -n "${linefromXX},${linetoXX}p" "${csvfile}") \
         | perl -pe 's/((?<=,)|(?<=^)),/ ,/g;' \
@@ -570,11 +565,34 @@ printMenuHeading(){
 # Print the sub menu head. 
 # Arguments:
 #   $1: sub menu head description
+#   $2: optional: menu width
+#   $3: padding symbol
 # Outputs:
 #   The sub menu head to stdout
 #################################################
 printSubmenuHeading(){
-  coloredLog "$1" "$submenuFGClr" "$submenuBGClr"
+  local width="${2:-$calculatedMenuWidth}"
+  local symbol="${3:-$submenu_pad_symbol}"
+  local paddedline="$(r_pad "$1" "$width" "$symbol")$submenu_corner_symbol"
+  coloredLog "$paddedline\n\r" "$submenuFGClr" "$submenuBGClr" $sub_menu_bold
+}
+
+#################################################
+# Right pad text 
+# Arguments:
+#   $1: text
+#   $2: target width of line 
+#   $3: symbol for padding
+# Outputs:
+#   Padded line to stdout
+#################################################
+r_pad() {
+  local text=$1
+  local length=${#text}
+  local width=${2:-$length}
+  local paddedcount=$(( width - length ))
+  local printout="$text$(printf "%-${paddedcount}s" "" | tr " " "$symbol")"
+  printf "%s" "$printout"
 }
 
 quit () {
@@ -628,10 +646,9 @@ draw_rounded_square() {
     done
     border+="$top_right_corner"
     
-    formattedTop=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    formattedMiddle=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)"$vertical_line "$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$text$(tput sgr0)$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)" $vertical_line"$(tput sgr0)
+    formattedMiddle=$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)"$vertical_line "$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)$text$(tput sgr0)$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)" $vertical_line"$(tput sgr0)
 
-    formattedheading+=$(printf '%s\n\r' "$formattedTop")
+    formattedheading+=$(coloredLog "$border\n\r" 7 20)
     formattedheading+=$(printf '%s\n\r' "$formattedMiddle")
     
     border="$bottom_left_corner"
@@ -640,8 +657,7 @@ draw_rounded_square() {
     done
     border+="$bottom_right_corner"
 
-    formattedBottom=$(tput setaf $clrWhite)$(tput setab $clrBlue)$(tput bold)$border$(tput sgr0)
-    formattedheading+=$(printf '%s\n\r' "$formattedBottom")
+    formattedheading+=$(coloredLog "$border\n\r" 7 20)
 
     printf '%s' "$formattedheading"
 
@@ -692,35 +708,6 @@ initConfig () {
    done <<< "$(echo -e "$configlines")"
 }
 
-draw_border() {
-  multiline_string="$1"
-
-  lines=()
-  while IFS= read -r line; do
-     lines+=("$line")
-  done <<< "$multiline_string"
-
-  # Find the longest line length
-  max_length=0
-  for line in "${lines[@]}"; do
-      length=${#line}
-      if (( length > max_length )); then
-          max_length=$length
-      fi
-  done
-
-  # Print the top line of the square
-  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
-
-  # Print the multiline string with side borders
-  for line in "${lines[@]}"; do
-      printf "| %-${max_length}s |\n" "$line"
-  done
-
-  # Print the bottom line of the square
-  echo "+"$(printf "%-${max_length}s" | tr ' ' '-')"+"
-}
-
 ######################################################
 # Updates global column width in non immediate mode
 # Arguments:
@@ -731,9 +718,11 @@ draw_border() {
 #   Updated globalClmWidth
 ######################################################
 update_column_width() {
-   desclength=${#1}
-   clmLocalWidth=$(( 3 + desclength + 3 ))
+   local desclength=${#1}
+   local clmLocalWidth=$(( 3 + desclength + 3 ))
    if [ "$clmLocalWidth" -gt "$globalClmWidth" ]; then
       globalClmWidth="$clmLocalWidth"
+      $has_two_clms && calculatedMenuWidth=$(( globalClmWidth * 2 + 3 ))
+      $has_two_clms || calculatedMenuWidth=$(( globalClmWidth + 3 ))
    fi
 }

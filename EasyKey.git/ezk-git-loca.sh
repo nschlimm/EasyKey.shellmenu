@@ -1,6 +1,8 @@
 #!/bin/bash
 
 oldmenudata=("${menudatamap[@]}")
+old_calculatedMenuWidth=$calculatedMenuWidth
+old_globalClmWidth=$globalClmWidth
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$script_dir/../shellmenu.sh"
@@ -63,12 +65,14 @@ for (( i = 0; i < ${#gitlocations[@]}; i++ )); do
 	IFS=$IFSOLD
 	menuItem "${arrIN[0]}" "${arrIN[1]}" "${arrIN[2]} ${arrIN[3]}" 
 done
-if $uncached; then coloredLog "NEW" "1;42"; else coloredLog "CACHED" "1;42"; fi
+if $uncached; then coloredLog "NEW" "1;42" && printf "\n\r"; else coloredLog "CACHED" "1;42" && printf "\n\r"; fi
 submenuHead "Shortcuts"
 menuItem X "Purge git dir cache" purgDirCache
 startMenu
 
 source "$script_dir/../shellmenu.sh"
 menudatamap=("${oldmenudata[@]}")
+calculatedMenuWidth=$old_calculatedMenuWidth
+globalClmWidth=$old_globalClmWidth
 
 noterminate
