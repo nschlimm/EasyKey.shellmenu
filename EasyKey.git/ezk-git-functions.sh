@@ -389,7 +389,8 @@ ammendCommit() {
         echo "Your branch is behind remote branch! Update first using git pull."
         return
     fi
-    echo -n "Change some commit messages(y/n)?" && wait_for_keypress && echo
+    coloredLog "   DO NOT DO THIS IN SHARED BRANCHES !   " "$clrPurple" "$clrWhite" && printf "\n\r"
+    echo -n "Change some commit messages (y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
     git rebase -i HEAD~10
     if [ $? -ne 0 ]; then
