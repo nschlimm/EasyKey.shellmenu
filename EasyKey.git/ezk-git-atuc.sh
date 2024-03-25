@@ -56,8 +56,16 @@ atucStatus() {
 
 }
 
+checkoutWay() {
+  git log --all --oneline
+  echo "Select a commit to checkout:"
+  read cname
+  executeCommand "git checkout $cname -- ."
+}
+
 menuInit "Undoing changes"
 submenuHead "Undoing changes"
+menuItem a "Just checkout contents of previous commit into working dir" checkoutWay
 menuItem a "Revert last commit - (keep commit history - create new commit)" revertLastCommit
 menuItem b "Revert commit - (keep commit history - create new commit)" revertToCommit
 menuItem c "(Soft) Reset commit - (delete some commits - keep current working dir)" resetToCommit
