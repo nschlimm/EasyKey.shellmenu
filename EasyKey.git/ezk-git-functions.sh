@@ -396,6 +396,5 @@ ammendCommit() {
    read cname
 
    echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
-   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend ${cname}"
-   executeCommand "git push --force"
+   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend ${cname}" && executeCommand "git push --force-with-lease origin $actual"
 }
