@@ -392,5 +392,5 @@ ammendCommit() {
    echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
    [ "${REPLY}" = "y" ] && git commit --amend 
    echo -n "Next step is to merge branch with remote branch (y/n)?" && wait_for_keypress && echo
-   [ "${REPLY}" = "y" ] && git merge 
+   [ "${REPLY}" = "y" ] && git merge  
 }
