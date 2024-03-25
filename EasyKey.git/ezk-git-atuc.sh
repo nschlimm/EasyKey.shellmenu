@@ -1,5 +1,9 @@
 #!/bin/bash
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$script_dir/../shellmenu.sh"
+source "$script_dir/ezk-git-functions.sh"
+
 function revertLastCommit () {
    echo "Enter YES if you want to revert to last commit:"
    read cname
@@ -44,21 +48,20 @@ function resetToCommitHard () {
    git reset --hard $cname 
 }
 
-while ${continuemenu:=true}; do
-clear
+atucStatus() {
+   coloredLog "   ALWAYS PREFER REVERT   " "$clrPurple" "$clrWhite" && printf "\n\r"
+   echo
+   echo "NOTE: if your work with remote repos and already 
+         pushed commits that you want to undo -> PREFER REVERT !!"
+
+}
+
 menuInit "Undoing changes"
-coloredLog "   ALWAYS PREFER REVERT   " "$clrPurple" "$clrWhite" && printf "\n\r"
 submenuHead "Undoing changes"
 menuItem a "Revert last commit - (keep commit history - create new commit)" revertLastCommit
 menuItem b "Revert commit - (keep commit history - create new commit)" revertToCommit
 menuItem c "(Soft) Reset commit - (delete some commits - keep current working dir)" resetToCommit
 menuItem d "(Hard) Reset commit - (delete some commits - overwrite working dir)" resetToCommitHard
 menuItem e "Undo local changes (only effects untracked files)" clean
-
-echo
-echo "NOTE: if your work with remote repos and already 
-      pushed commits that you want to undo -> PREFER REVERT !!"
-
-choice
-done
+startMenu "atucStatus"
 noterminate
