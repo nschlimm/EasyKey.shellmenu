@@ -392,7 +392,7 @@ ammendCommit() {
     coloredLog "   DO NOT DO THIS IN SHARED BRANCHES !   " "$clrPurple" "$clrWhite" && printf "\n\r"
     echo -n "Change some commit messages (y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
-    git rebase -i HEAD~10
+    git rebase -i HEAD~1
     if [ $? -ne 0 ]; then
         importantLog "Rebase failed"
     else
