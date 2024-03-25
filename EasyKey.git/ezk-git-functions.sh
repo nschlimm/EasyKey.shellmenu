@@ -384,17 +384,5 @@ function settingUp () {
 }
 
 ammendCommit() {
-   behind_count=$(git rev-list --count ${current_branch}..${current_branch}@{upstream})
-   if [ "$behind_count" -gt 0 ]; then
-      echo "Your branch is behind remote branch. Please pull remote changes first!";
-      return
-   fi
-
-   echo "Last 15 commits"
-   git log
-   echo "Enter commit name to ammend"
-   read cname
-
-   echo -n "Change the last commit message (y/n)?" && wait_for_keypress && echo
-   [ "${REPLY}" = "y" ] && executeCommand "git commit --amend ${cname}" && executeCommand "git push --force-with-lease origin $actual"
+    executeCommand "git rebase -i HEAD~5"
 }
