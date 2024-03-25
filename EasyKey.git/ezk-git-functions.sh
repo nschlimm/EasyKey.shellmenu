@@ -331,16 +331,12 @@ function setRemoteOrigin() {
    executeCommand "git remote set-url origin $originaddress"
 }
 
-newStatus() {
-   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-   git status -s 
-}
-
 function showStatus () {
   importantLog $(pwd | grep -o "[^/]*$")
   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
   importantLog $actual 
-  git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s' --abbrev-commit -n 1
+  git log --decorate --oneline -n 1
+  git status | grep "Your branch"
   analyzeWorkingDir
   git remote -v
 }
