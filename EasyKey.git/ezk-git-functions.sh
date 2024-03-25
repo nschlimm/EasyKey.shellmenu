@@ -417,3 +417,7 @@ ammendCommit() {
         executeCommand "git push --force origin $actual"
     fi
 }
+
+prettyLog() {
+  git log --all --graph --decorate --oneline --format='%C(bold blue)%h%Creset %s %C(bold green)(%cd)%Creset %an' --date=format:'%Y-%m-%d %H:%M'
+}

@@ -16,7 +16,7 @@ menuInit "EasyKey.git"
     menuItemClm e "Set upstream to current" setUpstream f "Administer remotes" adminRemotes
   submenuHead "Working on local branches "
     menuItemClm r "Show branch history" showBranchHisto g "Show reflog" showRepoHisto
-    menuItemClm l "Show all commits log" "git log --all --graph --decorate --oneline" p "Show all branches (incl. remote)" showAllBranches
+    menuItemClm l "Show all commits log" prettyLog p "Show all branches (incl. remote)" showAllBranches
     menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
     menuItemClm k "New local/remote branch checkout" newLocalBranch c "Change commit messages" ammendCommit 
     menuItem o "Merge source to target branch" mergeSourceToTarget 
