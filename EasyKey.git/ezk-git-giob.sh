@@ -16,6 +16,14 @@ allTags() {
   find .git/refs/tags -type f -exec sh -c 'echo "File: $1"; cat "$1"' _ {} \;
 }
 
+contCommit() {
+	git log --all --graph --decorate --oneline --format='%C(bold blue)%h%Creset %s %C(bold green)(%cd)%Creset %an' --date=format:'%Y-%m-%d %H:%M'
+	echo "Enter commit to display:"
+	read cname
+	[ "${cname}" = "" ] && waitonexit && return 
+    git cat-file -p $cname
+}
+
 setActual
 
 menuInit "Git object internals"
@@ -23,6 +31,7 @@ submenuHead "Usefull commands "
 menuItem b "Current HEAD pointer" "git symbolic-ref HEAD"
 menuItem c "Inspect current tree object" "git cat-file -p ${actual}^{tree}"
 menuItem d "Inspect current commit object" "git cat-file -p ${actual}^{commit}"
+menuItem e "Show contents of commit object" contCommit
 menuItem e "All branches" allBranches
 menuItem f "All tags" allTags
 startMenu "setActual"
