@@ -20,7 +20,7 @@ menuInit "EasyKey.git"
     menuItemClm r "Show branch history" showBranchHisto g "Show reflog" showRepoHisto
     menuItemClm v "Checkout remote branch" coRemoteBranch n "Delete local/remote branch" deleteBranch
     menuItemClm o "Merge source to target branch" mergeSourceToTarget p "Show all branches (incl. remote)" showAllBranches
-    menuItemClm k "New local/remote branch checkout" newLocalBranch c "Change last commit message" ammendCommit 
+    menuItemClm k "New local/remote branch checkout" newLocalBranch c "Change commit messages" ammendCommit 
   submenuHead "Other usefull actions "
     menuItemClm s "Working with diffs" workingDiffs w "Working with commits" atlassiansView
     menuItemClm y "Setting up repositories" settingUp 5 "Git extras" gitExtras
