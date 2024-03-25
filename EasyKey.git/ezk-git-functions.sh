@@ -384,5 +384,13 @@ function settingUp () {
 }
 
 ammendCommit() {
-    executeCommand "git rebase -i HEAD~5"
+    echo -n "Change some commit messages(y/n)?" && wait_for_keypress && echo
+    [ "${REPLY}" != "y" ] && waitonexit && return 
+    git rebase -i HEAD~5
+    if [ $? -ne 0 ]; then
+        importantLog "Rebase failed"
+    else
+        importantLog "Rebase successful"
+        executeCommand "git push --force origin $actual"
+    fi
 }
