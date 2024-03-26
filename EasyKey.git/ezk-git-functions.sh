@@ -19,6 +19,16 @@ function analyzeWorkingDir (){
 function pushActual() {
   executeCommand "git fetch --all"
   importantLog "Checking your head state"
+
+  # Check if the current branch has an upstream (remote)
+  if [ -z "$(git rev-parse --abbrev-ref --symbolic-full-name ${current_branch}@{upstream} 2>/dev/null)" ]; then
+     echo "The current branch '"$actual"' doesn't have an upstream branch."
+     echo
+     echo -n "Do you want to create and attach remot branch (y/n)?" && wait_for_keypress && echo
+     [ "$REPLY" != "y" ] && waitonexit && return 
+     setUpstream
+  fi
+
   if git status | grep -q "HEAD detached"; then
      redLog "... you seem to be on a detached head state ... can't push ..."
   else
@@ -64,12 +74,6 @@ function mergeChanges () {
 
     # Get the name of the current branch
     current_branch=$(git rev-parse --abbrev-ref HEAD)
-
-    # Check if the current branch has an upstream (remote)
-    if [ -z "$(git rev-parse --abbrev-ref --symbolic-full-name ${current_branch}@{upstream} 2>/dev/null)" ]; then
-        echo "The current branch '$current_branch' doesn't have an upstream branch."
-        exit 1
-    fi
 
     # Get the number of commits ahead of the remote branch
     ahead_count=$(git rev-list --count ${current_branch}@{upstream}..${current_branch})
