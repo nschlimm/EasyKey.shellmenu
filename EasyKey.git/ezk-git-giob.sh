@@ -53,7 +53,10 @@ currentObjects() {
   importantLog "branch: $branch"
   # Step 2: Get the commit object from the branch
   commit=$(git rev-parse "$branch")
-  importantLog "head commit: $commit"
+  echo "Enter custom commit to explore or press enter to take branch head!"
+  read ccommit
+  [ "$ccommit" != "" ] && commit=$ccommit; 
+  importantLog "commit: $commit"
   # Step 3: Get the tree object from the commit object
   tree=$(git cat-file -p "$commit" | awk '/^tree/ {print $2}')
   importantLog "tree: $tree"
