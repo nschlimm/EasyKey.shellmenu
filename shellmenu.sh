@@ -16,6 +16,7 @@ clrBlue=4
 clrPurple=5
 clrCyan=6
 clrWhite=7
+clrGray=237
 
 # Globals (SUBJECT TO CUSTOMIZATION)
 waitstatus=true                     # whether to wait for key press after menu command finished
@@ -429,13 +430,21 @@ callKeyFunktion () {
        IFS="$delimiter" read -r key description action submenu menu column <<< "$i"
          if [ "$1" = "$key" ]
            then
-              clear && importantLog "$action"
+              clear && actionBanner "$description"
+              importantLog "$action"
               eval "$action"
               return 1
          fi
    done
    return 5
    IFS=$OLD_IFS
+}
+
+actionBanner() {
+   local bannerline="$(r_pad " Action Execution" "75" " ")"
+   coloredLog "$bannerline" $clrWhite $clrBlue && echo
+   local actionline="$(r_pad " $1" "75" " ")"
+   coloredLog "$actionline" $clrWhite $clrGray && echo
 }
 
 #################################################
@@ -591,9 +600,10 @@ printSubmenuHeading(){
 #   Padded line to stdout
 #################################################
 r_pad() {
-  local text=$1
-  local length=${#text}
-  local width=${2:-$length}
+  local text="$1"
+  local length="${#text}"
+  local width="${2:-$length}"
+  local symbol="${3:- }"
   local paddedcount=$(( width - length ))
   local printout="$text$(printf "%-${paddedcount}s" "" | tr " " "$symbol")"
   printf "%s" "$printout"
