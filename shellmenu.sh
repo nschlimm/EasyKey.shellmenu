@@ -441,8 +441,8 @@ callKeyFunktion () {
 }
 
 actionBanner() {
-   local bannerline="$(r_pad " Action Execution" "75" " ")"
-   coloredLog "$bannerline" $clrWhite $clrBlue && echo
+   local bannerline="$(r_pad " Command Execution" "75" " ")"
+   coloredLog "$bannerline" $menuHeadingFGClr $menuHeadingBGClr && echo
    local actionline="$(r_pad " $1" "75" " ")"
    coloredLog "$actionline" $clrWhite $clrGray && echo
 }
