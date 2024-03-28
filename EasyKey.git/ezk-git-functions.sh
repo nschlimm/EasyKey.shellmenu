@@ -19,6 +19,16 @@ function analyzeWorkingDir (){
 function pushActual() {
   executeCommand "git fetch --all"
   importantLog "Checking your head state"
+
+  # Check if the current branch has an upstream (remote)
+  if [ -z "$(git rev-parse --abbrev-ref --symbolic-full-name ${current_branch}@{upstream} 2>/dev/null)" ]; then
+     echo "The current branch '"$actual"' doesn't have an upstream branch."
+     echo
+     echo -n "Do you want to create and attach remot branch (y/n)?" && wait_for_keypress && echo
+     [ "$REPLY" != "y" ] && waitonexit && return 
+     setUpstream
+  fi
+
   if git status | grep -q "HEAD detached"; then
      redLog "... you seem to be on a detached head state ... can't push ..."
   else
@@ -28,6 +38,7 @@ function pushActual() {
     commitChanges
     pushChanges
   fi
+  waitonexit
 }
 
 function pushChanges () {
@@ -64,12 +75,6 @@ function mergeChanges () {
 
     # Get the name of the current branch
     current_branch=$(git rev-parse --abbrev-ref HEAD)
-
-    # Check if the current branch has an upstream (remote)
-    if [ -z "$(git rev-parse --abbrev-ref --symbolic-full-name ${current_branch}@{upstream} 2>/dev/null)" ]; then
-        echo "The current branch '$current_branch' doesn't have an upstream branch."
-        exit 1
-    fi
 
     # Get the number of commits ahead of the remote branch
     ahead_count=$(git rev-list --count ${current_branch}@{upstream}..${current_branch})
@@ -416,4 +421,14 @@ ammendCommit() {
         importantLog "Rebase successful"
         executeCommand "git push --force origin $actual"
     fi
+}
+
+prettyLog() {
+  git log --all --graph --decorate --oneline --format='%C(auto)%ad %h %d %C(bold blue)%an%Creset %s %C(bold red)%D' --date=format:'%Y-%m-%d %H:%M'
+}
+
+allBranches() {
+  git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+  executeCommand "git fetch --all"
+  executeCommand "git pull --all"
 }

@@ -101,11 +101,11 @@ diffStatus() {
 git fetch --all
 menuInit "Working with diffs"
   submenuHead "Different diff options:"
-    menuItem a "actual branch        vs. origin/actual branch.      -> local repository vs. remote repository" headHead
-    menuItem b "actual working dir   vs. actual branch last commit  -> work dir vs. local repository" dirHead
-    menuItem c "actual working dir   vs. other commits              -> work dir vs. local repository" treeCommit
-    menuItem d "commit               vs. commit                     -> local repository vs. local repository" commitCommit
-    menuItem e "branch               vs. branch                     -> repository vs. repository (local/remote)" branchBranch
+    menuItem a "actual branch        vs. origin/actual branch" headHead
+    menuItem b "actual working dir   vs. actual branch last commit" dirHead
+    menuItem c "actual working dir   vs. other commits" treeCommit
+    menuItem d "commit               vs. commit" commitCommit
+    menuItem e "branch               vs. branch" branchBranch
   submenuHead "Specific diffs:"
     menuItem k "Diff since date" diffDate
   submenuHead "Other usefull stuff here:"
