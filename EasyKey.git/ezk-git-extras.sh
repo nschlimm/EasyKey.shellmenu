@@ -42,6 +42,10 @@ function obliterate () {
 	
 }
 
+monthlySummary() {
+  git log --oneline --format='%C(auto)%ad %h %d' --date=format:'%Y-%m-%d' | awk '{print substr($1, 1, 7)}' | sort | uniq -c | awk '{print $2, $1}'
+}
+
 menuInit "Git extras menu"
 submenuHead "Project information"
 menuItem a "Project summary in commits" "git summary"
@@ -52,6 +56,7 @@ menuItem e "Show information about the repo" "git info"
 menuItem f "Generate changelog" "git changelog -a"
 menuItem g "Show tree" "git show-tree"
 menuItem h "Show activity calendar" "git cal"
+menuItem i "Monthly count of commits" monthlySummary
 submenuHead "Author information"
 menuItem k "List authors" "git authors --list"
 menuItem l "Find out what somebody did since ..." findOut
