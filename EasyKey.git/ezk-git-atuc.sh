@@ -59,6 +59,7 @@ checkoutWay() {
   git log --all --oneline
   echo "Select a commit to checkout:"
   read cname
+  [ "$cname" = "" ] && waitonexit && return 
   executeCommand "git checkout $cname -- ."
 }
 

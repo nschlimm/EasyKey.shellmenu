@@ -433,6 +433,7 @@ callKeyFunktion () {
               clear && actionBanner "$description"
               importantLog "$action"
               eval "$action"
+              finishBanner "$description"
               return 1
          fi
    done
@@ -445,6 +446,11 @@ actionBanner() {
    coloredLog "$bannerline" $menuHeadingFGClr $menuHeadingBGClr && echo
    local actionline="$(r_pad " $1" "75" " ")"
    coloredLog "$actionline" $clrWhite $clrGray && echo
+}
+
+finishBanner() {
+   local bannerline="$(r_pad " Command Execution finished" "75" " ")"
+   coloredLog "$bannerline" $clrWhite $clrGray && echo
 }
 
 #################################################

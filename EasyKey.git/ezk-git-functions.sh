@@ -38,6 +38,7 @@ function pushActual() {
     commitChanges
     pushChanges
   fi
+  waitonexit
 }
 
 function pushChanges () {
