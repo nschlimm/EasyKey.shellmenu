@@ -39,6 +39,7 @@ startSpringBoot() {
              "logging.level.sql=TRACE" \
              "spring.jpa.show-sql=true" \
              "logging.level.org.springframework=DEBUG" \
+             "logging.level.org.springframework.jdbc.core=TRACE" \
              "management.endpoints.web.exposure.include=mappings" \
              "logging.group.tomcat=org.apache.catalina,org.apache.coyote,org.apache.tomcat,--logging.level.tomcat=DEBUG" \
              "logging.level.org.hibernate=DEBUG" \

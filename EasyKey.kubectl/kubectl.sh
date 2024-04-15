@@ -33,7 +33,7 @@ menuInit "EasyKey.kubectl"
   submenuHead "Other stuff "
     menuItemClm I "List images in contexts" listImagesInUse J "Ingress configuration" "kubectl get ing -o json | jq -r '.items[].spec.rules[].http.paths[]'"
     menuItemClm K "Describe ingress" "kubectl describe ing" "L" "Edit config map" editConfigMap
-    menuItem T "Edit Ingress" "kubectl edit ingress"
+    menuItemClm T "Edit Ingress" "kubectl edit ingress" U "View/Edit secrets" viewSecrets
 startMenu "kubeContext"
 echo "bye, bye, homie!"
 
