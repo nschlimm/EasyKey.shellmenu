@@ -73,6 +73,8 @@ function addAllUntracked () {
 
 function mergeChanges () {
 
+    importantLog "Checking for merge requirements from remote origin"
+
     # Get the name of the current branch
     current_branch=$(git rev-parse --abbrev-ref HEAD)
 
@@ -81,7 +83,10 @@ function mergeChanges () {
     behind_count=$(git rev-list --count ${current_branch}..${current_branch}@{upstream})
 
     # Check if the current branch is ahead of the remote branch
-    if [ $ahead_count -gt 0 ]; then
+    if [ $ahead_count -eq 0 ]; then
+        echo "Your current branch '$current_branch' is in sync with origin."
+        echo "... nothing to merge ..."
+    elif [ $ahead_count -ge 0 ]; then
         echo "Your current branch '$current_branch' is ahead of its remote counterpart by $ahead_count commit(s)."
         echo "... nothing to merge ..."
     elif [ $behind_count -gt 0 ]; then

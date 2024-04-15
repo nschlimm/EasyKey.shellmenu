@@ -234,3 +234,8 @@ kubeContext() {
     deplomentActualStatus
 }
 
+viewSecrets() {
+    selectItem "kubectl get secrets" "awk '{print \$1}'"
+    if [[ $fname == "" ]]; then return 0; fi
+    executeCommand "kubectl edit secret $fname"
+}
