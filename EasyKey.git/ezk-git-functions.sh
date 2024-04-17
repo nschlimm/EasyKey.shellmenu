@@ -91,7 +91,7 @@ function mergeChanges () {
         fi
     fi
 }
-
+ 
 function commitChanges () {
     importantLog "Checking for stuff to commit from the working tree"
     if git status -s -uno| grep -q ".*"; then
