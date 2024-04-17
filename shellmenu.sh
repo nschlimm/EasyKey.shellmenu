@@ -5,7 +5,7 @@
 #################################
 
 # Release
-release=2.1.6
+release=2.1.7
 
 # Colors
 clrBlack=0
