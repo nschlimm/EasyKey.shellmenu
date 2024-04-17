@@ -86,10 +86,11 @@ function mergeChanges () {
     if [ $ahead_count -eq 0 ]; then
         echo "Your current branch '$current_branch' is in sync with origin."
         echo "... nothing to merge ..."
-    elif [ $ahead_count -ge 0 ]; then
+    else 
         echo "Your current branch '$current_branch' is ahead of its remote counterpart by $ahead_count commit(s)."
         echo "... nothing to merge ..."
-    elif [ $behind_count -gt 0 ]; then
+    fi
+    if [ $behind_count -gt 0 ]; then
         echo "Your current branch '$current_branch' is behind of its remote counterpart."
         coloredLog "   MERGE RECOMMENDED   " "$clrPurple" "$clrWhite" && printf "\n\r"
         diffDrillDownAdvanced "git diff --name-status origin/$actual $actual" "awk '{print \$2}'" "origin/$actual" "$actual"
