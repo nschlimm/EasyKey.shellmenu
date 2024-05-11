@@ -20,11 +20,13 @@ menuInit "Super MAVEN Home"
   menuItemClm k "Download sources" downLoadSources l "Build with deps" "mvn clean compile assembly:single"  
   menuItemClm m "New project from archetype" newProject p "Effective pom" "mvn help:effective-pom"
   menuItemClm t "Dependency tree" "mvn dependency:tree" u "Display dependency updates" "mvn versions:display-dependency-updates -DexcludeReactor=true"
+  menuItemClm v "Enforce dependencies check" "mvn enforcer:enforce -B -Drules=DependencyConvergence" w "OPEN API Refresh" "mvn generate-sources && mvn clean compile"
  submenuHead "Lifecycle "
   menuItemClm C "Clean compile" "mvn clean compile" T "Clean test" "mvn clean test"
   menuItemClm I "Clean install" "mvn clean install -DskipTests" P "Clean package" "mvn clean package -DskipTests"
   menuItem D "Clean deploy" "mvn clean deploy -DskipTests"
  submenuHead "Spring-Boot "
   menuItemClm o "Start Spring Boot App" startSpringBoot s "View application properties" showProperties
-  menuItem v "Usefull notes" useFull
+  menuItemClm x "Usefull notes" useFull y "JMX Metrics" runJmx
+  menuItemClm z "Actuator mappings" printActuatorMappings 1 "Application mappings" printMappings
 startMenu "pwd"

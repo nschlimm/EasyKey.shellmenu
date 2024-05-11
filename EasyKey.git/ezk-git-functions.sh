@@ -420,7 +420,10 @@ ammendCommit() {
     echo 
     echo -n "Change some commit messages (y/n)?" && wait_for_keypress && echo
     [ "${REPLY}" != "y" ] && waitonexit && return 
-    git rebase -i HEAD~1
+    git log --oneline --graph
+    echo -n "How many messages (1-9)?" && wait_for_keypress && echo
+    [ "${REPLY}" == "" ] && waitonexit && return 
+    git rebase -i HEAD~"${REPLY}"
     if [ $? -ne 0 ]; then
         importantLog "Rebase failed"
     else
