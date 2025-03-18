@@ -29,7 +29,7 @@ menuHeadingBGClr="$clrBlue"         # the default menu heading background color
 submenuFGClr="$clrCyan"             # the default sub menu heading foreground color
 submenuBGClr="$clrBlack"            # the default sub menu heading background color
 releaseNoClr=137                    # the default release number color
-delimiter=⊕                         # the delimiter used in menu array
+delimiter=⊕                        # the delimiter used in menu array
 submenu_pad_symbol="─"              # Default submenu border symbol
 submenu_corner_symbol="┐"           # Default submenu corner symbol
 sub_menu_bold=false                 # whether to print out submenu bold
@@ -64,7 +64,7 @@ menuInit () {
 # Outputs:
 #   Creates actualsubmenuname global variable
 #################################################
-submenuHead () { 
+submenuHead () {
   actualsubmenuname="$1"
 }
 
@@ -73,11 +73,11 @@ submenuHead () {
 # Arguments:
 #   $1: key, e.g. "b"
 #   $2: menu item name, e.g. "Copy files"
-#   $3: name of shell function to call, or the 
+#   $3: name of shell function to call, or the
 #       shell command itself.
 # Globals:
 #   menudatamap - the menu data
-#   actualsubmenuname - the actual submenu 
+#   actualsubmenuname - the actual submenu
 #   actualmenu - the actual main menu
 # Outputs:
 #   Adds menu item data to menudatamap array.
@@ -93,15 +93,15 @@ menuItem () {
 # Arguments:
 #   $1: key, e.g. "b"
 #   $2: menu item name, e.g. "Copy files"
-#   $3: name of shell function to call, or the 
+#   $3: name of shell function to call, or the
 #       shell command itself.
 #   $4: key, e.g. "c"
 #   $5: menu item name, e.g. "Delete files"
-#   $6: name of shell function to call, or the 
+#   $6: name of shell function to call, or the
 #       shell command itself.
 # Globals:
 #   menudatamap - the menu data
-#   actualsubmenuname - the actual submenu 
+#   actualsubmenuname - the actual submenu
 #   actualmenu - the actual main menu
 # Outputs:
 #   Adds menu item data to menudatamap array.
@@ -223,7 +223,7 @@ importantLog() {
 }
 
 #################################################
-# Executes a so called list command. That is a 
+# Executes a so called list command. That is a
 # command like 'ls -l' that returns a list.
 # This function executes the list command and
 # gives every item in the list an ID. The header
@@ -241,12 +241,12 @@ importantLog() {
 # Outputs:
 #      linenumber - selected line number
 #      selected - the complete line selected)
-#      fname - selected line after regular expression 
-#              or awk cmd applied -> what you want to 
+#      fname - selected line after regular expression
+#              or awk cmd applied -> what you want to
 #              have as return value from selection.
 #              often the main output of this function!
 #################################################
-selectItem () { 
+selectItem () {
   listkommando="$1"
   regexp="$2"
   width="$3"
@@ -257,7 +257,7 @@ selectItem () {
 
   if [[ $width = "" ]]; then
     eval "$listkommando" | nl -n 'ln' -s " "
-  else 
+  else
     eval "$listkommando" \
        | nl -n 'ln' -s " " \
        | awk -v m="${width}" '{printf("[%-'"${width}"'s]\n", $0)}' \
@@ -291,7 +291,7 @@ selectItem () {
 }
 
 #################################################
-# Enables alternate coloring of lines in long 
+# Enables alternate coloring of lines in long
 # lists for improved readability.
 # Arguments:
 #   Reads stdin -> the line of the list displayed
@@ -306,7 +306,7 @@ alternateRows() {
     do
       if [[ $i == 1 ]] && [[ $header != "" ]]; then
         echo -e "\033[48;5;93m$line\033[0m"
-      else 
+      else
         echo -e "\033[48;5;238m$line\033[0m"
       fi
       read -r line
@@ -317,7 +317,7 @@ alternateRows() {
 }
 
 #################################################
-# Selelect rows or columns from CSV file. 
+# Selelect rows or columns from CSV file.
 # Uses selectItem(). Supports paging.
 # Arguments:
 #   $1: source csv file full name
@@ -327,7 +327,7 @@ alternateRows() {
 # Outputs:
 #   see selectItem() outputs
 #################################################
-selectFromCsv() { 
+selectFromCsv() {
    csvfile=$1 #source csv file full name
    linefrom=$2 #paging line from
    lineto=$3 #paging line to
@@ -423,7 +423,7 @@ waitonexit () {
 # Outputs:
 #   The executed user defined function or command
 #################################################
-callKeyFunktion () { 
+callKeyFunktion () {
    OLD_IFS=$IFS
    for i in "${menudatamap[@]}"
      do
@@ -461,22 +461,22 @@ finishBanner() {
 # Outputs:
 #   the menu written to generatedmenu variable
 #################################################
-generateMenu () { 
+generateMenu () {
   OLD_IFS=$IFS
   local previoussubmenu previouscolumn submenucount;
   submenucount=0
   skipnext=false
   for ((index=0; index<${#menudatamap[@]}; index++)); do
-    if [ "$skipnext" = "true" ]; then 
+    if [ "$skipnext" = "true" ]; then
       skipnext=false
       continue
     fi
     IFS="$delimiter" read -r key description action submenu menu column <<< "${menudatamap[index]}"
     IFS="$delimiter" read -r nextkey nextdescription nextaction nextsubmenu nextmenu nextcolumn <<< "${menudatamap[((index+1))]}"
     if [ "$index" -eq "0" ]; then generatedmenu+=$(printMenuHeading "$menu"); generatedmenu+=$(printf '%s' "\n\r"); fi
-    if [ "$submenu" != "$previoussubmenu" ]; then 
+    if [ "$submenu" != "$previoussubmenu" ]; then
        if [ "$submenucount" -gt 0 ]; then generatedmenu+=$(printf '%s' "\n\r"); fi
-       generatedmenu+=$(printSubmenuHeading "$submenu") 
+       generatedmenu+=$(printSubmenuHeading "$submenu")
        submenucount=$(( submenucount+1 ));
     fi
     if [ "$((nextcolumn))" -eq "$((column + 1))" ]; then
@@ -507,7 +507,7 @@ noterminate () { continuemenu=true; }
 terminate () { continuemenu=false; }
 
 #################################################
-# Initiates user input 
+# Initiates user input
 # Outputs:
 #      Creates the interactive user input and
 #      and initiates execution of command selected
@@ -539,7 +539,7 @@ choice () {
 }
 
 #################################################
-# Print a double column menu line. 
+# Print a double column menu line.
 # Arguments:
 #   $1: first column key
 #   $2: first column description
@@ -550,15 +550,15 @@ choice () {
 #################################################
 printMenuItemClm() {
   echo -e "${1}.,${2},${3}.,${4}" \
-          | awk -F , -v OFS=, '{printf "%-3s",$1; 
-                                printf "%-'"${globalClmWidth}"'s",$2; 
-                                printf "%-3s",$3; 
-                                printf "%-'"${globalClmWidth}"'s",$4; 
+          | awk -F , -v OFS=, '{printf "%-3s",$1;
+                                printf "%-'"${globalClmWidth}"'s",$2;
+                                printf "%-3s",$3;
+                                printf "%-'"${globalClmWidth}"'s",$4;
                                 printf("\n\r"); }'
 }
 
 #################################################
-# Print a single column menu line. 
+# Print a single column menu line.
 # Arguments:
 #   $1: column key
 #   $2: column description
@@ -570,7 +570,7 @@ printMenuItem() {
 }
 
 #################################################
-# Print the menu head. 
+# Print the menu head.
 # Arguments:
 #   $1: menu head description
 # Outputs:
@@ -581,7 +581,7 @@ printMenuHeading(){
 }
 
 #################################################
-# Print the sub menu head. 
+# Print the sub menu head.
 # Arguments:
 #   $1: sub menu head description
 #   $2: optional: menu width
@@ -597,10 +597,10 @@ printSubmenuHeading(){
 }
 
 #################################################
-# Right pad text 
+# Right pad text
 # Arguments:
 #   $1: text
-#   $2: target width of line 
+#   $2: target width of line
 #   $3: symbol for padding
 # Outputs:
 #   Padded line to stdout
@@ -628,7 +628,7 @@ exitGently () {
 }
 
 #################################################
-# Draw title graphic 
+# Draw title graphic
 # Globals:
 #   formattedTop - top line of graphic
 #   formattedMiddle - middle line of graphic
@@ -658,19 +658,19 @@ draw_rounded_square() {
     local bottom_left_corner="└"
     local bottom_right_corner="┘"
     local vertical_line="│"
-    
+
     local border=""
     border+="$top_left_corner"
     for (( i=0; i<width+2; i++ )); do
         border+="$horizontal_line"
     done
     border+="$top_right_corner"
-    
+
     formattedMiddle=$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)"$vertical_line "$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)$text$(tput sgr0)$(tput setaf $menuHeadingFGClr)$(tput setab $menuHeadingBGClr)$(tput bold)" $vertical_line"$(tput sgr0)
 
     formattedheading+=$(coloredLog "$border\n\r" 7 20)
     formattedheading+=$(printf '%s\n\r' "$formattedMiddle")
-    
+
     border="$bottom_left_corner"
     for (( i=0; i<width+2; i++ )); do
         border+="$horizontal_line"

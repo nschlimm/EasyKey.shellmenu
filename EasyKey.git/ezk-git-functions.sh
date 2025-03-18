@@ -25,7 +25,7 @@ function pushActual() {
      echo "The current branch '"$actual"' doesn't have an upstream branch."
      echo
      echo -n "Do you want to create and attach remot branch (y/n)?" && wait_for_keypress && echo
-     [ "$REPLY" != "y" ] && waitonexit && return 
+     [ "$REPLY" != "y" ] && waitonexit && return
      setUpstream
   fi
 
@@ -86,7 +86,7 @@ function mergeChanges () {
     if [ $ahead_count -eq 0 ]; then
         echo "Your current branch '$current_branch' is in sync with origin."
         echo "... nothing to merge ..."
-    else 
+    else
         echo "Your current branch '$current_branch' is ahead of its remote counterpart by $ahead_count commit(s)."
         echo "... nothing to merge ..."
     fi
@@ -102,7 +102,7 @@ function mergeChanges () {
         fi
     fi
 }
- 
+
 function commitChanges () {
     importantLog "Checking for stuff to commit from the working tree"
     if git status -s -uno| grep -q ".*"; then
@@ -137,17 +137,17 @@ function adminRemotes() {
                 "b")
                     echo "What is the adress?"
                     read adress
-                    [ "${adress}" = "" ] && waitonexit && return 
+                    [ "${adress}" = "" ] && waitonexit && return
                     echo "Type an alias for this remote?"
                     read ralias
-                    [ "${ralias}" = "" ] && waitonexit && return 
+                    [ "${ralias}" = "" ] && waitonexit && return
                     git remote add $ralias $adress
                 ;;
                 "c")
                     git remote -v
                     echo "Name of the remote to inspect"
                     read rname
-                    [ "${rname}" = "" ] && waitonexit && return 
+                    [ "${rname}" = "" ] && waitonexit && return
                     git remote show $rname
                 ;;
             esac
@@ -171,15 +171,15 @@ function cloneRemote() {
 function newLocalBranch() {
     echo "Name des neuen Branch?"
     read branchname
-    [ "${branchname}" = "" ] && waitonexit && return 
-    git branch $branchname 
+    [ "${branchname}" = "" ] && waitonexit && return
+    git branch $branchname
     git checkout $branchname
     read -p "Set upstream? " -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]
         then
            git push --set-upstream origin $branchname
-    fi      
+    fi
 }
 
 function rollBackLast() {
@@ -194,31 +194,43 @@ function rollBackLast() {
             if [[ $REPLY =~ ^[Yy]$ ]]
                 then
                     git reset HEAD --hard
-            fi      
+            fi
 }
 
 function deleteBranch() {
   git branch
   echo "Which branch to delete?"
   read dbranch
-  [ "${dbranch}" = "" ] && waitonexit && return 
+  [ "${dbranch}" = "" ] && waitonexit && return
   git branch -d $dbranch
   read -p "Delete remote [y/n]? " -n 1 -r
   echo    # (optional) move to a new line
   if [[ $REPLY =~ ^[Yy]$ ]]
     then
        git push origin --delete $dbranch
-  fi 
+  fi
+}
+
+function cherryPick {
+   selectItem "git ls-files --full-name" "awk '{print \$1}'"
+   [ "${fname}" = "" ] && waitonexit && return
+   echo
+   echo "Available source branches:"
+   git branch
+   echo "Select source branch:"
+   read cbranch
+   [ "${cbranch}" = "" ] && waitonexit && return
+   git restore --source=$cbranch -- $fname
 }
 
 function mergeSourceToTarget(){
     git branch --all
     echo "Enter merge target branch"
     read target
-    [ "${target}" = "" ] && waitonexit && return 
+    [ "${target}" = "" ] && waitonexit && return
     echo "Enter merge source branch"
     read bsource
-    [ "${bsource}" = "" ] && waitonexit && return 
+    [ "${bsource}" = "" ] && waitonexit && return
     git checkout $target
     git merge $bsource
 }
@@ -237,7 +249,7 @@ function setUpstream() {
   if [[ $REPLY =~ ^[Yy]$ ]]
     then
       git push --set-upstream origin $actual
-  fi 
+  fi
 }
 
 function localGitConfig() {
@@ -271,7 +283,7 @@ function changeBranch () {
    git branch --all
    echo "Which branch?"
    read bname
-   [ "${bname}" = "" ] && waitonexit && return 
+   [ "${bname}" = "" ] && waitonexit && return
    git checkout $bname
 }
 
@@ -321,7 +333,7 @@ function assumeUnchanged () {
     git ls-files
     echo "Which file?"
     read filename
-    [ "${filename}" = "" ] && waitonexit && return 
+    [ "${filename}" = "" ] && waitonexit && return
     executeCommand "git update-index --assume-unchanged $filename"
 }
 
@@ -336,32 +348,32 @@ function coRemoteBranch () {
        git branch -r
        echo "Which remote branch?"
        read bname
-       [ "${bname}" = "" ] && waitonexit && return 
-       git checkout --track $bname 
+       [ "${bname}" = "" ] && waitonexit && return
+       git checkout --track $bname
 }
 
 function setRemoteOrigin() {
    echo "Enter remot origin address:"
    read originaddress
-   [ "${originaddress}" = "" ] && waitonexit && return 
+   [ "${originaddress}" = "" ] && waitonexit && return
    executeCommand "git remote set-url origin $originaddress"
 }
 
 newStatus() {
    actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-   git status -s 
+   git status -s
 }
 
 function showStatus () {
   importantLog $(pwd | grep -o "[^/]*$")
   actual=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  importantLog $actual 
+  importantLog $actual
   git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s' --abbrev-commit -n 1
   analyzeWorkingDir
   git remote -v
 }
 
-diffDrillDownAdvanced () { 
+diffDrillDownAdvanced () {
   listkommando="$1"
   regexp="$2"
   if $listkommando | grep -q ".*"; then
@@ -391,7 +403,7 @@ repoSize() {
    executeCommand "git rev-list --objects --all | grep -f <(git verify-pack -v  .git/objects/pack/*.idx| sort -k 3 -n | cut -f 1 -d ' ' | tail -10)"
    echo "Enter file pattern to REMOVE in repo history (e.g. *.jar or full qualified filename or */folder/*):"
    read filePattern
-   [ "${filePattern}" = "" ] && waitonexit && return 
+   [ "${filePattern}" = "" ] && waitonexit && return
    executeCommand "git filter-repo --path-glob '${filePattern}' --invert-paths --force"
    executeCommand "git reflog expire --expire=now --all"
    executeCommand "git gc --prune=now"
@@ -415,11 +427,11 @@ ammendCommit() {
     echo "some developers might have the commit object your going to change as predecessor to their"
     echo "commits. Actually you will replace that object with a new one. This changes the commit "
     echo "history which can result in conflicts."
-    echo 
+    echo
     echo "If you are the only developer working in that branch, the change is NOT critical."
-    echo 
+    echo
     echo -n "Change some commit messages (y/n)?" && wait_for_keypress && echo
-    [ "${REPLY}" != "y" ] && waitonexit && return 
+    [ "${REPLY}" != "y" ] && waitonexit && return
     git rebase -i HEAD~1
     if [ $? -ne 0 ]; then
         importantLog "Rebase failed"
