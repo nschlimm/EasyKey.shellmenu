@@ -34,6 +34,5 @@ submenuHead "Working on your local repository"
 menuItem b "Saving changes" savingChanges
 menuItem c "Inspecting a repository" inspectingRepos
 menuItem d "Undoing changes" undoingChanges
-menuItem e "Cherry pick commit" cherryPick
 startMenu "atlnStatus"
 noterminate
